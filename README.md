@@ -15,7 +15,7 @@
 5. [Organisation du code](#5-organisation-du-code)
 6. [Structure du projet](#6-structure-du-projet)
 
----
+--- 
 
 ## 1. Présentation du projet
 
