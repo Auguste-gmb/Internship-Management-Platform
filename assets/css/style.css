@@ -1,0 +1,81 @@
+h1 {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h2 {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h3 {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+h4 {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+p {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.main_index section {
+  display: flex;
+  justify-content: space-around;
+}
+.main_index section aside {
+  background-color: #edf6f9;
+  box-shadow: #000000;
+  border-radius: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3vh 5vw 3vh 5vw;
+  margin: 7vh 0vw 7vh 0vw;
+}
+.main_index section aside h2 {
+  padding-block: 1rem;
+}
+
+.div_sec_index {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 30px;
+}
+
+#search_index {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.input1_index {
+  padding: 0.5vh;
+  border-radius: 15px 0px 0px 15px;
+}
+.input2_index {
+  padding: 0.5vh;
+  border-radius: 0px 15px 15px 0px;
+}
+
+.search_incon_index {
+  border-radius: 0px;
+}
+
+.div_button_index {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+button {
+  border-radius: 20px;
+  
+}
