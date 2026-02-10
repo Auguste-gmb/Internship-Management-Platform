@@ -1,0 +1,129 @@
+h1 {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h2 {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h3 {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+h4 {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+p {
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.section_index {
+  display: flex;
+  justify-content: space-around;
+  padding-inline: 1vw;
+}
+.main_index section aside {
+  background-color: #edf6f9;
+  box-shadow: #000000;
+  border-radius: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3vh 5vw 3vh 5vw;
+  margin: 7vh 0vw 7vh 0vw;
+}
+
+@media (max-width: 700px) {
+  .section_index {
+    flex-direction: column;
+  }
+  #search_index {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: solid 2px #000000;
+
+    border-radius: 20px;
+    padding-block: 1px;
+    width: 70%;
+
+  }
+  .rdiv_index{
+    justify-content: center;
+  }
+}
+
+.main_index section aside h2 {
+  padding-block: 1rem;
+}
+
+.div_sec_index {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 30px;
+}
+
+@media (min-width: 700px) {
+  #search_index {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: solid 2px #000000;
+
+    border-radius: 20px;
+    padding: 1px;
+  }
+}
+
+#search_index::before {
+  content: "";
+  border: solid 1px #000000;
+  position: absolute;
+  height: 30px;
+
+  transform: translateX(-15px);
+}
+.input1_index {
+  padding: 6px 0px 6px 5px;
+  border-radius: 15px 0px 0px 15px;
+  color: #000000;
+  outline: none;
+  border: none;
+  background: transparent;
+}
+.input2_index {
+  padding: 6px 0px 6px 5px;
+  border-radius: 0px 15px 15px 0px;
+  color: #000000;
+  outline: none;
+  border: none;
+  background: transparent;
+}
+
+.search_incon_index {
+  border-radius: 0px;
+  padding-right: 0.9vw;
+}
+
+.div_button_index {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+button {
+  border-radius: 20px;
+  background-color: #edf6f9;
+  color: #83c5be;
+  border: 0px;
+}
