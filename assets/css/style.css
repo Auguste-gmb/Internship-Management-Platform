@@ -24,9 +24,16 @@ p {
 
 .section_index {
   display: flex;
-  justify-content: space-around;
-  padding-inline: 1vw;
+  justify-content: center;
 }
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .main_index section aside {
   background-color: #edf6f9;
   box-shadow: #000000;
@@ -43,21 +50,19 @@ p {
   .section_index {
     flex-direction: column;
   }
-  #search_index {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border: solid 2px #000000;
-
-    border-radius: 20px;
-    padding-block: 1px;
-    width: 70%;
-
+    .search_bar {
+    width: 80%;
   }
-  .rdiv_index{
-    justify-content: center;
+
+  .search_bar input {
+    width: 100%;
   }
+}
+.rdiv_index {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
 .main_index section aside h2 {
@@ -69,45 +74,8 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   padding: 30px;
-}
-
-@media (min-width: 700px) {
-  #search_index {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border: solid 2px #000000;
-
-    border-radius: 20px;
-    padding: 1px;
-  }
-}
-
-#search_index::before {
-  content: "";
-  border: solid 1px #000000;
-  position: absolute;
-  height: 30px;
-
-  transform: translateX(-15px);
-}
-.input1_index {
-  padding: 6px 0px 6px 5px;
-  border-radius: 15px 0px 0px 15px;
-  color: #000000;
-  outline: none;
-  border: none;
-  background: transparent;
-}
-.input2_index {
-  padding: 6px 0px 6px 5px;
-  border-radius: 0px 15px 15px 0px;
-  color: #000000;
-  outline: none;
-  border: none;
-  background: transparent;
 }
 
 .search_incon_index {
@@ -126,4 +94,34 @@ button {
   background-color: #edf6f9;
   color: #83c5be;
   border: 0px;
+}
+
+.search_bar {
+  display: flex;
+  align-items: center;
+  border: 2px solid #000000;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.search_bar input {
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: transparent;
+  color: #000000;
+}
+
+.search_bar input:first-child {
+  border-right: 1px solid #000000;
+}
+
+.search_bar button {
+  border: none;
+  background: transparent;
+  padding: 0 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
