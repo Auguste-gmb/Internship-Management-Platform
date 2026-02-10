@@ -1,7 +1,16 @@
 body {
 	margin: 0;
 	padding: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
+
+main {
+
+	flex: 1;
+}
+
 
 /** Pour le Header : **/
 
@@ -66,6 +75,7 @@ header img.logo {
 	width: auto;
 	height: 2em;
 }
+
 @media screen and (min-width: 750px) {
 	.menu_burger_icone {
 		display: none;
@@ -119,4 +129,35 @@ header img.logo {
 	img.logo {
 		display: none;
 	}
+}
+
+
+
+
+/** Footer **/
+
+
+
+footer {
+
+	background-color: whitesmoke;	
+}
+
+
+footer nav a {
+
+	text-decoration: none;
+	color: black;
+	font-size: 1.2em;
+}
+
+
+footer nav ul {
+	display: flex;
+	flex-direction: row	;
+	list-style: none;
+	justify-content: space-between;
+	margin: 0.2em;
+	padding: 0.2em 0.5em;
+
 }

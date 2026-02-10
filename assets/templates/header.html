@@ -1,59 +1,67 @@
 <!doctype html>
 
 <html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Projet</title>
 
-		<link rel="stylesheet" href="./style.css" />
-	</head>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Projet</title>
 
-	<body>
-		<header>
-			<img
-				src="../../assets/image/burger-bar.png"
-				class="menu_burger_icone"
-				alt="menu burger"
-			/>
+	<link rel="stylesheet" href="./style.css" />
+</head>
 
-			<a href="./header.html">
-				<img
-					src="../../assets/image/logo.png"
-					class="logo"
-					alt="logo du site"
-			/></a>
+<body>
+	<header>
+		<img src="../../assets/image/burger-bar.png" class="menu_burger_icone" alt="menu burger" />
 
-			<nav class="navbar">
-				<ul class="liens_btn">
-					<li>
-						<a href="./header.html" class="active"> Acceuil </a>
-					</li>
-					<li><a href="./pages/offres.html"> Offres </a></li>
-					<li><a href="./pages/dashboard.html"> Dashboard </a></li>
-				</ul>
-			</nav>
+		<a href="./header.html">
+			<img src="../../assets/image/logo.png" class="logo" alt="logo du site" /></a>
 
-			<a href="./pages/profil.html" class="profil"
-				><img
-					class="img_profil"
-					src="../../assets/image/utilisateur.png"
-					alt="icone du profil"
-				/>
-			</a>
-		</header>
+		<nav class="navbar">
+			<ul class="liens_btn">
+				<li>
+					<a href="./header.html" class="active"> Acceuil </a>
+				</li>
+				<li><a href="./pages/offres.html"> Offres </a></li>
+				<li><a href="./pages/dashboard.html"> Dashboard </a></li>
+			</ul>
+		</nav>
 
-		<main>
-			<h2>tezugfzug</h2>
-		</main>
-	</body>
+		<a href="./pages/profil.html" class="profil"><img class="img_profil" src="../../assets/image/utilisateur.png"
+				alt="icone du profil" />
+		</a>
+	</header>
 
-	<script>
-		const menu_burger = document.querySelector(".menu_burger_icone");
-		const liens_btn = document.querySelector(".liens_btn");
+	<main>
+		<h2>tezugfzug</h2>
+	</main>
 
-		menu_burger.addEventListener("click", () => {
-			liens_btn.classList.toggle("menu");
-		});
-	</script>
+
+
+
+
+	<footer>
+		<nav>
+			<ul>
+				<li><a href="../../pages/crédits"> crédits</a> </li>
+				<li><a href="../../pages/mention_légal">mention légal</a></li>
+			</ul>
+		</nav>
+	</footer>
+
+
+
+
+
+</body>
+
+<script>
+	const menu_burger = document.querySelector(".menu_burger_icone");
+	const liens_btn = document.querySelector(".liens_btn");
+
+	menu_burger.addEventListener("click", () => {
+		liens_btn.classList.toggle("menu");
+	});
+</script>
+
 </html>
