@@ -12,6 +12,40 @@
 		/>
 	</head>
 	<body>
+		<header>
+			<img
+				src="../../assets/image/burger-bar.png"
+				class="menu_burger_icone"
+				alt="menu burger"
+			/>
+
+			<a href="./header.html">
+				<img
+					src="./assets/image/logo.png"
+					src="../../assets/image/logo.png"
+					class="logo"
+					alt="logo du site"
+			/></a>
+
+			<nav class="navbar">
+				<ul class="liens_btn">
+					<li>
+						<a href="./header.html" class="active"> Acceuil </a>
+					</li>
+					<li><a href="./pages/offres.html"> Offres </a></li>
+					<li><a href="./pages/dashboard.html"> Dashboard </a></li>
+				</ul>
+			</nav>
+
+			<a href="./pages/profil.html" class="profil"
+				><img
+					class="img_profil"
+					src="../../assets/image/utilisateur.png"
+					alt="icone du profil"
+				/>
+			</a>
+		</header>
+
 		<main class="main_index">
 			<section class="section_index">
 				<div class="div_sec_index">
@@ -53,4 +87,13 @@
 			</section>
 		</main>
 	</body>
+
+	<script>
+		const menu_burger = document.querySelector(".menu_burger_icone");
+		const liens_btn = document.querySelector(".liens_btn");
+
+		menu_burger.addEventListener("click", () => {
+			liens_btn.classList.toggle("menu");
+		});
+	</script>
 </html>
