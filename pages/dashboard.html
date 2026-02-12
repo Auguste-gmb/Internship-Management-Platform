@@ -1,39 +1,42 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-		<link rel="stylesheet" href="../assets/css/style.css" />
-	</head>
-	<body>
-		<main>
-			<h1>Dashboard</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <main class="main_dashboard">
+      <h1>Dashboard</h1>
+      <div class="status_dashboard">
+        <div class="card_dashboard accepted">
+          <h2 class="status_H_dashboard">Acceptés</h2>
+          <h1 class="status_H_dashboard">0</h1>
+        </div>
 
-			<div>
-				<h2>Acceptés</h2>
-				<h3>0</h3>
-			</div>
+        <div class="card_dashboard waiting">
+          <h2 class="status_H_dashboard">En attente</h2>
+          <h1 class="status_H_dashboard">5</h1>
+        </div>
 
-			<div>
-				<h2>En attente</h2>
-				<h3>5</h3>
-			</div>
+        <div class="card_dashboard refused">
+          <h2 class="status_H_dashboard">Refusés</h2>
+          <h1 class="status_H_dashboard">28</h1>
+        </div>
+      </div>
 
-			<div>
-				<h2>Refusés</h2>
-				<h3>28</h3>
-			</div>
+      <div class="subdiv2_dashboard">
+        <div class="subdiv2_1_dashboard"></div>
 
-			<div></div>
-
-			<div>
-				<h2>Offres postulées</h2>
-				<div>
-					<h3>33</h3>
-					<h2>Offres</h2>
-				</div>
-			</div>
-		</main>
-	</body>
+        <div class="subdiv2_2_dashboard">
+          <h2>Offres postulées</h2>
+          <div class="subdiv2_2_1_dashboard">
+            <h3>33</h3>
+            <h2>Offres</h2>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
 </html>
