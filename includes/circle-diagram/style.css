@@ -12,7 +12,7 @@ body {
 	width: 250px;
 	height: 250px;
 	border-radius: 50%;
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .center-label {
@@ -21,8 +21,8 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background: white;
-	width: 100px;
-	height: 100px;
+	width: 150px;
+	height: 150px;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;

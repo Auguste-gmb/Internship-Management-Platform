@@ -1,7 +1,7 @@
 // JSON DATA
 const data = {
-	"Offer waiting": 45,
-	"Offer refuse": 40,
+	"Offer waiting": 5,
+	"Offer refuse": 28,
 	"Offer accepted": 1,
 };
 
@@ -30,22 +30,6 @@ for (let key in data) {
 	const color = colors[colorIndex % colors.length];
 
 	gradientParts.push(`${color} ${start}% ${end}%`);
-
-	/*
-	// Création légende
-	const legendItem = document.createElement("div");
-	legendItem.classList.add("legend-item");
-
-	const colorBox = document.createElement("div");
-	colorBox.classList.add("legend-color");
-	colorBox.style.background = color;
-
-	const text = document.createTextNode(`${key} - ${value}`);
-
-	legendItem.appendChild(colorBox);
-	legendItem.appendChild(text);
-	legendContainer.appendChild(legendItem);
-    */
 
 	cumulativePercent += percent;
 	colorIndex++;
