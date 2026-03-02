@@ -1,0 +1,100 @@
+img.photo_de_profil {
+
+    width: 10em;
+    height: 10em;
+    border-radius: 50%;
+    border: 2px solid black;
+
+
+}
+
+
+
+.info_du_profil {
+    display: flex;
+    flex-direction: row;
+    gap: 10em  ;
+    /** background-color: rgb(255, 221, 210); **/
+    padding: 5em;
+    border-radius: 80px;
+    margin-inline-start: 5em;
+
+}
+
+
+main.profil div {
+
+    background-color: rgb(237, 246, 249);
+    border-radius: 50px;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+main.profil {
+
+    display: flex;
+    flex-direction: column;
+    gap: 2.5em;
+}
+
+div.info_basic {
+
+    display: flex;
+
+    justify-content: space-between;
+    
+    padding-top: 2em;
+    padding-bottom: 2em;
+
+
+}
+
+
+div.le_diplome {
+
+    padding-top: 2em;
+    padding-bottom: 2em;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+section.info_dip_exp {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    padding: 0;
+}
+
+
+
+main.profil ul{
+
+    list-style: none;
+    
+}
+
+section.info_dip_exp ul {
+
+display: flex;
+flex-direction: column;
+justify-content: left;
+margin: 0;
+
+}
+
+
+@media screen and (max-width: 750px){
+    
+    
+
+    section.info_du_profil {
+
+        display: flex;
+        flex-direction: column;
+        gap: 5em   ;
+        
+    }
+
+
+}
