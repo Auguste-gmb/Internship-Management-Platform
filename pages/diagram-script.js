@@ -2,7 +2,7 @@
 const data = {
 	"Offer waiting": 5,
 	"Offer refuse": 28,
-	"Offer accepted": 1,
+	"Offer accepted": 0,
 };
 
 // Couleurs automatiques
