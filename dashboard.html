@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Mon tableau de bord — StageHub" />
+		<title>StageHub — Dashboard</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="dashboard-style.css" />
+	</head>
+	<body>
+		<!-- NAV -->
+		<nav>
+			<a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
+
+			<div class="nav-links" id="navLinks">
+				<a href="index.html">Accueil</a>
+				<span class="sep">|</span>
+				<a href="offer.html">Offres</a>
+				<span class="sep">|</span>
+				<a href="entreprises.html">Entreprises</a>
+				<span class="sep">|</span>
+				<a href="dashboard.html" class="active">Dashboard</a>
+			</div>
+			<div class="nav-right">
+				<a href="login-register.html" class="btn-login">Connexion</a>
+				<div class="nav-avatar" aria-label="Profil">
+					<svg viewBox="0 0 24 24" fill="currentColor">
+						<path
+							d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+						/>
+					</svg>
+				</div>
+				<div class="nav-hamburger" id="hamburger">
+					<span></span><span></span><span></span>
+				</div>
+			</div>
+		</nav>
+
+		<div class="page">
+			<!-- GREETING -->
+			<div class="greeting">
+				<div class="greeting-left">
+					<h1>Bonjour, <span>Thomas</span> 👋</h1>
+					<p>
+						Voici un résumé de votre activité de recherche de stage.
+					</p>
+				</div>
+				<a href="offer.html" class="btn-primary">
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<circle cx="11" cy="11" r="8" />
+						<line x1="21" y1="21" x2="16.65" y2="16.65" />
+					</svg>
+					Chercher un stage
+				</a>
+			</div>
+
+			<!-- STAT CARDS -->
+			<div class="stats-row">
+				<div class="stat-card accepted">
+					<div class="stat-card-icon">✓</div>
+					<span class="stat-card-label">Acceptés</span>
+					<span class="stat-card-value">0</span>
+					<span class="stat-card-sub">candidature retenue</span>
+				</div>
+				<div class="stat-card pending">
+					<div class="stat-card-icon">⏳</div>
+					<span class="stat-card-label">En attente</span>
+					<span class="stat-card-value">5</span>
+					<span class="stat-card-sub">réponses en cours</span>
+				</div>
+				<div class="stat-card refused">
+					<div class="stat-card-icon">✕</div>
+					<span class="stat-card-label">Refusés</span>
+					<span class="stat-card-value">28</span>
+					<span class="stat-card-sub">candidatures refusées</span>
+				</div>
+			</div>
+
+			<!-- MAIN GRID ROW 1 -->
+			<div class="main-grid">
+				<!-- Candidatures récentes -->
+				<div class="card">
+					<div class="card-header">
+						<h2 class="card-title">Mes candidatures</h2>
+						<a href="#" class="card-link">Voir tout →</a>
+					</div>
+					<div class="candidature-list">
+						<div class="candidature-item">
+							<div class="cand-logo">AC</div>
+							<div class="cand-info">
+								<p class="cand-title">Développeur Full-Stack</p>
+								<p class="cand-company">Accenture · Paris</p>
+							</div>
+							<span class="status-badge pending">En attente</span>
+							<span class="cand-date">02/03</span>
+						</div>
+
+						<div class="candidature-item">
+							<div class="cand-logo">CA</div>
+							<div class="cand-info">
+								<p class="cand-title">UX/UI Designer</p>
+								<p class="cand-company">Capgemini · Lyon</p>
+							</div>
+							<span class="status-badge refused">Refusé</span>
+							<span class="cand-date">25/02</span>
+						</div>
+
+						<div class="candidature-item">
+							<div class="cand-logo">SO</div>
+							<div class="cand-info">
+								<p class="cand-title">Analyste Data</p>
+								<p class="cand-company">
+									Sopra Steria · Bordeaux
+								</p>
+							</div>
+							<span class="status-badge pending">En attente</span>
+							<span class="cand-date">20/02</span>
+						</div>
+
+						<div class="candidature-item">
+							<div class="cand-logo">AL</div>
+							<div class="cand-info">
+								<p class="cand-title">Ingénieur DevOps</p>
+								<p class="cand-company">Alten · Toulouse</p>
+							</div>
+							<span class="status-badge refused">Refusé</span>
+							<span class="cand-date">14/02</span>
+						</div>
+
+						<div class="candidature-item">
+							<div class="cand-logo">OG</div>
+							<div class="cand-info">
+								<p class="cand-title">Chef de projet digital</p>
+								<p class="cand-company">Orange Group · Paris</p>
+							</div>
+							<span class="status-badge pending">En attente</span>
+							<span class="cand-date">10/02</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Donut chart -->
+				<div class="card">
+					<div class="card-header">
+						<h2 class="card-title">Offres postulées</h2>
+					</div>
+					<div class="donut-wrap">
+						<div class="donut-svg-wrap">
+							<svg viewBox="0 0 36 36">
+								<!-- bg track -->
+								<circle
+									cx="18"
+									cy="18"
+									r="15.5"
+									fill="none"
+									stroke="#ebebeb"
+									stroke-width="4"
+								/>
+								<!-- refused: 85% → 85/100 * 97.4 ≈ 82.8 -->
+								<circle
+									cx="18"
+									cy="18"
+									r="15.5"
+									fill="none"
+									stroke="var(--salmon-light)"
+									stroke-width="4"
+									stroke-dasharray="82.8 97.4"
+									stroke-linecap="round"
+								/>
+								<!-- pending: 15% → 14.6 -->
+								<circle
+									cx="18"
+									cy="18"
+									r="15.5"
+									fill="none"
+									stroke="var(--sky)"
+									stroke-width="4"
+									stroke-dasharray="14.6 97.4"
+									stroke-dashoffset="-82.8"
+									stroke-linecap="round"
+								/>
+							</svg>
+							<div class="donut-center">
+								<div class="val">33</div>
+								<div class="lbl">Offres</div>
+							</div>
+						</div>
+						<div class="donut-legend">
+							<div class="legend-item">
+								<span
+									class="legend-dot"
+									style="background: var(--salmon-light)"
+								></span>
+								Refusés
+								<span class="legend-count">28</span>
+							</div>
+							<div class="legend-item">
+								<span
+									class="legend-dot"
+									style="background: var(--sky)"
+								></span>
+								En attente
+								<span class="legend-count">5</span>
+							</div>
+							<div class="legend-item">
+								<span
+									class="legend-dot"
+									style="background: var(--mint-dark)"
+								></span>
+								Acceptés
+								<span class="legend-count">0</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Mini progression -->
+					<div class="progress-section">
+						<h3>Taux de réponse</h3>
+						<div class="progress-item">
+							<div class="progress-label">
+								<span>Taux global</span><span>100 %</span>
+							</div>
+							<div class="progress-bar">
+								<div
+									class="progress-fill"
+									style="width: 100%"
+								></div>
+							</div>
+						</div>
+						<div class="progress-item">
+							<div class="progress-label">
+								<span>Refus</span><span>85 %</span>
+							</div>
+							<div class="progress-bar">
+								<div
+									class="progress-fill"
+									style="
+										width: 85%;
+										background: var(--salmon-light);
+									"
+								></div>
+							</div>
+						</div>
+						<div class="progress-item">
+							<div class="progress-label">
+								<span>En attente</span><span>15 %</span>
+							</div>
+							<div class="progress-bar">
+								<div
+									class="progress-fill"
+									style="width: 15%; background: var(--sky)"
+								></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- MAIN GRID ROW 2 -->
+			<div class="main-grid">
+				<!-- Wish-list -->
+				<div class="card">
+					<div class="card-header">
+						<h2 class="card-title">Ma wish-list ❤️</h2>
+						<a href="offres.html" class="card-link"
+							>Voir les offres →</a
+						>
+					</div>
+					<div class="wish-grid">
+						<div class="wish-card">
+							<span class="wish-card-company">Accenture</span>
+							<span class="wish-card-title"
+								>Développeur Full-Stack PHP/JS</span
+							>
+							<span class="wish-card-salary">800 €/mois</span>
+							<div class="wish-card-footer">
+								<span class="wish-card-loc">📍 Paris</span>
+								<button class="wish-remove" title="Retirer">
+									♥
+								</button>
+							</div>
+						</div>
+
+						<div class="wish-card">
+							<span class="wish-card-company">Capgemini</span>
+							<span class="wish-card-title"
+								>UX/UI Designer Stage</span
+							>
+							<span class="wish-card-salary">700 €/mois</span>
+							<div class="wish-card-footer">
+								<span class="wish-card-loc">📍 Lyon</span>
+								<button class="wish-remove" title="Retirer">
+									♥
+								</button>
+							</div>
+						</div>
+
+						<div class="wish-card">
+							<span class="wish-card-company">BNP Paribas</span>
+							<span class="wish-card-title"
+								>Analyste Financier Junior</span
+							>
+							<span class="wish-card-salary">950 €/mois</span>
+							<div class="wish-card-footer">
+								<span class="wish-card-loc">📍 Rouen</span>
+								<button class="wish-remove" title="Retirer">
+									♥
+								</button>
+							</div>
+						</div>
+
+						<div class="wish-card">
+							<span class="wish-card-company">Orange Group</span>
+							<span class="wish-card-title"
+								>Chef de projet digital</span
+							>
+							<span class="wish-card-salary">780 €/mois</span>
+							<div class="wish-card-footer">
+								<span class="wish-card-loc">📍 Paris</span>
+								<button class="wish-remove" title="Retirer">
+									♥
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Profil étudiant -->
+				<div style="display: flex; flex-direction: column; gap: 20px">
+					<div class="profile-card">
+						<div class="profile-avatar">
+							<svg viewBox="0 0 24 24" fill="currentColor">
+								<path
+									d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+								/>
+							</svg>
+						</div>
+						<div class="profile-info">
+							<h2>Thomas Dupont</h2>
+							<p>thomas.dupont@cesi.fr</p>
+							<span class="profile-promo">PGE A2 · CPI INFO</span>
+						</div>
+						<div class="profile-stats">
+							<div class="profile-stat">
+								<div class="n">33</div>
+								<div class="l">Postulés</div>
+							</div>
+							<div class="profile-stat">
+								<div class="n">4</div>
+								<div class="l">Wish-list</div>
+							</div>
+						</div>
+						<a href="#" class="btn-edit">Modifier</a>
+					</div>
+
+					<!-- Prochaines échéances -->
+					<div class="card">
+						<div class="card-header">
+							<h2 class="card-title">Échéances à venir</h2>
+						</div>
+						<div class="candidature-list">
+							<div class="candidature-item">
+								<div
+									class="cand-logo"
+									style="background: #fef3c7; color: #b45309"
+								>
+									📅
+								</div>
+								<div class="cand-info">
+									<p class="cand-title">
+										Début stage obligatoire
+									</p>
+									<p class="cand-company">
+										CESI · Promotion 2025
+									</p>
+								</div>
+								<span
+									class="cand-date"
+									style="
+										color: var(--salmon);
+										font-weight: 800;
+									"
+									>01/06</span
+								>
+							</div>
+							<div class="candidature-item">
+								<div
+									class="cand-logo"
+									style="background: #e0e7ff; color: #4338ca"
+								>
+									📝
+								</div>
+								<div class="cand-info">
+									<p class="cand-title">
+										Dépôt convention de stage
+									</p>
+									<p class="cand-company">Scolarité CESI</p>
+								</div>
+								<span
+									class="cand-date"
+									style="color: var(--gray); font-weight: 800"
+									>15/05</span
+								>
+							</div>
+							<div class="candidature-item">
+								<div
+									class="cand-logo"
+									style="background: #d1fae5; color: #065f46"
+								>
+									🎓
+								</div>
+								<div class="cand-info">
+									<p class="cand-title">
+										Rapport de stage à rendre
+									</p>
+									<p class="cand-company">
+										Pilote de promotion
+									</p>
+								</div>
+								<span
+									class="cand-date"
+									style="color: var(--gray); font-weight: 800"
+									>31/08</span
+								>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /page -->
+		<script src="dashboard-script.js"></script>
+	</body>
+</html>

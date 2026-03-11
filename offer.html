@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Parcourez toutes les offres de stage disponibles sur StageHub."/>
+  <meta name="keywords" content="offres de stage, stage, alternance, CESI, emploi étudiant"/>
+  <title>StageHub — Offres de stage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="offer-style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Accueil</a>
+      <span class="sep">|</span>
+      <a href="offer.html" class="active">Offres</a>
+      <span class="sep">|</span>
+      <a href="entreprises.html">Entreprises</a>
+      <span class="sep">|</span>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+    <div class="nav-right">
+				<a href="login-register.html" class="btn-login">Connexion</a>
+      <div class="nav-avatar" aria-label="Profil">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+        </svg>
+      </div>
+      <div class="nav-hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb">
+        <a href="accueil.html">Accueil</a>
+        <span>›</span>
+        <span style="color:var(--dark); opacity:1">Offres</span>
+      </div>
+      <h1>Toutes les <em>offres</em> de stage</h1>
+      <p>128 offres disponibles dans 80 entreprises partenaires</p>
+
+      <div class="search-wrap">
+        <div class="search-bar">
+          <input class="search-input" type="text" placeholder="Emploi, compétence..." id="jobInput"/>
+          <div class="search-divider"></div>
+          <input class="search-input" type="text" placeholder="Ville, région…" id="locInput" style="max-width:200px"/>
+          <button class="search-btn" aria-label="Rechercher" id="searchBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <button class="filter-toggle-btn" id="filterToggle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/>
+      </svg>
+      Filtres
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Domaine -->
+      <div class="filter-card">
+        <h3>Domaine <button onclick="clearFilter('domaine')">Réinitialiser</button></h3>
+        <div class="filter-options" id="domaine">
+          <label class="filter-option">
+            <input type="checkbox" checked onchange="updateChips()">
+            <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg></span>
+            <span class="filter-label">Informatique <span class="filter-count">42</span></span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" onchange="updateChips()">
+            <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg></span>
+            <span class="filter-label">Finance <span class="filter-count">18</span></span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" onchange="updateChips()">
+            <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg></span>
+            <span class="filter-label">Marketing <span class="filter-count">24</span></span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" onchange="updateChips()">
+            <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg></span>
+            <span class="filter-label">Design <span class="filter-count">16</span></span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" onchange="updateChips()">
+            <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg></span>
+            <span class="filter-label">Data / IA <span class="filter-count">28</span></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Durée -->
+      <div class="filter-card">
+        <h3>Durée <button onclick="clearFilter('duree')">Réinitialiser</button></h3>
+        <div class="filter-options" id="duree">
+          <label class="filter-option">
+            <input type="checkbox" onchange="updateChips()">
+            <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg></span>
+            <span class="filter-label">1 – 2 mois <span class="filter-count">14</span></span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" checked onchange="updateChips()">
+            <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg></span>
+            <span class="filter-label">3 – 4 mois <span class="filter-count">52</span></span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" onchange="updateChips()">
+            <span class="custom-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg></span>
+            <span class="filter-label">5 – 6 mois <span class="filter-count">62</span></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Rémunération -->
+      <div class="filter-card">
+        <h3>Rémunération</h3>
+        <div class="range-wrap">
+          <div class="range-display">
+            <span>0 €</span>
+            <span id="rangeVal">1 200 €/mois</span>
+          </div>
+          <input type="range" min="0" max="1500" value="1200" id="salaryRange" oninput="updateRange(this.value)"/>
+        </div>
+      </div>
+
+      <button class="apply-btn" onclick="applyFilters()">Appliquer les filtres</button>
+    </aside>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-content">
+
+      <!-- Results bar -->
+      <div class="results-bar">
+        <p class="results-count"><strong>78 offres</strong> correspondent à votre recherche</p>
+        <div class="sort-wrap">
+          <span class="sort-label">Trier par</span>
+          <select class="sort-select">
+            <option>Plus récentes</option>
+            <option>Rémunération ↑</option>
+            <option>Rémunération ↓</option>
+            <option>Entreprise A–Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active filters chips -->
+      <div class="active-filters" id="activeFilters">
+        <button class="chip" onclick="removeChip(this)">Informatique <span class="chip-x">×</span></button>
+        <button class="chip" onclick="removeChip(this)">3 – 4 mois <span class="chip-x">×</span></button>
+      </div>
+
+      <!-- Cards grid -->
+      <div class="offers-grid">
+
+        <!-- Card 1 – Finance -->
+        <article class="offer-card" data-domain="finance">
+          <span class="domain-badge">Finance</span>
+          <div class="offer-top">
+            <div class="offer-company">
+              <div class="company-logo">BN</div>
+              <span class="company-name">BNP Paribas</span>
+            </div>
+          </div>
+          <p class="offer-title">Banquier Analyste Junior</p>
+          <div class="offer-location">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Rouen
+          </div>
+          <div class="offer-tags">
+            <span class="offer-tag">Finance</span>
+            <span class="offer-tag">Excel</span>
+            <span class="offer-tag">Analyse</span>
+          </div>
+          <div class="offer-footer">
+            <span class="offer-salary">950 €/mois</span>
+            <span class="offer-date">Il y a 2 jours</span>
+            <a href="postuler.html" class="btn-voir">Voir</a>
+            <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Favoris">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 2 – Informatique -->
+        <article class="offer-card" data-domain="info">
+          <span class="domain-badge">Informatique</span>
+          <div class="offer-top">
+            <div class="offer-company">
+              <div class="company-logo">AC</div>
+              <span class="company-name">Accenture</span>
+            </div>
+          </div>
+          <p class="offer-title">Développeur Full-Stack PHP/JS</p>
+          <div class="offer-location">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Paris
+          </div>
+          <div class="offer-tags">
+            <span class="offer-tag">PHP</span>
+            <span class="offer-tag">JavaScript</span>
+            <span class="offer-tag">MySQL</span>
+          </div>
+          <div class="offer-footer">
+            <span class="offer-salary">800 €/mois</span>
+            <span class="offer-date">Il y a 1 jour</span>
+            <a href="postuler.html" class="btn-voir">Voir</a>
+            <button class="wishlist-btn" onclick="toggleWish(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 3 – Design -->
+        <article class="offer-card" data-domain="design">
+          <span class="domain-badge">Design</span>
+          <div class="offer-top">
+            <div class="offer-company">
+              <div class="company-logo">CA</div>
+              <span class="company-name">Capgemini</span>
+            </div>
+          </div>
+          <p class="offer-title">Stage UX/UI Designer</p>
+          <div class="offer-location">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Lyon
+          </div>
+          <div class="offer-tags">
+            <span class="offer-tag">Figma</span>
+            <span class="offer-tag">CSS</span>
+            <span class="offer-tag">Responsive</span>
+          </div>
+          <div class="offer-footer">
+            <span class="offer-salary">700 €/mois</span>
+            <span class="offer-date">Il y a 3 jours</span>
+            <a href="postuler.html" class="btn-voir">Voir</a>
+            <button class="wishlist-btn active" onclick="toggleWish(this)">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 4 – Data -->
+        <article class="offer-card" data-domain="data">
+          <span class="domain-badge">Data / IA</span>
+          <div class="offer-top">
+            <div class="offer-company">
+              <div class="company-logo">SO</div>
+              <span class="company-name">Sopra Steria</span>
+            </div>
+          </div>
+          <p class="offer-title">Analyste Données & Reporting</p>
+          <div class="offer-location">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Bordeaux
+          </div>
+          <div class="offer-tags">
+            <span class="offer-tag">SQL</span>
+            <span class="offer-tag">Python</span>
+            <span class="offer-tag">Power BI</span>
+          </div>
+          <div class="offer-footer">
+            <span class="offer-salary">850 €/mois</span>
+            <span class="offer-date">Il y a 5 jours</span>
+            <a href="postuler.html" class="btn-voir">Voir</a>
+            <button class="wishlist-btn" onclick="toggleWish(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 5 – DevOps -->
+        <article class="offer-card" data-domain="devops">
+          <span class="domain-badge">DevOps</span>
+          <div class="offer-top">
+            <div class="offer-company">
+              <div class="company-logo">AL</div>
+              <span class="company-name">Alten</span>
+            </div>
+          </div>
+          <p class="offer-title">Ingénieur DevOps</p>
+          <div class="offer-location">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Toulouse
+          </div>
+          <div class="offer-tags">
+            <span class="offer-tag">Docker</span>
+            <span class="offer-tag">Linux</span>
+            <span class="offer-tag">CI/CD</span>
+          </div>
+          <div class="offer-footer">
+            <span class="offer-salary">900 €/mois</span>
+            <span class="offer-date">Il y a 1 jour</span>
+            <a href="postuler.html" class="btn-voir">Voir</a>
+            <button class="wishlist-btn" onclick="toggleWish(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 6 – Management -->
+        <article class="offer-card" data-domain="management">
+          <span class="domain-badge">Management</span>
+          <div class="offer-top">
+            <div class="offer-company">
+              <div class="company-logo">OG</div>
+              <span class="company-name">Orange Group</span>
+            </div>
+          </div>
+          <p class="offer-title">Chef de projet digital</p>
+          <div class="offer-location">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Paris
+          </div>
+          <div class="offer-tags">
+            <span class="offer-tag">Agile</span>
+            <span class="offer-tag">Scrum</span>
+            <span class="offer-tag">Jira</span>
+          </div>
+          <div class="offer-footer">
+            <span class="offer-salary">780 €/mois</span>
+            <span class="offer-date">Il y a 7 jours</span>
+            <a href="postuler.html" class="btn-voir">Voir</a>
+            <button class="wishlist-btn" onclick="toggleWish(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <button class="page-btn arrow">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">4</button>
+        <span style="font-weight:700;color:#ccc;padding:0 4px">…</span>
+        <button class="page-btn">11</button>
+        <button class="page-btn arrow">›</button>
+      </div>
+
+    </div><!-- /main-content -->
+  </div><!-- /layout -->
+    <script src="offer-script.js"></script>
+</body>
+</html>
