@@ -1,112 +1,341 @@
 <!doctype html>
 <html lang="fr">
 	<head>
-		<link rel="stylesheet" href="./assets/css/style.css" />
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<title>recherche de stage</title>
+		<title>StageHub — Trouvez votre stage idéal</title>
 		<link
+			href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
 			rel="stylesheet"
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=search"
 		/>
+		<link rel="stylesheet" href="index-style.css" />
 	</head>
 	<body>
-		<!-- Header -->
-		<header>
-			<img
-				src="./assets/image/burger-bar.png"
-				class="menu_burger_icone"
-				alt="menu burger"
-			/>
+		<nav>
+			<a href="#" class="nav-logo">Stage<span>Hub</span></a>
 
-			<a href="./index.html">
-				<img
-					src="./assets/image/logo.png"
-					class="logo"
-					alt="logo du site"
-			/></a>
+			<div class="nav-links" id="navLinks">
+				<a href="#" class="active">Accueil</a>
+				<span class="sep">|</span>
+				<a href="#offres">Offres</a>
+				<span class="sep">|</span>
+				<a href="#entreprises">Entreprises</a>
+				<span class="sep">|</span>
+				<a href="#">Dashboard</a>
+			</div>
 
-			<nav class="navbar">
-				<ul class="liens_btn">
-					<li>
-						<a href="./header.html" class="active"> Acceuil </a>
-					</li>
-					<li><a href="./pages/offres.html"> Offres </a></li>
-					<li><a href="./pages/dashboard.html"> Dashboard </a></li>
-				</ul>
-			</nav>
+			<div class="nav-right">
+				<a href="#" class="btn-login">Connexion</a>
+				<div class="nav-avatar" aria-label="Profil">
+					<svg viewBox="0 0 24 24" fill="currentColor">
+						<path
+							d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+						/>
+					</svg>
+				</div>
+				<div class="nav-hamburger" id="hamburger" aria-label="Menu">
+					<span></span><span></span><span></span>
+				</div>
+			</div>
+		</nav>
 
-			<a href="./pages/profil.html" class="profil"
-				><img
-					class="img_profil"
-					src="./assets/image/utilisateur.png"
-					alt="icone du profil"
-				/>
-			</a>
-		</header>
-
-		<!-- Main -->
-		<main class="main_index">
-			<section class="section_index">
-				<div class="div_sec_index">
-					<h1>
-						Trouvez l'emploi <br />
-						idéal pour vous !
+		<div class="hero-wrapper">
+			<main class="hero">
+				<div class="hero-left">
+					<h1 class="hero-title">
+						Trouvez le <span class="accent">stage</span><br />idéal
+						pour vous !
 					</h1>
-					<div class="rdiv_index">
-						<div class="search_bar">
-							<input type="search" placeholder="Emplois ?" />
-							<input type="search" placeholder="Où ?" />
-							<button type="submit">
-								<svg
-									aria-hidden="true"
-									width="18"
-									height="18"
-									viewBox="0 0 18 18"
-								>
-									<path
-										d="m18 16.5-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18zM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0"
-									></path>
-								</svg>
-							</button>
-						</div>
 
-						<h3>Recherches populaire</h3>
-						<div class="div_button_index">
-							<button>designer</button>
-							<button>developper</button>
-							<button>web</button>
+					<div class="search-bar">
+						<input
+							class="search-input"
+							type="text"
+							placeholder="Emploi, compétence…"
+							id="jobInput"
+						/>
+						<div class="search-divider"></div>
+						<input
+							class="search-input"
+							type="text"
+							placeholder="Ville, région…"
+							id="locInput"
+						/>
+						<button
+							class="search-btn"
+							aria-label="Rechercher"
+							id="searchBtn"
+						>
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<circle cx="11" cy="11" r="8" />
+								<line x1="21" y1="21" x2="16.65" y2="16.65" />
+							</svg>
+						</button>
+					</div>
+
+					<div class="popular">
+						<p class="popular-label">Recherches populaires</p>
+						<div class="tags">
+							<button class="tag" onclick="fillSearch(this)">
+								Designer
+							</button>
+							<button class="tag" onclick="fillSearch(this)">
+								Développeur
+							</button>
+							<button class="tag" onclick="fillSearch(this)">
+								Web
+							</button>
+							<button class="tag" onclick="fillSearch(this)">
+								Marketing
+							</button>
+							<button class="tag" onclick="fillSearch(this)">
+								Data
+							</button>
+							<button class="tag" onclick="fillSearch(this)">
+								UX/UI
+							</button>
 						</div>
 					</div>
 				</div>
-				<aside>
-					<h2>128 offres d'emplois</h2>
-					<h2>86 offres de stages</h2>
-					<h2>120 offres d'alternances</h2>
-				</aside>
-			</section>
-		</main>
 
-		<!-- Footer -->
+				<div class="stats-card">
+					<div class="stat-item">
+						<span class="stat-number" data-target="128">0</span>
+						<span class="stat-label">Offres disponibles</span>
+					</div>
+					<div class="stat-item">
+						<span class="stat-number" data-target="80">0</span>
+						<span class="stat-label">Entreprises</span>
+					</div>
+					<div class="stat-item">
+						<span class="stat-number faded" data-target="128"
+							>0</span
+						>
+						<span class="stat-label">Étudiants inscrits</span>
+					</div>
+				</div>
+			</main>
+		</div>
+
+		<section id="offres" class="section">
+			<div class="section-header">
+				<h2 class="section-title">Offres <span>récentes</span></h2>
+				<a href="#" class="see-all">Voir toutes les offres →</a>
+			</div>
+			<div class="offers-grid">
+				<article class="offer-card">
+					<div class="offer-company">
+						<div class="company-logo">AC</div>
+						<span class="company-name">Accenture</span>
+					</div>
+					<p class="offer-title">Développeur Web Full-Stack</p>
+					<div class="offer-tags">
+						<span class="offer-tag">PHP</span>
+						<span class="offer-tag">JavaScript</span>
+						<span class="offer-tag">MySQL</span>
+					</div>
+					<div class="offer-footer">
+						<span class="offer-salary">800 €/mois</span>
+						<span class="offer-date">Il y a 2 jours</span>
+						<button
+							class="wishlist-btn"
+							onclick="toggleWish(this)"
+							aria-label="Ajouter aux favoris"
+						>
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path
+									d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+								/>
+							</svg>
+						</button>
+					</div>
+				</article>
+
+				<article class="offer-card">
+					<div class="offer-company">
+						<div class="company-logo">CA</div>
+						<span class="company-name">Capgemini</span>
+					</div>
+					<p class="offer-title">Stage UX/UI Designer</p>
+					<div class="offer-tags">
+						<span class="offer-tag">Figma</span>
+						<span class="offer-tag">CSS</span>
+						<span class="offer-tag">Responsive</span>
+					</div>
+					<div class="offer-footer">
+						<span class="offer-salary">700 €/mois</span>
+						<span class="offer-date">Il y a 3 jours</span>
+						<button
+							class="wishlist-btn"
+							onclick="toggleWish(this)"
+							aria-label="Ajouter aux favoris"
+						>
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path
+									d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+								/>
+							</svg>
+						</button>
+					</div>
+				</article>
+
+				<article class="offer-card">
+					<div class="offer-company">
+						<div class="company-logo">SO</div>
+						<span class="company-name">Sopra Steria</span>
+					</div>
+					<p class="offer-title">Analyste Données & Reporting</p>
+					<div class="offer-tags">
+						<span class="offer-tag">SQL</span>
+						<span class="offer-tag">Python</span>
+						<span class="offer-tag">Power BI</span>
+					</div>
+					<div class="offer-footer">
+						<span class="offer-salary">850 €/mois</span>
+						<span class="offer-date">Il y a 5 jours</span>
+						<button
+							class="wishlist-btn"
+							onclick="toggleWish(this)"
+							aria-label="Ajouter aux favoris"
+						>
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path
+									d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+								/>
+							</svg>
+						</button>
+					</div>
+				</article>
+			</div>
+		</section>
+
+		<div class="companies-section" id="entreprises">
+			<div class="companies-inner">
+				<div class="section-header">
+					<h2 class="section-title">
+						Entreprises <span>partenaires</span>
+					</h2>
+					<a href="#" class="see-all">Voir toutes →</a>
+				</div>
+				<div class="companies-grid">
+					<a href="#" class="company-card">
+						<div class="logo-big">AC</div>
+						<h3>Accenture</h3>
+						<p>12 offres actives</p>
+						<div class="stars">★★★★★</div>
+					</a>
+					<a href="#" class="company-card">
+						<div class="logo-big">CA</div>
+						<h3>Capgemini</h3>
+						<p>9 offres actives</p>
+						<div class="stars">★★★★☆</div>
+					</a>
+					<a href="#" class="company-card">
+						<div class="logo-big">SO</div>
+						<h3>Sopra Steria</h3>
+						<p>7 offres actives</p>
+						<div class="stars">★★★★★</div>
+					</a>
+					<a href="#" class="company-card">
+						<div class="logo-big">AL</div>
+						<h3>Alten</h3>
+						<p>5 offres actives</p>
+						<div class="stars">★★★★☆</div>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<section class="cta-section">
+			<h2>Prêt à trouver votre <span>stage</span> ?</h2>
+			<p>
+				Inscrivez-vous gratuitement et accédez à toutes les offres en
+				quelques clics.
+			</p>
+			<div class="cta-btns">
+				<a href="#" class="btn-primary">Créer un compte étudiant</a>
+				<a href="#" class="btn-secondary">Je suis une entreprise</a>
+			</div>
+		</section>
+
 		<footer>
-			<nav>
-				<ul>
-					<li><a href="../../pages/crédits"> crédits</a></li>
-					<li>
-						<a href="../../pages/mention_légal">mention légal</a>
-					</li>
-				</ul>
-			</nav>
+			<div class="footer-grid">
+				<div class="footer-brand">
+					<h3>Stage<span>Hub</span></h3>
+					<p>
+						La plateforme de mise en relation entre étudiants CESI
+						et entreprises partenaires pour des stages
+						enrichissants.
+					</p>
+				</div>
+				<div class="footer-col">
+					<h4>Navigation</h4>
+					<ul>
+						<li><a href="#">Accueil</a></li>
+						<li><a href="#offres">Offres de stage</a></li>
+						<li><a href="#entreprises">Entreprises</a></li>
+						<li><a href="#">Dashboard</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h4>Compte</h4>
+					<ul>
+						<li><a href="#">Connexion</a></li>
+						<li><a href="#">Créer un compte</a></li>
+						<li><a href="#">Mon profil</a></li>
+						<li><a href="#">Ma wish-list</a></li>
+						<li><a href="#">Mes candidatures</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h4>Informations</h4>
+					<ul>
+						<li><a href="#">Mentions légales</a></li>
+						<li><a href="#">Politique de confidentialité</a></li>
+						<li><a href="#">CGU</a></li>
+						<li><a href="#">Contact</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<span
+					>© 2025 StageHub — Projet CESI. Tous droits réservés.</span
+				>
+				<div class="footer-legal-links">
+					<a href="#">Mentions légales</a>
+					<a href="#">Confidentialité</a>
+					<a href="#">CGU</a>
+				</div>
+			</div>
 		</footer>
+		<script src="index-script.js"></script>
 	</body>
-
-	<script>
-		const menu_burger = document.querySelector(".menu_burger_icone");
-		const liens_btn = document.querySelector(".liens_btn");
-
-		menu_burger.addEventListener("click", () => {
-			liens_btn.classList.toggle("menu");
-		});
-	</script>
 </html>
