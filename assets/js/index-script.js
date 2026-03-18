@@ -52,3 +52,56 @@ document.getElementById("searchBtn").addEventListener("click", () => {
 	if (job || loc)
 		alert(`Recherche : "${job || "tous"}" — "${loc || "partout"}"`);
 });
+
+document.getElementById("hamburger").addEventListener("click", () => {
+	document.getElementById("hamburger").classList.toggle("open");
+	document.getElementById("navLinks").classList.toggle("open");
+});
+
+function fillSearch(btn) {
+	document.getElementById("jobInput").value = btn.textContent.trim();
+}
+
+function animateCounter(el) {
+	const target = +el.dataset.target;
+	const duration = 1400;
+	const start = performance.now();
+	function step(now) {
+		const p = Math.min((now - start) / duration, 1);
+		const ease = 1 - Math.pow(1 - p, 3);
+		el.textContent = Math.floor(ease * target);
+		if (p < 1) requestAnimationFrame(step);
+		else el.textContent = target;
+	}
+	requestAnimationFrame(step);
+}
+
+const counters = document.querySelectorAll(".stat-number[data-target]");
+const obs = new IntersectionObserver(
+	(entries) => {
+		if (entries[0].isIntersecting) {
+			counters.forEach(animateCounter);
+			obs.disconnect();
+		}
+	},
+	{ threshold: 0.3 },
+);
+if (counters.length) obs.observe(counters[0].closest(".stats-card"));
+
+window.addEventListener(
+	"scroll",
+	() => {
+		const a = document.getElementById("scrollArrow");
+		if (a) a.style.opacity = window.scrollY > 60 ? "0" : "1";
+	},
+	{ passive: true },
+);
+
+function toggleWish(btn) {
+	btn.classList.toggle("active");
+	const svg = btn.querySelector("svg");
+	svg.setAttribute(
+		"fill",
+		btn.classList.contains("active") ? "currentColor" : "none",
+	);
+}

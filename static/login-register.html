@@ -9,13 +9,11 @@
 			href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
 			rel="stylesheet"
 		/>
-		<link rel="stylesheet" href="login-register-style.css" />
+		<link rel="stylesheet" href="../assets/css/style.css" />
 	</head>
-	<body>
-		<!-- NAV -->
+	<body class="page-login">
 		<nav>
 			<a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
-
 			<div class="nav-links" id="navLinks">
 				<a href="index.html" class="active">Accueil</a>
 				<span class="sep">|</span>
@@ -39,10 +37,8 @@
 			</div>
 		</nav>
 
-		<!-- MAIN -->
-		<div class="main">
+		<div class="login-main">
 			<div class="login-card">
-				<!-- Tabs -->
 				<div class="tabs">
 					<button
 						class="tab active"
@@ -60,9 +56,9 @@
 					</button>
 				</div>
 
-				<!-- ══ LOGIN PANEL ══════════════════════════ -->
+				<!-- LOGIN -->
 				<div class="panel active" id="panelLogin">
-					<div class="card-header">
+					<div class="login-card-header">
 						<div class="card-logo">
 							<svg viewBox="0 0 24 24" fill="currentColor">
 								<path
@@ -74,7 +70,6 @@
 						<p>Accédez à votre espace personnel StageHub</p>
 					</div>
 
-					<!-- Error alert -->
 					<div class="alert error" id="loginAlert">
 						<svg
 							viewBox="0 0 24 24"
@@ -196,7 +191,6 @@
 					</button>
 
 					<div class="divider">ou</div>
-
 					<p class="switch-link">
 						Pas encore de compte ?
 						<a
@@ -210,9 +204,9 @@
 					</p>
 				</div>
 
-				<!-- ══ REGISTER PANEL ═══════════════════════ -->
+				<!-- REGISTER -->
 				<div class="panel" id="panelRegister">
-					<div class="card-header">
+					<div class="login-card-header">
 						<div class="card-logo">
 							<svg
 								viewBox="0 0 24 24"
@@ -234,7 +228,6 @@
 						<p>Rejoignez StageHub et trouvez votre stage idéal</p>
 					</div>
 
-					<!-- Role selector -->
 					<div class="form-group">
 						<label class="form-label">Je suis…</label>
 						<div class="role-selector">
@@ -242,16 +235,13 @@
 								class="role-btn active"
 								onclick="selectRole(this)"
 							>
-								<span class="role-icon">🎓</span>
-								Étudiant
+								<span class="role-icon">🎓</span>Étudiant
 							</button>
 							<button class="role-btn" onclick="selectRole(this)">
-								<span class="role-icon">👨‍🏫</span>
-								Pilote
+								<span class="role-icon">👨‍🏫</span>Pilote
 							</button>
 							<button class="role-btn" onclick="selectRole(this)">
-								<span class="role-icon">🏢</span>
-								Entreprise
+								<span class="role-icon">🏢</span>Entreprise
 							</button>
 						</div>
 					</div>
@@ -278,9 +268,8 @@
 										<path
 											d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
 										/>
-										<circle cx="12" cy="7" r="4" />
-									</svg>
-								</span>
+										<circle cx="12" cy="7" r="4" /></svg
+								></span>
 								<input
 									class="form-input"
 									type="text"
@@ -303,9 +292,8 @@
 										<path
 											d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
 										/>
-										<circle cx="12" cy="7" r="4" />
-									</svg>
-								</span>
+										<circle cx="12" cy="7" r="4" /></svg
+								></span>
 								<input
 									class="form-input"
 									type="text"
@@ -330,9 +318,8 @@
 									<path
 										d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
 									/>
-									<polyline points="22,6 12,13 2,6" />
-								</svg>
-							</span>
+									<polyline points="22,6 12,13 2,6" /></svg
+							></span>
 							<input
 								class="form-input"
 								type="email"
@@ -360,9 +347,8 @@
 										height="11"
 										rx="2"
 									/>
-									<path d="M7 11V7a5 5 0 0 1 10 0v4" />
-								</svg>
-							</span>
+									<path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+							></span>
 							<input
 								class="form-input"
 								type="password"
@@ -421,9 +407,8 @@
 										height="11"
 										rx="2"
 									/>
-									<path d="M7 11V7a5 5 0 0 1 10 0v4" />
-								</svg>
-							</span>
+									<path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+							></span>
 							<input
 								class="form-input"
 								type="password"
@@ -461,7 +446,6 @@
 					</button>
 
 					<div class="divider">ou</div>
-
 					<p class="switch-link">
 						Déjà un compte ?
 						<a
@@ -476,6 +460,6 @@
 				</div>
 			</div>
 		</div>
-		<script src="login-register-script.js"></script>
+		<script src="../assets/js/login-register-script.js"></script>
 	</body>
 </html>

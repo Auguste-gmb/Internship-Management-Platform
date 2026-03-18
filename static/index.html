@@ -8,12 +8,11 @@
 			href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
 			rel="stylesheet"
 		/>
-		<link rel="stylesheet" href="index-style.css" />
+		<link rel="stylesheet" href="../assets/css/style.css" />
 	</head>
-	<body>
+	<body class="page-index">
 		<nav>
 			<a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
-
 			<div class="nav-links" id="navLinks">
 				<a href="index.html" class="active">Accueil</a>
 				<span class="sep">|</span>
@@ -23,7 +22,6 @@
 				<span class="sep">|</span>
 				<a href="dashboard.html">Dashboard</a>
 			</div>
-
 			<div class="nav-right">
 				<a href="login-register.html" class="btn-login">Connexion</a>
 				<div class="nav-avatar" aria-label="Profil">
@@ -39,14 +37,13 @@
 			</div>
 		</nav>
 
-		<div class="hero-wrapper">
+		<div class="hero-wrapper" style="position: relative">
 			<main class="hero">
 				<div class="hero-left">
 					<h1 class="hero-title">
 						Trouvez le <span class="accent">stage</span><br />idéal
 						pour vous !
 					</h1>
-
 					<div class="search-bar">
 						<input
 							class="search-input"
@@ -79,7 +76,6 @@
 							</svg>
 						</button>
 					</div>
-
 					<div class="popular">
 						<p class="popular-label">Recherches populaires</p>
 						<div class="tags">
@@ -122,6 +118,32 @@
 					</div>
 				</div>
 			</main>
+
+			<!-- Scroll arrow -->
+			<a
+				class="scroll-arrow"
+				onclick="
+					document
+						.getElementById('offres')
+						.scrollIntoView({ behavior: 'smooth' });
+					return false;
+				"
+				href="#"
+			>
+				<span>Découvrir</span>
+				<svg
+					width="28"
+					height="28"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="var(--salmon)"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<polyline points="6 9 12 15 18 9" />
+				</svg>
+			</a>
 		</div>
 
 		<section id="offres" class="section">
@@ -131,8 +153,8 @@
 					>Voir toutes les offres →</a
 				>
 			</div>
-			<div class="offers-grid">
-				<article class="offer-card">
+			<div class="offers-grid-index">
+				<article class="offer-card-index">
 					<div class="offer-company">
 						<div class="company-logo">AC</div>
 						<span class="company-name">Accenture</span>
@@ -167,7 +189,7 @@
 					</div>
 				</article>
 
-				<article class="offer-card">
+				<article class="offer-card-index">
 					<div class="offer-company">
 						<div class="company-logo">CA</div>
 						<span class="company-name">Capgemini</span>
@@ -202,7 +224,7 @@
 					</div>
 				</article>
 
-				<article class="offer-card">
+				<article class="offer-card-index">
 					<div class="offer-company">
 						<div class="company-logo">SO</div>
 						<span class="company-name">Sopra Steria</span>
@@ -245,28 +267,28 @@
 					<h2 class="section-title">
 						Entreprises <span>partenaires</span>
 					</h2>
-					<a href="#" class="see-all">Voir toutes →</a>
+					<a href="entreprises.html" class="see-all">Voir toutes →</a>
 				</div>
 				<div class="companies-grid">
-					<a href="#" class="company-card">
+					<a href="#" class="company-card-index">
 						<div class="logo-big">AC</div>
 						<h3>Accenture</h3>
 						<p>12 offres actives</p>
 						<div class="stars">★★★★★</div>
 					</a>
-					<a href="#" class="company-card">
+					<a href="#" class="company-card-index">
 						<div class="logo-big">CA</div>
 						<h3>Capgemini</h3>
 						<p>9 offres actives</p>
 						<div class="stars">★★★★☆</div>
 					</a>
-					<a href="#" class="company-card">
+					<a href="#" class="company-card-index">
 						<div class="logo-big">SO</div>
 						<h3>Sopra Steria</h3>
 						<p>7 offres actives</p>
 						<div class="stars">★★★★★</div>
 					</a>
-					<a href="#" class="company-card">
+					<a href="#" class="company-card-index">
 						<div class="logo-big">AL</div>
 						<h3>Alten</h3>
 						<p>5 offres actives</p>
@@ -338,6 +360,6 @@
 				</div>
 			</div>
 		</footer>
-		<script src="index-script.js"></script>
+		<script src="../assets/js/index-script.js"></script>
 	</body>
 </html>
