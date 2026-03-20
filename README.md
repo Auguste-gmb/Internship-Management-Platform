@@ -17,6 +17,8 @@
 
 --- 
 
+**[Demo Frontend](https://auguste-gmb.github.io/Internship-Management-Platform/static/index.html)** 
+
 ## 1. Présentation du projet
 
 **Internship Management Platform** est un projet de **développement web**.
