@@ -1,0 +1,217 @@
+{% extends 'base.html.twig' %}
+{% set active = 'entreprises' %}
+
+{% block title %}StageHub — Entreprises partenaires{% endblock %}
+{% block meta_desc %}Découvrez toutes les entreprises partenaires de StageHub et leurs offres de stage.{% endblock %}
+
+{% block content %}
+
+{# ════ PAGE HEADER ══════════════════════════════════════════════════════════ #}
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="/">Accueil</a>
+    <span>›</span>
+    <span class="current">Entreprises</span>
+  </div>
+
+  <h1>Nos <em>entreprises</em> partenaires</h1>
+  <p>{{ stats.total_entreprises ?? 80 }} entreprises proposent des offres de stage sur StageHub</p>
+
+  <div class="search-bar" style="max-width: 560px; margin: 0 auto">
+    <input
+      class="search-input"
+      type="text"
+      placeholder="Rechercher une entreprise…"
+      id="searchInput"
+      oninput="filterCards()"
+      value="{{ app_query ?? '' }}"
+    />
+    <button class="search-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+{# ════ LAYOUT ═══════════════════════════════════════════════════════════════ #}
+<div class="layout">
+
+  {# ── Bouton filtres mobile ──────────────────────────────────────────────── #}
+  <button class="filter-toggle-btn" id="filterToggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="4"  y1="6"  x2="20" y2="6"/>
+      <line x1="8"  y1="12" x2="16" y2="12"/>
+      <line x1="10" y1="18" x2="14" y2="18"/>
+    </svg>
+    Filtres
+  </button>
+
+  {# ── SIDEBAR FILTRES ────────────────────────────────────────────────────── #}
+  <aside class="sidebar" id="sidebar" style="width: 240px">
+
+    {# Secteur #}
+    <div class="filter-card">
+      <h3>Secteur <button onclick="clearGroup(this)">Reset</button></h3>
+      <div class="filter-options">
+        {% set secteurs = [
+          { label: 'Informatique', count: 22, checked: true  },
+          { label: 'Finance',      count: 14, checked: false },
+          { label: 'Conseil',      count: 12, checked: false },
+          { label: 'Industrie',    count: 18, checked: false },
+          { label: 'Télécoms',     count: 8,  checked: false },
+          { label: 'Marketing',    count: 6,  checked: false },
+        ] %}
+        {% for s in secteurs %}
+          <label class="filter-option">
+            <input type="checkbox" {{ s.checked ? 'checked' }} onchange="filterCards()"/>
+            <span class="custom-check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="1.5,6 5,9.5 10.5,2.5"/>
+              </svg>
+            </span>
+            <span class="filter-label">
+              {{ s.label }}
+              <span class="filter-count">{{ s.count }}</span>
+            </span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# Note minimale #}
+    <div class="filter-card">
+      <h3>Note minimale</h3>
+      <div class="stars-filter">
+        {% set notes = [
+          { value: '0', label: 'Toutes',      stars: '★★★★★', checked: true  },
+          { value: '3', label: '3+',          stars: '★★★☆☆', checked: false },
+          { value: '4', label: '4+',          stars: '★★★★☆', checked: false },
+          { value: '5', label: '5 seulement', stars: '★★★★★', checked: false },
+        ] %}
+        {% for n in notes %}
+          <label class="star-row">
+            <input type="radio" name="stars" value="{{ n.value }}"
+                   {{ n.checked ? 'checked' }} onchange="filterCards()"/>
+            <span class="stars">{{ n.stars }}</span>
+            <span class="count">{{ n.label }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# Offres actives #}
+    <div class="filter-card">
+      <h3>Offres actives</h3>
+      <div class="filter-options">
+        {% for range in ['1 – 5 offres', '6 – 10 offres', '10+ offres'] %}
+          <label class="filter-option">
+            <input type="checkbox" onchange="filterCards()"/>
+            <span class="custom-check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="1.5,6 5,9.5 10.5,2.5"/>
+              </svg>
+            </span>
+            <span class="filter-label">{{ range }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+  </aside>
+
+  {# ── CONTENU PRINCIPAL ──────────────────────────────────────────────────── #}
+  <div class="main-content">
+
+    <div class="results-bar">
+      <p class="results-count" id="resultsCount">
+        <strong>{{ entreprises|length }} entreprises</strong> référencées
+      </p>
+      <div class="sort-wrap">
+        <span class="sort-label">Trier par</span>
+        <select class="sort-select">
+          <option>Meilleures notes</option>
+          <option>Plus d'offres</option>
+          <option>Nom A–Z</option>
+          <option>Récemment ajoutées</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="active-filters">
+      <button class="chip">
+        Informatique <span style="opacity:.6;margin-left:2px">×</span>
+      </button>
+    </div>
+
+    {# ── Grille entreprises ─────────────────────────────────────────────── #}
+    <div class="company-grid" id="companyGrid">
+      {% for e in entreprises %}
+        <a href="/entreprises/{{ e.id }}" class="company-card {{ e.featured is defined and e.featured ? 'featured' }}">
+          <div class="company-logo-wrap">{{ e.nom|slice(0,2)|upper }}</div>
+          <p class="company-card-name">{{ e.nom }}</p>
+          <p class="company-sector">{{ e.secteur }}</p>
+          <div class="company-stars">
+            {%- for i in 1..5 -%}
+              {{- e.note >= i ? '★' : '☆' -}}
+            {%- endfor -%}
+          </div>
+          <div class="company-meta">
+            {% for tag in e.tags %}
+              <span class="meta-tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          <p class="company-offers-count">{{ e.offres }} offres actives</p>
+          <span class="btn-see">Voir les offres</span>
+        </a>
+      {% else %}
+        <p style="color:#999; grid-column:1/-1; text-align:center; padding:60px 0">
+          Aucune entreprise ne correspond à votre recherche.
+        </p>
+      {% endfor %}
+    </div>
+
+    {# ── Pagination ─────────────────────────────────────────────────────── #}
+    {% if pagination is defined and pagination.total_pages > 1 %}
+      <div class="pagination">
+        <a href="?page={{ pagination.current - 1 }}"
+           class="page-btn arrow {{ pagination.current <= 1 ? 'disabled' }}">‹</a>
+
+        {% for p in 1..pagination.total_pages %}
+          {% if p == pagination.current %}
+            <button class="page-btn active">{{ p }}</button>
+          {% elseif p <= 4 or p == pagination.total_pages %}
+            <a href="?page={{ p }}" class="page-btn">{{ p }}</a>
+          {% elseif p == 5 %}
+            <span style="font-weight:700;color:#ccc;padding:0 4px">…</span>
+          {% endif %}
+        {% endfor %}
+
+        <a href="?page={{ pagination.current + 1 }}"
+           class="page-btn arrow {{ pagination.current >= pagination.total_pages ? 'disabled' }}">›</a>
+      </div>
+    {% else %}
+      <div class="pagination">
+        <button class="page-btn arrow">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">4</button>
+        <span style="font-weight:700;color:#ccc;padding:0 4px">…</span>
+        <button class="page-btn">8</button>
+        <button class="page-btn arrow">›</button>
+      </div>
+    {% endif %}
+
+  </div>{# /main-content #}
+
+</div>{# /layout #}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/assets/js/entreprises-script.js"></script>
+{% endblock %}

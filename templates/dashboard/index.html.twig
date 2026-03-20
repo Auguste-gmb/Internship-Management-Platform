@@ -1,0 +1,275 @@
+{% extends 'base.html.twig' %}
+{% set active = 'dashboard' %}
+
+{% block title %}StageHub — Dashboard{% endblock %}
+{% block meta_desc %}Mon tableau de bord — StageHub{% endblock %}
+
+{% block content %}
+
+<div class="page-dashboard">
+
+  {# ════ GREETING ═════════════════════════════════════════════════════════════ #}
+  <div class="greeting">
+    <div class="greeting-left">
+      <h1>Bonjour, <span>{{ user.prenom ?? 'Thomas' }}</span> 👋</h1>
+      <p>Voici un résumé de votre activité de recherche de stage.</p>
+    </div>
+    <a href="/offres" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      Chercher un stage
+    </a>
+  </div>
+
+  {# ════ STAT CARDS ════════════════════════════════════════════════════════════ #}
+  <div class="stats-row">
+    <div class="stat-card accepted">
+      <div class="stat-card-icon">✓</div>
+      <span class="stat-card-label">Acceptés</span>
+      <span class="stat-card-value">{{ stats.acceptes ?? 0 }}</span>
+      <span class="stat-card-sub">candidature retenue</span>
+    </div>
+    <div class="stat-card pending">
+      <div class="stat-card-icon">⏳</div>
+      <span class="stat-card-label">En attente</span>
+      <span class="stat-card-value">{{ stats.en_attente ?? 5 }}</span>
+      <span class="stat-card-sub">réponses en cours</span>
+    </div>
+    <div class="stat-card refused">
+      <div class="stat-card-icon">✕</div>
+      <span class="stat-card-label">Refusés</span>
+      <span class="stat-card-value">{{ stats.refuses ?? 28 }}</span>
+      <span class="stat-card-sub">candidatures refusées</span>
+    </div>
+  </div>
+
+  {# ════ MAIN GRID — ROW 1 ═════════════════════════════════════════════════════ #}
+  <div class="main-grid">
+
+    {# ── Mes candidatures ───────────────────────────────────────────────────── #}
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Mes candidatures</h2>
+        <a href="#" class="card-link">Voir tout →</a>
+      </div>
+      <div class="candidature-list">
+        {% for c in candidatures %}
+          <div class="candidature-item">
+            <div class="cand-logo">{{ c.entreprise|slice(0,2)|upper }}</div>
+            <div class="cand-info">
+              <p class="cand-title">{{ c.titre }}</p>
+              <p class="cand-company">{{ c.entreprise }} · {{ c.ville }}</p>
+            </div>
+            <span class="status-badge {{ c.statut }}">
+              {{ c.statut == 'pending'  ? 'En attente' :
+                 c.statut == 'accepted' ? 'Accepté'    : 'Refusé' }}
+            </span>
+            <span class="cand-date">{{ c.date }}</span>
+          </div>
+        {% else %}
+          <p style="color:#bbb;text-align:center;padding:20px 0;font-weight:700">
+            Aucune candidature pour le moment.
+          </p>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# ── Donut chart offres postulées ───────────────────────────────────────── #}
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Offres postulées</h2>
+      </div>
+
+      {% set total    = (stats.acceptes ?? 0) + (stats.en_attente ?? 5) + (stats.refuses ?? 28) %}
+      {% set circ     = 97.4 %}
+      {% set refuses_dash  = ((stats.refuses   ?? 28) / total * circ)|round(1) %}
+      {% set attente_dash  = ((stats.en_attente ?? 5)  / total * circ)|round(1) %}
+      {% set acceptes_dash = ((stats.acceptes  ?? 0)  / total * circ)|round(1) %}
+
+      <div class="donut-wrap">
+        <div class="donut-svg-wrap">
+          <svg viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15.5" fill="none"
+                    stroke="#ebebeb" stroke-width="4"/>
+            <circle cx="18" cy="18" r="15.5" fill="none"
+                    stroke="var(--salmon-light)" stroke-width="4"
+                    stroke-dasharray="{{ refuses_dash }} {{ circ }}"
+                    stroke-linecap="round"/>
+            <circle cx="18" cy="18" r="15.5" fill="none"
+                    stroke="var(--sky)" stroke-width="4"
+                    stroke-dasharray="{{ attente_dash }} {{ circ }}"
+                    stroke-dashoffset="-{{ refuses_dash }}"
+                    stroke-linecap="round"/>
+            <circle cx="18" cy="18" r="15.5" fill="none"
+                    stroke="var(--mint-dark)" stroke-width="4"
+                    stroke-dasharray="{{ acceptes_dash }} {{ circ }}"
+                    stroke-dashoffset="-{{ refuses_dash + attente_dash }}"
+                    stroke-linecap="round"/>
+          </svg>
+          <div class="donut-center">
+            <div class="val">{{ total }}</div>
+            <div class="lbl">Offres</div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item">
+            <span class="legend-dot" style="background:var(--salmon-light)"></span>
+            Refusés <span class="legend-count">{{ stats.refuses ?? 28 }}</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background:var(--sky)"></span>
+            En attente <span class="legend-count">{{ stats.en_attente ?? 5 }}</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background:var(--mint-dark)"></span>
+            Acceptés <span class="legend-count">{{ stats.acceptes ?? 0 }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <h3>Taux de réponse</h3>
+        <div class="progress-item">
+          <div class="progress-label"><span>Taux global</span><span>100 %</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+        </div>
+        <div class="progress-item">
+          {% set pct_refuses = total > 0 ? ((stats.refuses ?? 28) / total * 100)|round : 0 %}
+          <div class="progress-label"><span>Refus</span><span>{{ pct_refuses }} %</span></div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:{{ pct_refuses }}%;background:var(--salmon-light)"></div>
+          </div>
+        </div>
+        <div class="progress-item">
+          {% set pct_attente = total > 0 ? ((stats.en_attente ?? 5) / total * 100)|round : 0 %}
+          <div class="progress-label"><span>En attente</span><span>{{ pct_attente }} %</span></div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:{{ pct_attente }}%;background:var(--sky)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>{# /main-grid row 1 #}
+
+  {# ════ MAIN GRID — ROW 2 ═════════════════════════════════════════════════════ #}
+  <div class="main-grid">
+
+    {# ── Wish-list ──────────────────────────────────────────────────────────── #}
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Ma wish-list ❤️</h2>
+        <a href="/offres" class="card-link">Voir les offres →</a>
+      </div>
+      <div class="wish-grid">
+        {% for w in wishlist %}
+          <div class="wish-card">
+            <span class="wish-card-company">{{ w.entreprise }}</span>
+            <span class="wish-card-title">{{ w.titre }}</span>
+            <span class="wish-card-salary">{{ w.salaire }}</span>
+            <div class="wish-card-footer">
+              <span class="wish-card-loc">📍 {{ w.ville }}</span>
+              <button class="wish-remove" title="Retirer">♥</button>
+            </div>
+          </div>
+        {% else %}
+          <p style="color:#bbb;text-align:center;padding:20px 0;font-weight:700;grid-column:1/-1">
+            Votre wish-list est vide.
+          </p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+
+      {# ── Profil étudiant ──────────────────────────────────────────────────── #}
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+          </svg>
+        </div>
+        <div class="profile-info">
+          <h2>{{ user.nom ?? 'Thomas Dupont' }}</h2>
+          <p>{{ user.email ?? 'thomas.dupont@cesi.fr' }}</p>
+          <span class="profile-promo">{{ user.promo ?? 'PGE A2 · CPI INFO' }}</span>
+        </div>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="n">{{ total ?? 33 }}</div>
+            <div class="l">Postulés</div>
+          </div>
+          <div class="profile-stat">
+            <div class="n">{{ wishlist|length }}</div>
+            <div class="l">Wish-list</div>
+          </div>
+        </div>
+        <a href="#" class="btn-edit">Modifier</a>
+      </div>
+
+      {# ── Échéances à venir ────────────────────────────────────────────────── #}
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Échéances à venir</h2>
+        </div>
+        <div class="candidature-list">
+          {% set echeances = [
+            {
+              icon:    '📅',
+              bg:      '#fef3c7',
+              color:   '#b45309',
+              titre:   'Début stage obligatoire',
+              sous:    'CESI · Promotion 2025',
+              date:    '01/06',
+              urgent:  true
+            },
+            {
+              icon:    '📝',
+              bg:      '#e0e7ff',
+              color:   '#4338ca',
+              titre:   'Dépôt convention de stage',
+              sous:    'Scolarité CESI',
+              date:    '15/05',
+              urgent:  false
+            },
+            {
+              icon:    '🎓',
+              bg:      '#d1fae5',
+              color:   '#065f46',
+              titre:   'Rapport de stage à rendre',
+              sous:    'Pilote de promotion',
+              date:    '31/08',
+              urgent:  false
+            },
+          ] %}
+          {% for e in echeances %}
+            <div class="candidature-item">
+              <div class="cand-logo" style="background:{{ e.bg }};color:{{ e.color }}">
+                {{ e.icon }}
+              </div>
+              <div class="cand-info">
+                <p class="cand-title">{{ e.titre }}</p>
+                <p class="cand-company">{{ e.sous }}</p>
+              </div>
+              <span class="cand-date"
+                    style="color:{{ e.urgent ? 'var(--salmon)' : 'var(--gray)' }};font-weight:800">
+                {{ e.date }}
+              </span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>{# /main-grid row 2 #}
+
+</div>{# /page-dashboard #}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/assets/js/dashboard-script.js"></script>
+{% endblock %}

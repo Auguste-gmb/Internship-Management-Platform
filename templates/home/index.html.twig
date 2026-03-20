@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+{% set active = 'home' %}
+
+{% block title %}StageHub — Trouvez votre stage idéal{% endblock %}
+{% block meta_desc %}Trouvez votre stage idéal sur StageHub, la plateforme de stages CESI.{% endblock %}
+
+{% block body_class %}page-index{% endblock %}
+
+{% block content %}
+
+{# ════ HERO ════════════════════════════════════════════════════════════════ #}
+<div class="hero-wrapper" style="position: relative">
+  <main class="hero">
+
+    <div class="hero-left">
+      <h1 class="hero-title">
+        Trouvez le <span class="accent">stage</span><br/>idéal pour vous !
+      </h1>
+
+      <form class="search-bar" action="/offres" method="GET">
+        <input
+          class="search-input"
+          type="text"
+          name="q"
+          placeholder="Emploi, compétence…"
+          id="jobInput"
+          value="{{ app_query ?? '' }}"
+        />
+        <div class="search-divider"></div>
+        <input
+          class="search-input"
+          type="text"
+          name="loc"
+          placeholder="Ville, région…"
+          id="locInput"
+          value="{{ app_loc ?? '' }}"
+        />
+        <button class="search-btn" type="submit" aria-label="Rechercher">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </form>
+
+      <div class="popular">
+        <p class="popular-label">Recherches populaires</p>
+        <div class="tags">
+          {% for tag in ['Designer', 'Développeur', 'Web', 'Marketing', 'Data', 'UX/UI'] %}
+            <a href="/offres?q={{ tag|url_encode }}" class="tag">{{ tag }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {# ── Stats card — même structure que l'original, chiffres dynamiques ─── #}
+    <div class="stats-card">
+      <div class="stat-item">
+        <span class="stat-number" data-target="{{ stats.total_offres ?? 128 }}">0</span>
+        <span class="stat-label">Offres disponibles</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="{{ stats.total_entreprises ?? 80 }}">0</span>
+        <span class="stat-label">Entreprises</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number faded" data-target="{{ stats.total_etudiants ?? 128 }}">0</span>
+        <span class="stat-label">Étudiants inscrits</span>
+      </div>
+    </div>
+
+  </main>
+
+  {# ── Flèche scroll ──────────────────────────────────────────────────────── #}
+  <a class="scroll-arrow" href="#offres"
+     onclick="document.getElementById('offres').scrollIntoView({behavior:'smooth'}); return false;">
+    <span>Découvrir</span>
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+         stroke="var(--salmon)" stroke-width="2.5"
+         stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </a>
+</div>
+
+{# ════ OFFRES RÉCENTES ══════════════════════════════════════════════════════ #}
+<section id="offres" class="section">
+  <div class="section-header">
+    <h2 class="section-title">Offres <span>récentes</span></h2>
+    <a href="/offres" class="see-all">Voir toutes les offres →</a>
+  </div>
+
+  <div class="offers-grid-index">
+    {% for offre in offres_recentes %}
+      <article class="offer-card-index">
+        <div class="offer-company">
+          <div class="company-logo">{{ offre.entreprise|slice(0,2)|upper }}</div>
+          <span class="company-name">{{ offre.entreprise }}</span>
+        </div>
+
+        <p class="offer-title">{{ offre.titre }}</p>
+
+        <div class="offer-tags">
+          {% for tag in offre.tags %}
+            <span class="offer-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+
+        <div class="offer-footer">
+          <span class="offer-salary">{{ offre.salaire }}</span>
+          <span class="offer-date">{{ offre.date ?? 'Il y a 2 jours' }}</span>
+          <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Ajouter aux favoris">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </button>
+        </div>
+      </article>
+    {% else %}
+      <p style="color:#999; grid-column:1/-1; text-align:center; padding:40px 0">
+        Aucune offre disponible pour le moment.
+      </p>
+    {% endfor %}
+  </div>
+</section>
+
+{# ════ ENTREPRISES PARTENAIRES ══════════════════════════════════════════════ #}
+<div class="companies-section" id="entreprises">
+  <div class="companies-inner">
+    <div class="section-header">
+      <h2 class="section-title">Entreprises <span>partenaires</span></h2>
+      <a href="/entreprises" class="see-all">Voir toutes →</a>
+    </div>
+
+    <div class="companies-grid">
+      {% for entreprise in entreprises_vedette %}
+        <a href="/entreprises/{{ entreprise.id }}" class="company-card-index">
+          <div class="logo-big">{{ entreprise.nom|slice(0,2)|upper }}</div>
+          <h3>{{ entreprise.nom }}</h3>
+          <p>{{ entreprise.offres }} offres actives</p>
+          <div class="stars">
+            {%- for i in 1..5 -%}
+              {{- entreprise.note >= i ? '★' : '☆' -}}
+            {%- endfor -%}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{# ════ CTA ══════════════════════════════════════════════════════════════════ #}
+<section class="cta-section">
+  <h2>Prêt à trouver votre <span>stage</span> ?</h2>
+  <p>Inscrivez-vous gratuitement et accédez à toutes les offres en quelques clics.</p>
+  <div class="cta-btns">
+    <a href="/inscription" class="btn-primary">Créer un compte étudiant</a>
+    <a href="/connexion"   class="btn-secondary">Je suis une entreprise</a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/assets/js/index-script.js"></script>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="{% block meta_desc %}StageHub — Plateforme de stages CESI{% endblock %}"/>
+  <title>{% block title %}StageHub{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/assets/css/style.css"/>
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  <nav>
+    <a href="/" class="nav-logo">Stage<span>Hub</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="/" {% if active == 'home' %}class="active"{% endif %}>Accueil</a>
+      <span class="sep">|</span>
+      <a href="/offres" {% if active == 'offres' %}class="active"{% endif %}>Offres</a>
+      <span class="sep">|</span>
+      <a href="/entreprises" {% if active == 'entreprises' %}class="active"{% endif %}>Entreprises</a>
+      <span class="sep">|</span>
+      <a href="/dashboard" {% if active == 'dashboard' %}class="active"{% endif %}>Dashboard</a>
+    </div>
+    <div class="nav-right">
+      {% if app_user is defined and app_user %}
+        <span style="font-weight:700;font-size:.88rem">{{ app_user.email }}</span>
+        <a href="/deconnexion" class="btn-login">Déconnexion</a>
+      {% else %}
+        <a href="/connexion" class="btn-login">Connexion</a>
+      {% endif %}
+      <div class="nav-avatar" aria-label="Profil">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+        </svg>
+      </div>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>Stage<span>Hub</span></h3>
+        <p>La plateforme de mise en relation entre étudiants CESI et entreprises partenaires.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/offres">Offres de stage</a></li>
+          <li><a href="/entreprises">Entreprises</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Compte</h4>
+        <ul>
+          <li><a href="/connexion">Connexion</a></li>
+          <li><a href="/dashboard">Mon profil</a></li>
+          <li><a href="/dashboard">Ma wish-list</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="/mentions-legales">Mentions légales</a></li>
+          <li><a href="/mentions-legales#donnees">Confidentialité</a></li>
+          <li><a href="/mentions-legales#cgu">CGU</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 StageHub — Projet CESI. Tous droits réservés.</span>
+      <div class="footer-legal-links">
+        <a href="/mentions-legales">Mentions légales</a>
+        <a href="/mentions-legales#donnees">Confidentialité</a>
+        <a href="/mentions-legales#cgu">CGU</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/index-script.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
