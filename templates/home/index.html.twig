@@ -8,7 +8,6 @@
 
 {% block content %}
 
-{# ════ HERO ════════════════════════════════════════════════════════════════ #}
 <div class="hero-wrapper" style="position: relative">
   <main class="hero">
 
@@ -54,7 +53,6 @@
       </div>
     </div>
 
-    {# ── Stats card — même structure que l'original, chiffres dynamiques ─── #}
     <div class="stats-card">
       <div class="stat-item">
         <span class="stat-number" data-target="{{ stats.total_offres ?? 128 }}">0</span>
@@ -72,7 +70,6 @@
 
   </main>
 
-  {# ── Flèche scroll ──────────────────────────────────────────────────────── #}
   <a class="scroll-arrow" href="#offres"
      onclick="document.getElementById('offres').scrollIntoView({behavior:'smooth'}); return false;">
     <span>Découvrir</span>
@@ -84,7 +81,6 @@
   </a>
 </div>
 
-{# ════ OFFRES RÉCENTES ══════════════════════════════════════════════════════ #}
 <section id="offres" class="section">
   <div class="section-header">
     <h2 class="section-title">Offres <span>récentes</span></h2>
@@ -126,7 +122,6 @@
   </div>
 </section>
 
-{# ════ ENTREPRISES PARTENAIRES ══════════════════════════════════════════════ #}
 <div class="companies-section" id="entreprises">
   <div class="companies-inner">
     <div class="section-header">
@@ -151,7 +146,6 @@
   </div>
 </div>
 
-{# ════ CTA ══════════════════════════════════════════════════════════════════ #}
 <section class="cta-section">
   <h2>Prêt à trouver votre <span>stage</span> ?</h2>
   <p>Inscrivez-vous gratuitement et accédez à toutes les offres en quelques clics.</p>

@@ -9,7 +9,6 @@
 <div class="login-main">
   <div class="login-card">
 
-    {# ── Tabs ───────────────────────────────────────────────────────────────── #}
     <div class="tabs">
       <button class="tab {{ tab != 'register' ? 'active' }}" id="tabLogin"
               onclick="switchTab('login')">Se connecter</button>
@@ -17,7 +16,6 @@
               onclick="switchTab('register')">Créer un compte</button>
     </div>
 
-    {# ════ PANEL LOGIN ═══════════════════════════════════════════════════════ #}
     <div class="panel {{ tab != 'register' ? 'active' }}" id="panelLogin">
 
       <div class="login-card-header">
@@ -30,7 +28,6 @@
         <p>Accédez à votre espace personnel StageHub</p>
       </div>
 
-      {# Alerte erreur PHP (renvoyée par AuthController) #}
       {% if error is defined and error %}
         <div class="alert error show">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -117,7 +114,6 @@
 
     </div>{# /panelLogin #}
 
-    {# ════ PANEL REGISTER ════════════════════════════════════════════════════ #}
     <div class="panel {{ tab == 'register' ? 'active' }}" id="panelRegister">
 
       <div class="login-card-header">
@@ -134,7 +130,6 @@
         <p>Rejoignez StageHub et trouvez votre stage idéal</p>
       </div>
 
-      {# Alerte erreur inscription #}
       {% if register_error is defined and register_error %}
         <div class="alert error show">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -149,7 +144,6 @@
 
       <form method="POST" action="/inscription" id="registerForm">
 
-        {# Sélecteur de rôle #}
         <div class="form-group">
           <label class="form-label">Je suis…</label>
           <div class="role-selector">
@@ -171,7 +165,6 @@
           <input type="hidden" name="role" id="roleInput" value="etudiant"/>
         </div>
 
-        {# Prénom + Nom #}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
           <div class="form-group">
             <label class="form-label">Prénom</label>
@@ -203,7 +196,6 @@
           </div>
         </div>
 
-        {# Email #}
         <div class="form-group">
           <label class="form-label">Email</label>
           <div class="input-wrap">
@@ -219,7 +211,6 @@
           </div>
         </div>
 
-        {# Mot de passe + force #}
         <div class="form-group">
           <label class="form-label">Mot de passe</label>
           <div class="input-wrap">
@@ -250,7 +241,6 @@
           <p class="strength-label" id="strengthLabel"></p>
         </div>
 
-        {# Confirmation mot de passe #}
         <div class="form-group">
           <label class="form-label">Confirmer le mot de passe</label>
           <div class="input-wrap">
@@ -289,16 +279,15 @@
         <a href="#" onclick="switchTab('login'); return false;">Se connecter</a>
       </p>
 
-    </div>{# /panelRegister #}
+    </div>
 
-  </div>{# /login-card #}
-</div>{# /login-main #}
+  </div>
+</div>
 
 {% endblock %}
 
 {% block extra_js %}
 <script src="/assets/js/login-register-script.js"></script>
-{# Sync le champ caché "role" quand le JS sélectionne un bouton #}
 <script>
   const origSelectRole = window.selectRole;
   window.selectRole = function(btn) {

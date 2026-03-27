@@ -6,7 +6,6 @@
 
 {% block content %}
 
-{# ════ PAGE HEADER ══════════════════════════════════════════════════════════ #}
 <div class="page-header">
   <div class="page-header-inner">
     <div class="breadcrumb">
@@ -38,10 +37,8 @@
   </div>
 </div>
 
-{# ════ LAYOUT ═══════════════════════════════════════════════════════════════ #}
 <div class="layout">
 
-  {# ── Bouton filtres mobile ──────────────────────────────────────────────── #}
   <button class="filter-toggle-btn" id="filterToggle">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -52,10 +49,8 @@
     Filtres
   </button>
 
-  {# ── SIDEBAR FILTRES ────────────────────────────────────────────────────── #}
   <aside class="sidebar" id="sidebar" style="width: 240px">
 
-    {# Secteur #}
     <div class="filter-card">
       <h3>Secteur <button onclick="clearGroup(this)">Reset</button></h3>
       <div class="filter-options">
@@ -84,7 +79,6 @@
       </div>
     </div>
 
-    {# Note minimale #}
     <div class="filter-card">
       <h3>Note minimale</h3>
       <div class="stars-filter">
@@ -105,7 +99,6 @@
       </div>
     </div>
 
-    {# Offres actives #}
     <div class="filter-card">
       <h3>Offres actives</h3>
       <div class="filter-options">
@@ -125,7 +118,6 @@
 
   </aside>
 
-  {# ── CONTENU PRINCIPAL ──────────────────────────────────────────────────── #}
   <div class="main-content">
 
     <div class="results-bar">
@@ -149,7 +141,6 @@
       </button>
     </div>
 
-    {# ── Grille entreprises ─────────────────────────────────────────────── #}
     <div class="company-grid" id="companyGrid">
       {% for e in entreprises %}
         <a href="/entreprises/{{ e.id }}" class="company-card {{ e.featured is defined and e.featured ? 'featured' }}">
@@ -176,7 +167,6 @@
       {% endfor %}
     </div>
 
-    {# ── Pagination ─────────────────────────────────────────────────────── #}
     {% if pagination is defined and pagination.total_pages > 1 %}
       <div class="pagination">
         <a href="?page={{ pagination.current - 1 }}"

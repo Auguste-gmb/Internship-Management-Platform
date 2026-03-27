@@ -5,7 +5,6 @@ namespace App\Controller;
 
 class AuthController extends BaseController
 {
-    // ── GET /connexion ────────────────────────────────────────────────────────
     public function loginForm(): void
     {
         // Si déjà connecté → dashboard
@@ -18,8 +17,6 @@ class AuthController extends BaseController
             'tab'   => 'login',
         ]);
     }
-
-    // ── POST /connexion ───────────────────────────────────────────────────────
     public function login(): void
     {
         $email = trim(htmlspecialchars($_POST['email']    ?? '', ENT_QUOTES));
@@ -71,8 +68,6 @@ class AuthController extends BaseController
             'old_email' => $email,
         ]);
     }
-
-    // ── POST /inscription ─────────────────────────────────────────────────────
     public function register(): void
     {
         $prenom  = trim(htmlspecialchars($_POST['prenom']   ?? '', ENT_QUOTES));
@@ -120,7 +115,7 @@ class AuthController extends BaseController
         $this->redirect('/dashboard');
     }
 
-    // ── GET /deconnexion ──────────────────────────────────────────────────────
+    
     public function logout(): void
     {
         session_destroy();

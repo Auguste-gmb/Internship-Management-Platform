@@ -8,7 +8,6 @@
 
 <div class="page-dashboard">
 
-  {# ════ GREETING ═════════════════════════════════════════════════════════════ #}
   <div class="greeting">
     <div class="greeting-left">
       <h1>Bonjour, <span>{{ user.prenom ?? 'Thomas' }}</span> 👋</h1>
@@ -24,7 +23,6 @@
     </a>
   </div>
 
-  {# ════ STAT CARDS ════════════════════════════════════════════════════════════ #}
   <div class="stats-row">
     <div class="stat-card accepted">
       <div class="stat-card-icon">✓</div>
@@ -46,10 +44,8 @@
     </div>
   </div>
 
-  {# ════ MAIN GRID — ROW 1 ═════════════════════════════════════════════════════ #}
   <div class="main-grid">
 
-    {# ── Mes candidatures ───────────────────────────────────────────────────── #}
     <div class="card">
       <div class="card-header">
         <h2 class="card-title">Mes candidatures</h2>
@@ -77,7 +73,6 @@
       </div>
     </div>
 
-    {# ── Donut chart offres postulées ───────────────────────────────────────── #}
     <div class="card">
       <div class="card-header">
         <h2 class="card-title">Offres postulées</h2>
@@ -155,10 +150,8 @@
 
   </div>{# /main-grid row 1 #}
 
-  {# ════ MAIN GRID — ROW 2 ═════════════════════════════════════════════════════ #}
   <div class="main-grid">
 
-    {# ── Wish-list ──────────────────────────────────────────────────────────── #}
     <div class="card">
       <div class="card-header">
         <h2 class="card-title">Ma wish-list ❤️</h2>
@@ -185,7 +178,6 @@
 
     <div style="display:flex;flex-direction:column;gap:20px">
 
-      {# ── Profil étudiant ──────────────────────────────────────────────────── #}
       <div class="profile-card">
         <div class="profile-avatar">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -210,7 +202,6 @@
         <a href="#" class="btn-edit">Modifier</a>
       </div>
 
-      {# ── Échéances à venir ────────────────────────────────────────────────── #}
       <div class="card">
         <div class="card-header">
           <h2 class="card-title">Échéances à venir</h2>

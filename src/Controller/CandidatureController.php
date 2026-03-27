@@ -7,7 +7,6 @@ use App\Model\Offre;
 
 class CandidatureController extends BaseController
 {
-    // ── GET /postuler?offre=1 ─────────────────────────────────────────────────
     public function form(): void
     {
         $this->requireAuth();
@@ -26,7 +25,6 @@ class CandidatureController extends BaseController
         ]);
     }
 
-    // ── POST /postuler ────────────────────────────────────────────────────────
     public function submit(): void
     {
         $this->requireAuth();
@@ -34,7 +32,6 @@ class CandidatureController extends BaseController
         $offreId = (int)($_POST['offre_id'] ?? 1);
         $offre   = Offre::fakeById($offreId) ?? Offre::fakeById(1);
 
-        // ── Validation PHP ────────────────────────────────────────────────────
         $prenom  = trim(htmlspecialchars($_POST['prenom']  ?? '', ENT_QUOTES));
         $nom     = trim(htmlspecialchars($_POST['nom']     ?? '', ENT_QUOTES));
         $email   = trim(htmlspecialchars($_POST['email']   ?? '', ENT_QUOTES));
@@ -74,7 +71,6 @@ class CandidatureController extends BaseController
             return;
         }
 
-        // ── Upload CV ─────────────────────────────────────────────────────────
         if (!empty($_FILES['cv']['name'])) {
             $allowed    = ['pdf', 'doc', 'docx'];
             $ext        = strtolower(pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION));

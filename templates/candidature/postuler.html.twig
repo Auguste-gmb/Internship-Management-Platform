@@ -5,7 +5,6 @@
 
 {% block content %}
 
-{# ════ BREADCRUMB ════════════════════════════════════════════════════════════ #}
 <div class="breadcrumb-bar">
   <div class="breadcrumb">
     <a href="/">Accueil</a>
@@ -16,10 +15,8 @@
   </div>
 </div>
 
-{# ════ PAGE ══════════════════════════════════════════════════════════════════ #}
 <div class="page-postuler">
 
-  {# ── LEFT — FICHE OFFRE ─────────────────────────────────────────────────── #}
   <aside class="offer-card-postuler">
 
     <div class="offer-top">
@@ -100,7 +97,6 @@
 
   </aside>
 
-  {# ── RIGHT — FORMULAIRE ─────────────────────────────────────────────────── #}
   <div class="form-card-postuler">
 
     <div class="form-header">
@@ -108,7 +104,6 @@
       <p>Complétez les informations ci-dessous pour envoyer votre candidature à {{ offre.entreprise ?? 'BNP Paribas' }}.</p>
     </div>
 
-    {# Steps #}
     <div class="steps">
       <div class="step done">
         <div class="step-num">✓</div>
@@ -126,7 +121,6 @@
       </div>
     </div>
 
-    {# Alerte erreur PHP #}
     {% if error is defined and error %}
       <div class="alert error show" style="margin-bottom:20px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -142,7 +136,6 @@
     <form method="POST" action="/postuler" enctype="multipart/form-data" id="postForm">
       <input type="hidden" name="offre_id" value="{{ offre.id ?? 1 }}"/>
 
-      {# ── Infos personnelles ─────────────────────────────────────────────── #}
       <div class="form-section">
         <p class="form-section-title">Informations personnelles</p>
         <div class="form-row">
@@ -174,7 +167,6 @@
         </div>
       </div>
 
-      {# ── CV ─────────────────────────────────────────────────────────────── #}
       <div class="form-section">
         <p class="form-section-title">Curriculum Vitae</p>
         <div class="form-group-p">
@@ -206,7 +198,6 @@
         </div>
       </div>
 
-      {# ── Lettre de motivation ────────────────────────────────────────────── #}
       <div class="form-section">
         <p class="form-section-title">Lettre de motivation</p>
         <div class="form-group-p">
@@ -222,7 +213,6 @@
         </div>
       </div>
 
-      {# ── Message complémentaire ─────────────────────────────────────────── #}
       <div class="form-section">
         <p class="form-section-title">Message complémentaire</p>
         <div class="form-group-p">
@@ -240,7 +230,6 @@
         </div>
       </div>
 
-      {# ── Consentement RGPD ──────────────────────────────────────────────── #}
       <label class="checkbox-group">
         <input type="checkbox" name="consent" id="consent" onchange="checkForm()"/>
         <span class="custom-check">
@@ -255,7 +244,6 @@
         </span>
       </label>
 
-      {# ── Footer formulaire ──────────────────────────────────────────────── #}
       <div class="form-footer">
         <a href="/offres" class="btn-back">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -280,7 +268,6 @@
 
 </div>{# /page-postuler #}
 
-{# ════ MODALE SUCCÈS ════════════════════════════════════════════════════════ #}
 {% if success is defined and success %}
 <div class="success-overlay show" id="successOverlay">
 {% else %}

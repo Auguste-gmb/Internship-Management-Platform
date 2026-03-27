@@ -17,13 +17,11 @@ class Router
 
     public function dispatch(): void
     {
-        // URL propre : on retire le slash de fin et le query string
         $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $uri    = rtrim($uri, '/') ?: '/';
         $method = $_SERVER['REQUEST_METHOD'];
 
         match (true) {
-            // ── Pages publiques ──────────────────────────────
             $uri === '/' && $method === 'GET'
                 => (new HomeController($this->twig))->index(),
 
@@ -39,7 +37,6 @@ class Router
             preg_match('#^/entreprises/(\d+)$#', $uri, $m) && $method === 'GET'
                 => (new EntrepriseController($this->twig))->show((int)$m[1]),
 
-            // ── Auth ─────────────────────────────────────────
             $uri === '/connexion' && $method === 'GET'
                 => (new AuthController($this->twig))->loginForm(),
 
@@ -52,7 +49,6 @@ class Router
             $uri === '/deconnexion'
                 => (new AuthController($this->twig))->logout(),
 
-            // ── Espace connecté ──────────────────────────────
             $uri === '/dashboard' && $method === 'GET'
                 => (new DashboardController($this->twig))->index(),
 
@@ -62,11 +58,9 @@ class Router
             $uri === '/postuler' && $method === 'POST'
                 => (new CandidatureController($this->twig))->submit(),
 
-            // ── Mentions légales ─────────────────────────────
             $uri === '/mentions-legales' && $method === 'GET'
                 => (new HomeController($this->twig))->mentions(),
 
-            // ── 404 ─────────────────────────────────────────
             default => $this->notFound(),
         };
     }
