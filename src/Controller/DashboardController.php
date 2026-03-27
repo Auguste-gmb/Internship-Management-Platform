@@ -29,7 +29,7 @@ class DashboardController extends BaseController
             'title'        => 'Dashboard — StageHub',
             'user'         => [
                 'prenom' => $_SESSION['user']['prenom'] ?? 'Thomas',
-                'nom'    => $_SESSION['user']['nom']    ?? 'Thomas Dupont',
+                'nom'    => $_SESSION['user']['prenom'] . " " . $_SESSION['user']['nom']    ?? 'Thomas Dupont',
                 'email'  => $_SESSION['user']['email']  ?? 'thomas.dupont@cesi.fr',
                 'promo'  => $_SESSION['user']['promo']  ?? 'PGE A2 · CPI INFO',
             ],

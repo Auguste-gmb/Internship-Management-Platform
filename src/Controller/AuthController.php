@@ -26,17 +26,42 @@ class AuthController extends BaseController
         $mdp   = $_POST['password'] ?? '';
 
         // TODO: remplacer par une vraie requête PDO + password_verify()
-        if ($email === 'test@cesi.fr' && $mdp === 'motdepasse') {
-            $_SESSION['user'] = [
-                'email'  => $email,
-                'prenom' => 'Thomas',
-                'nom'    => 'Thomas Dupont',
-                'promo'  => 'PGE A2 · CPI INFO',
-                'role'   => 'etudiant',
-            ];
-            $this->redirect('/dashboard');
-            return;
+
+        $users = [
+            [
+                "id"=> 0,
+                "email"=>"test@cesi.fr",
+                "password"=> "motdepasse",
+                "prenom" => "Thomas",
+                "nom"    => "Thomas Dupont",
+                "promo"  => "PGE A2 · CPI INFO",
+                "role"   => "tuteur",
+            ],
+            [
+                "id"=> 1,
+                "email"=>"auguste.gambu@viacesi.fr",
+                "password"=> "mdp1234",
+                "prenom" => "Auguste",
+                "nom"    => "Gambu",
+                "promo"  => "PGE A2 · CPI INFO",
+                "role"   => "etudiant",
+            ],
+        ];
+
+        foreach ($users as $user) {
+            if ($email === $user["email"] && $mdp === $user["password"]) {
+                $_SESSION['user'] = [
+                    'email'  => $user["email"],
+                    'prenom' => $user["prenom"],
+                    'nom'    => $user["nom"],
+                    'promo'  => $user["promo"],
+                    'role'   => $user["role"],
+                ];
+                $this->redirect('/dashboard');
+                return;
+            }
         }
+
 
         // Echec → on réaffiche le formulaire avec l'erreur
         $this->render('auth/login.html.twig', [
