@@ -2,12 +2,12 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+//use Core\DataBase;
 
 class AuthController extends BaseController
 {
     public function loginForm(): void
     {
-        // Si déjà connecté → dashboard
         if (!empty($_SESSION['user'])) {
             $this->redirect('/dashboard');
         }
@@ -59,8 +59,6 @@ class AuthController extends BaseController
             }
         }
 
-
-        // Echec → on réaffiche le formulaire avec l'erreur
         $this->render('auth/login.html.twig', [
             'title'     => 'Connexion — StageHub',
             'tab'       => 'login',
@@ -77,7 +75,6 @@ class AuthController extends BaseController
         $mdp     = $_POST['password']         ?? '';
         $confirm = $_POST['password_confirm'] ?? '';
 
-        // Validation basique
         if ($mdp !== $confirm) {
             $this->render('auth/login.html.twig', [
                 'title'          => 'Connexion — StageHub',
@@ -103,7 +100,6 @@ class AuthController extends BaseController
         }
 
         // TODO: insérer en BDD avec password_hash($mdp, PASSWORD_BCRYPT)
-        // Pour l'instant on connecte directement après inscription
         $_SESSION['user'] = [
             'email'  => $email,
             'prenom' => $prenom,
@@ -115,7 +111,6 @@ class AuthController extends BaseController
         $this->redirect('/dashboard');
     }
 
-    
     public function logout(): void
     {
         session_destroy();

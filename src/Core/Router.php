@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Router;
+namespace App\Core;
 
 use Twig\Environment;
 use App\Controller\HomeController;

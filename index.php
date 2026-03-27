@@ -1,20 +1,28 @@
 <?php
-declare(strict_types=1);
+    declare(strict_types=1);
 
-require_once __DIR__ . '/vendor/autoload.php';
+    // à retier (pour afficher les erreur)
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 
-use App\Router\Router;
+    require_once __DIR__ . '/vendor/autoload.php';
 
-session_start();
+    // Chargement des variables d'environnement
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
 
-$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-$twig   = new \Twig\Environment($loader, [
-    'cache' => false, // mettre __DIR__ . '/cache' en prod
-    'debug' => true,
-]);
-$twig->addExtension(new \Twig\Extension\DebugExtension());
+    use App\Core\Router;
 
-$router = new Router($twig);
-$router->dispatch();
+    session_start();
 
+    $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
+    $twig   = new \Twig\Environment($loader, [
+        'cache' => false,
+        'debug' => true,
+    ]);
+    $twig->addExtension(new \Twig\Extension\DebugExtension());
+
+    $router = new Router($twig);
+    $router->dispatch();
 ?>
