@@ -1,0 +1,311 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StageHub — Postuler · {{ offre.titre ?? 'Offre de stage' }}{% endblock %}
+{% block meta_desc %}Postuler à une offre de stage — StageHub{% endblock %}
+
+{% block content %}
+
+{# ════ BREADCRUMB ════════════════════════════════════════════════════════════ #}
+<div class="breadcrumb-bar">
+  <div class="breadcrumb">
+    <a href="/">Accueil</a>
+    <span>›</span>
+    <a href="/offres">Offres</a>
+    <span>›</span>
+    <span class="current">Postuler — {{ offre.titre ?? 'Banquier Analyste Junior' }}</span>
+  </div>
+</div>
+
+{# ════ PAGE ══════════════════════════════════════════════════════════════════ #}
+<div class="page-postuler">
+
+  {# ── LEFT — FICHE OFFRE ─────────────────────────────────────────────────── #}
+  <aside class="offer-card-postuler">
+
+    <div class="offer-top">
+      <div class="offer-domain-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+      </div>
+      <span class="offer-domain-label">{{ offre.domaine ?? 'Finance' }}</span>
+    </div>
+
+    <h1 class="offer-title-big">{{ offre.titre ?? 'Banquier Analyste Junior' }}</h1>
+
+    <div class="offer-location-postuler">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+      {{ offre.ville ?? 'Rouen, Normandie' }}
+    </div>
+
+    <div class="offer-meta">
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8"  y1="2" x2="8"  y2="6"/>
+          <line x1="3"  y1="10" x2="21" y2="10"/>
+        </svg>
+        {{ offre.duree ?? '4 – 6 mois' }}
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+        {{ offre.salaire ?? '950 €/mois' }}
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+        </svg>
+        {{ offre.nb_candidats ?? 12 }} candidats
+      </span>
+    </div>
+
+    <div class="offer-divider"></div>
+
+    <p class="postuler-section-title">Description</p>
+    <p class="offer-description">{{ offre.description ?? 'Nous recherchons un(e) stagiaire motivé(e) pour rejoindre notre équipe d\'analyse financière. Vous participerez à la gestion des portefeuilles clients, à la réalisation de reporting mensuel et à l\'analyse de données de marché.' }}</p>
+
+    <p class="postuler-section-title">Compétences recherchées</p>
+    <div class="offer-skills">
+      {% for skill in offre.tags ?? ['Finance', 'Excel', 'Analyse', 'Reporting', 'Bloomberg'] %}
+        <span class="skill-tag">{{ skill }}</span>
+      {% endfor %}
+    </div>
+
+    <p class="postuler-section-title">Entreprise</p>
+    <div class="offer-company-block">
+      <p class="label">À propos</p>
+      <div class="company-row">
+        <div class="company-logo-p">{{ (offre.entreprise ?? 'BNP Paribas')|slice(0,2)|upper }}</div>
+        <div>
+          <p class="company-name-p">{{ offre.entreprise ?? 'BNP Paribas' }}</p>
+          <p class="company-sub">Banque · 5 offres actives · ★★★★☆</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="wish-btn" id="wishBtn" onclick="toggleWish()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      <span id="wishLabel">Ajouter à la wish-list</span>
+    </button>
+
+  </aside>
+
+  {# ── RIGHT — FORMULAIRE ─────────────────────────────────────────────────── #}
+  <div class="form-card-postuler">
+
+    <div class="form-header">
+      <h1>Postuler à cette <span>offre</span></h1>
+      <p>Complétez les informations ci-dessous pour envoyer votre candidature à {{ offre.entreprise ?? 'BNP Paribas' }}.</p>
+    </div>
+
+    {# Steps #}
+    <div class="steps">
+      <div class="step done">
+        <div class="step-num">✓</div>
+        <span class="step-label">Compte</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step active">
+        <div class="step-num">2</div>
+        <span class="step-label">Candidature</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step todo">
+        <div class="step-num">3</div>
+        <span class="step-label">Confirmation</span>
+      </div>
+    </div>
+
+    {# Alerte erreur PHP #}
+    {% if error is defined and error %}
+      <div class="alert error show" style="margin-bottom:20px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>{{ error }}</span>
+      </div>
+    {% endif %}
+
+    <form method="POST" action="/postuler" enctype="multipart/form-data" id="postForm">
+      <input type="hidden" name="offre_id" value="{{ offre.id ?? 1 }}"/>
+
+      {# ── Infos personnelles ─────────────────────────────────────────────── #}
+      <div class="form-section">
+        <p class="form-section-title">Informations personnelles</p>
+        <div class="form-row">
+          <div class="form-group-p">
+            <label class="form-label-p">Prénom <span class="required">*</span></label>
+            <input class="form-input-p" type="text" name="prenom"
+                   placeholder="Thomas"
+                   required/>
+          </div>
+          <div class="form-group-p">
+            <label class="form-label-p">Nom <span class="required">*</span></label>
+            <input class="form-input-p" type="text" name="nom"
+                   placeholder="Dupont"
+                   required/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group-p">
+            <label class="form-label-p">Email <span class="required">*</span></label>
+            <input class="form-input-p" type="email" name="email"
+                   placeholder="thomas.dupont@cesi.fr"
+                   required/>
+          </div>
+          <div class="form-group-p">
+            <label class="form-label-p">Téléphone</label>
+            <input class="form-input-p" type="tel" name="telephone"
+                   placeholder="06 00 00 00 00"/>
+          </div>
+        </div>
+      </div>
+
+      {# ── CV ─────────────────────────────────────────────────────────────── #}
+      <div class="form-section">
+        <p class="form-section-title">Curriculum Vitae</p>
+        <div class="form-group-p">
+          <label class="form-label-p">CV <span class="required">*</span></label>
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" accept=".pdf,.doc,.docx" name="cv"
+                   id="cvInput" onchange="handleFile(this)"/>
+            <div class="upload-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <p>Glissez votre CV ici ou <span class="browse">parcourez</span></p>
+            <span>PDF, DOC, DOCX — max 5 Mo</span>
+          </div>
+          <div class="file-preview" id="filePreview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <span class="file-name" id="fileName">—</span>
+            <span class="file-size" id="fileSize">—</span>
+            <button type="button" class="file-remove" onclick="removeFile()">×</button>
+          </div>
+        </div>
+      </div>
+
+      {# ── Lettre de motivation ────────────────────────────────────────────── #}
+      <div class="form-section">
+        <p class="form-section-title">Lettre de motivation</p>
+        <div class="form-group-p">
+          <label class="form-label-p">Votre lettre <span class="required">*</span></label>
+          <textarea class="form-textarea-p" name="lm" id="lm"
+                    placeholder="Madame, Monsieur,&#10;&#10;Je me permets de vous adresser ma candidature…"
+                    oninput="countChars('lm','lmCount',2000)"
+                    style="min-height:160px" required>{{ old_lm ?? '' }}</textarea>
+          <div class="field-footer">
+            <span class="field-hint">Minimum 150 caractères recommandés</span>
+            <span class="char-count" id="lmCount">0 / 2000</span>
+          </div>
+        </div>
+      </div>
+
+      {# ── Message complémentaire ─────────────────────────────────────────── #}
+      <div class="form-section">
+        <p class="form-section-title">Message complémentaire</p>
+        <div class="form-group-p">
+          <label class="form-label-p">
+            Message <span style="color:#bbb;font-weight:600;font-size:.8rem">(optionnel)</span>
+          </label>
+          <textarea class="form-textarea-p" name="message" id="msg"
+                    placeholder="Disponibilités, informations supplémentaires…"
+                    oninput="countChars('msg','msgCount',500)"
+                    style="min-height:100px">{{ old_message ?? '' }}</textarea>
+          <div class="field-footer">
+            <span class="field-hint">Précisez vos disponibilités si besoin</span>
+            <span class="char-count" id="msgCount">0 / 500</span>
+          </div>
+        </div>
+      </div>
+
+      {# ── Consentement RGPD ──────────────────────────────────────────────── #}
+      <label class="checkbox-group">
+        <input type="checkbox" name="consent" id="consent" onchange="checkForm()"/>
+        <span class="custom-check">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="1.5,6 5,9.5 10.5,2.5"/>
+          </svg>
+        </span>
+        <span class="checkbox-label">
+          J'accepte que mes données soient transmises à l'entreprise dans le cadre
+          de ma candidature, conformément à notre
+          <a href="/mentions-legales#donnees">politique de confidentialité</a>.
+        </span>
+      </label>
+
+      {# ── Footer formulaire ──────────────────────────────────────────────── #}
+      <div class="form-footer">
+        <a href="/offres" class="btn-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Retour aux offres
+        </a>
+        <button class="btn-submit-postuler" id="submitBtn"
+                type="submit" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          Envoyer ma candidature
+        </button>
+      </div>
+
+    </form>
+  </div>{# /form-card-postuler #}
+
+</div>{# /page-postuler #}
+
+{# ════ MODALE SUCCÈS ════════════════════════════════════════════════════════ #}
+{% if success is defined and success %}
+<div class="success-overlay show" id="successOverlay">
+{% else %}
+<div class="success-overlay" id="successOverlay">
+{% endif %}
+  <div class="success-box">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h2>Candidature envoyée ! 🎉</h2>
+    <p>
+      Votre candidature pour le poste de
+      <strong>{{ offre.titre ?? 'Banquier Analyste Junior' }}</strong> chez
+      <strong>{{ offre.entreprise ?? 'BNP Paribas' }}</strong>
+      a bien été transmise. Vous recevrez une réponse par email.
+    </p>
+    <a href="/dashboard" class="btn-goto">Voir mon dashboard</a>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/assets/js/postuler-script.js"></script>
+{% endblock %}

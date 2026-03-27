@@ -1,7 +1,9 @@
 {
 	"name": "cesi/stagehub",
+	"description": "Plateforme de stages CESI",
 	"type": "project",
 	"require": {
+		"php": ">=8.1",
 		"twig/twig": "^3.16"
 	},
 	"require-dev": {
@@ -11,11 +13,5 @@
 		"psr-4": {
 			"App\\": "src/"
 		}
-	},
-	"authors": [
-		{
-			"name": "Ada Lovelace",
-			"email": "alovelace@cesi.fr"
-		}
-	]
+	}
 }
