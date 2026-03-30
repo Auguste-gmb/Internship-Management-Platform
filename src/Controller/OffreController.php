@@ -7,22 +7,39 @@ use App\Model\Offre;
 
 class OffreController extends BaseController
 {
+    private const PER_PAGE = 12;
+
     public function index(): void
     {
-        $model  = new Offre();
-        $search = trim($_GET['q']   ?? '');
-        $loc    = trim($_GET['loc'] ?? '');
+        $model    = new Offre();
+        $search   = trim($_GET['q']        ?? '');
+        $loc      = trim($_GET['loc']      ?? '');
+        $duration = trim($_GET['duration'] ?? '');
+        $remuMax  = (int)($_GET['remu_max'] ?? 0);
+        $domainId = (int)($_GET['domain']   ?? 0);
+        $page     = max(1, (int)($_GET['page'] ?? 1));
+        $offset   = ($page - 1) * self::PER_PAGE;
 
-        $offres = $model->getAll($search, $loc);
+        $total      = $model->countFiltered($search, $loc, $duration, $remuMax, $domainId);
+        $totalPages = (int) ceil($total / self::PER_PAGE);
+        $offres     = $model->getAll($search, $loc, $duration, $remuMax, $domainId, self::PER_PAGE, $offset);
+        $domaines   = $model->getDomaines();
 
         $this->render('offre/list.html.twig', [
-            'title'     => 'Offres de stage — StageHub',
-            'offres'    => $offres,
-            'stats'     => [
-                'total_offres' => $model->count(),
+            'title'        => 'Offres de stage — StageHub',
+            'offres'       => $offres,
+            'domaines'     => $domaines,
+            'stats'        => ['total_offres' => $total],
+            'pagination'   => [
+                'current'     => $page,
+                'total_pages' => $totalPages,
+                'per_page'    => self::PER_PAGE,
             ],
-            'app_query' => htmlspecialchars($search, ENT_QUOTES),
-            'app_loc'   => htmlspecialchars($loc, ENT_QUOTES),
+            'app_query'    => htmlspecialchars($search,   ENT_QUOTES),
+            'app_loc'      => htmlspecialchars($loc,      ENT_QUOTES),
+            'app_duration' => htmlspecialchars($duration, ENT_QUOTES),
+            'app_remu_max' => $remuMax,
+            'app_domain'   => $domainId,
         ]);
     }
 
@@ -42,4 +59,3 @@ class OffreController extends BaseController
         ]);
     }
 }
-?>
