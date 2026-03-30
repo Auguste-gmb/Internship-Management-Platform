@@ -9,29 +9,33 @@ class EntrepriseController extends BaseController
 {
     public function index(): void
     {
+        $model  = new Entreprise();
+        $search = trim($_GET['q'] ?? '');
+
         $this->render('entreprise/list.html.twig', [
             'title'       => 'Entreprises partenaires — StageHub',
-            'entreprises' => Entreprise::fakeList(),
+            'entreprises' => $model->getAll($search),
             'stats'       => [
-                'total_entreprises' => 80,
+                'total_entreprises' => $model->count(),
             ],
-            'app_query'   => $_GET['q'] ?? '',
+            'app_query'   => htmlspecialchars($search, ENT_QUOTES),
         ]);
     }
 
     public function show(int $id): void
     {
-        $entreprise = Entreprise::fakeById($id);
+        $entreprise = (new Entreprise())->getById((string)$id);
 
         if (!$entreprise) {
             http_response_code(404);
-            $this->render('errors/404.html.twig');
+            $this->render('errors/404.html.twig', []);
             return;
         }
 
         $this->render('entreprise/detail.html.twig', [
-            'title'      => $entreprise['nom'] . ' — StageHub',
+            'title'      => $entreprise['name'] . ' — StageHub',
             'entreprise' => $entreprise,
         ]);
     }
 }
+?>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use PDO;
+use App\Core\Database;
 
 abstract class Model
 {

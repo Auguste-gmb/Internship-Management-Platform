@@ -5,22 +5,27 @@ namespace App\Controller;
 
 use App\Model\Offre;
 use App\Model\Entreprise;
+use App\Model\User;
 
 class HomeController extends BaseController
 {
     public function index(): void
     {
+        $offreModel      = new Offre();
+        $entrepriseModel = new Entreprise();
+        $userModel       = new User();
+
+        $offres      = $offreModel->getAll();
+        $entreprises = $entrepriseModel->getAll();
+
         $this->render('home/index.html.twig', [
-            'title'              => 'StageHub — Trouvez votre stage idéal',
-            // Les 3 offres les plus récentes pour la section accueil
-            'offres_recentes'    => Offre::fakeList(),
-            // Les 4 premières entreprises pour la section partenaires
-            'entreprises_vedette'=> array_slice(Entreprise::fakeList(), 0, 4),
-            // Stats pour la carte (sera remplacé par des vraies requêtes BDD)
-            'stats'              => [
-                'total_offres'      => 128,
-                'total_entreprises' => 80,
-                'total_etudiants'   => 128,
+            'title'               => 'StageHub — Trouvez votre stage idéal',
+            'offres_recentes'     => array_slice($offres, 0, 3),
+            'entreprises_vedette' => array_slice($entreprises, 0, 4),
+            'stats'               => [
+                'total_offres'      => $offreModel->count(),
+                'total_entreprises' => $entrepriseModel->count(),
+                'total_etudiants'   => $userModel->count(),
             ],
         ]);
     }
@@ -32,4 +37,3 @@ class HomeController extends BaseController
         ]);
     }
 }
-?>

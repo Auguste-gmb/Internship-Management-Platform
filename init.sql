@@ -1,12 +1,12 @@
 CREATE TABLE Role(
-   id_role INT,
-   role_name ENUM('student', 'entreprise', 'tutor') NOT NULL,
+   id_role INT NOT NULL AUTO_INCREMENT,
+   role_name ENUM('student', 'tutor', 'administrator') NOT NULL,
    PRIMARY KEY(id_role)
 );
 
 
 CREATE TABLE Profil(
-   id_profil INT,
+   id_profil INT NOT NULL AUTO_INCREMENT,
    first_name VARCHAR(50),
    name VARCHAR(50),
    birth_date VARCHAR(50),
@@ -16,10 +16,10 @@ CREATE TABLE Profil(
 
 
 CREATE TABLE User_(
-   id_user INT,
-   email VARCHAR(50),
-   password VARCHAR(50),
-   active BOOLEAN,
+   id_user INT NOT NULL AUTO_INCREMENT,
+   email VARCHAR(255),
+   password VARCHAR(255),
+   active TINYINT(1),
    id_tutor INT NOT NULL,
    id_role INT NOT NULL,
    id_profil INT NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE User_(
 
 
 CREATE TABLE offer(
-   id_offer INT,
+   id_offer INT NOT NULL AUTO_INCREMENT,
    title VARCHAR(50),
    description VARCHAR(50),
    duration VARCHAR(50),
@@ -46,7 +46,7 @@ CREATE TABLE offer(
 
 
 CREATE TABLE Adress(
-   id_adress INT,
+   id_adress INT NOT NULL AUTO_INCREMENT,
    city VARCHAR(50),
    street_number VARCHAR(50),
    street_name VARCHAR(50),

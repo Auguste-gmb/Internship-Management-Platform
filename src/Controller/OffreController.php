@@ -9,36 +9,37 @@ class OffreController extends BaseController
 {
     public function index(): void
     {
+        $model  = new Offre();
+        $search = trim($_GET['q']   ?? '');
+        $loc    = trim($_GET['loc'] ?? '');
+
+        $offres = $model->getAll($search, $loc);
+
         $this->render('offre/list.html.twig', [
-            'title'  => 'Offres de stage — StageHub',
-            'offres' => Offre::fakeList(),
-            'stats'  => [
-                'total_offres'      => 128,
-                'total_entreprises' => 80,
+            'title'     => 'Offres de stage — StageHub',
+            'offres'    => $offres,
+            'stats'     => [
+                'total_offres' => $model->count(),
             ],
-            // Décommenter quand la pagination BDD sera prête :
-            // 'pagination' => [
-            //     'current'     => 1,
-            //     'total_pages' => 11,
-            // ],
-            'app_query' => $_GET['q']   ?? '',
-            'app_loc'   => $_GET['loc'] ?? '',
+            'app_query' => htmlspecialchars($search, ENT_QUOTES),
+            'app_loc'   => htmlspecialchars($loc, ENT_QUOTES),
         ]);
     }
 
     public function show(int $id): void
     {
-        $offre = Offre::fakeById($id);
+        $offre = (new Offre())->getById($id);
 
         if (!$offre) {
             http_response_code(404);
-            $this->render('errors/404.html.twig');
+            $this->render('errors/404.html.twig', []);
             return;
         }
 
         $this->render('offre/detail.html.twig', [
-            'title' => $offre['titre'] . ' — StageHub',
+            'title' => $offre['title'] . ' — StageHub',
             'offre' => $offre,
         ]);
     }
 }
+?>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Offre;
+use App\Core\Database;
 
 class CandidatureController extends BaseController
 {
@@ -11,17 +12,19 @@ class CandidatureController extends BaseController
     {
         $this->requireAuth();
 
-        $offreId = (int)($_GET['offre'] ?? 1);
-        $offre   = Offre::fakeById($offreId) ?? Offre::fakeById(1);
+        $offreId = (int)($_GET['offre'] ?? 0);
+        $offre   = (new Offre())->getById($offreId);
+
+        if (!$offre) {
+            http_response_code(404);
+            $this->render('errors/404.html.twig', []);
+            return;
+        }
 
         $this->render('candidature/postuler.html.twig', [
-            'title' => 'Postuler — ' . $offre['titre'] . ' · StageHub',
+            'title' => 'Postuler — ' . $offre['title'] . ' · StageHub',
             'offre' => $offre,
-            'user'  => [
-                'prenom' => $_SESSION['user']['prenom'] ?? '',
-                'nom'    => $_SESSION['user']['nom']    ?? '',
-                'email'  => $_SESSION['user']['email']  ?? '',
-            ],
+            'user'  => $_SESSION['user'],
         ]);
     }
 
@@ -29,92 +32,85 @@ class CandidatureController extends BaseController
     {
         $this->requireAuth();
 
-        $offreId = (int)($_POST['offre_id'] ?? 1);
-        $offre   = Offre::fakeById($offreId) ?? Offre::fakeById(1);
+        $offreId = (int)($_POST['offre_id'] ?? 0);
+        $offre   = (new Offre())->getById($offreId);
 
-        $prenom  = trim(htmlspecialchars($_POST['prenom']  ?? '', ENT_QUOTES));
-        $nom     = trim(htmlspecialchars($_POST['nom']     ?? '', ENT_QUOTES));
-        $email   = trim(htmlspecialchars($_POST['email']   ?? '', ENT_QUOTES));
+        if (!$offre) {
+            http_response_code(404);
+            $this->render('errors/404.html.twig', []);
+            return;
+        }
+
         $lm      = trim($_POST['lm']      ?? '');
         $message = trim($_POST['message'] ?? '');
         $consent = isset($_POST['consent']);
 
-        if (!$prenom || !$nom || !$email) {
-            $this->render('candidature/postuler.html.twig', [
-                'title'  => 'Postuler — StageHub',
-                'offre'  => $offre,
-                'error'  => 'Veuillez remplir tous les champs obligatoires.',
-                'old_lm' => $lm,
-            ]);
-            return;
-        }
-
+        // Validation
         if (strlen($lm) < 50) {
-            $this->render('candidature/postuler.html.twig', [
-                'title'       => 'Postuler — StageHub',
-                'offre'       => $offre,
-                'error'       => 'Votre lettre de motivation est trop courte.',
-                'old_lm'      => $lm,
-                'old_message' => $message,
-            ]);
+            $this->renderForm($offre, 'Votre lettre de motivation est trop courte (50 caractères min).', $lm, $message);
             return;
         }
 
         if (!$consent) {
-            $this->render('candidature/postuler.html.twig', [
-                'title'       => 'Postuler — StageHub',
-                'offre'       => $offre,
-                'error'       => 'Vous devez accepter la politique de confidentialité.',
-                'old_lm'      => $lm,
-                'old_message' => $message,
-            ]);
+            $this->renderForm($offre, 'Vous devez accepter la politique de confidentialité.', $lm, $message);
             return;
         }
 
+        // Gestion CV
+        $cvPath = null;
         if (!empty($_FILES['cv']['name'])) {
-            $allowed    = ['pdf', 'doc', 'docx'];
-            $ext        = strtolower(pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION));
-            $maxSize    = 5 * 1024 * 1024; // 5 Mo
+            $allowed = ['pdf', 'doc', 'docx'];
+            $ext     = strtolower(pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION));
 
             if (!in_array($ext, $allowed)) {
-                $this->render('candidature/postuler.html.twig', [
-                    'title' => 'Postuler — StageHub',
-                    'offre' => $offre,
-                    'error' => 'Format de CV non accepté (PDF, DOC, DOCX uniquement).',
-                    'old_lm' => $lm,
-                ]);
+                $this->renderForm($offre, 'Format CV non accepté (PDF, DOC, DOCX).', $lm, $message);
                 return;
             }
 
-            if ($_FILES['cv']['size'] > $maxSize) {
-                $this->render('candidature/postuler.html.twig', [
-                    'title' => 'Postuler — StageHub',
-                    'offre' => $offre,
-                    'error' => 'Le fichier CV dépasse la taille maximale de 5 Mo.',
-                    'old_lm' => $lm,
-                ]);
+            if ($_FILES['cv']['size'] > 5 * 1024 * 1024) {
+                $this->renderForm($offre, 'Le CV dépasse 5 Mo.', $lm, $message);
                 return;
             }
 
-            // TODO: déplacer le fichier dans un dossier sécurisé hors webroot
-            // $dest = __DIR__ . '/../../../uploads/cv/' . uniqid() . '.' . $ext;
-            // move_uploaded_file($_FILES['cv']['tmp_name'], $dest);
+            $uploadDir = __DIR__ . '/../../../uploads/cv/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0750, true);
+            }
+
+            $cvPath = uniqid('cv_', true) . '.' . $ext;
+            move_uploaded_file($_FILES['cv']['tmp_name'], $uploadDir . $cvPath);
         }
 
-        // ── TODO: insertion BDD ───────────────────────────────────────────────
-        // $db = Database::getInstance();
-        // $db->prepare("INSERT INTO candidatures (...) VALUES (...)")->execute([...]);
+        // Insertion BDD via procédure stockée
+        Database::getInstance()->query(
+            'CALL sp_apply(?, ?, ?, ?, ?)',
+            [
+                $_SESSION['user']['id'],
+                $offreId,
+                $cvPath,
+                $lm,
+                $message,
+            ]
+        );
 
-        // ── Succès : on réaffiche la page avec la modale ouverte ──────────────
         $this->render('candidature/postuler.html.twig', [
             'title'   => 'Postuler — StageHub',
             'offre'   => $offre,
             'success' => true,
-            'user'    => [
-                'prenom' => $prenom,
-                'nom'    => $nom,
-                'email'  => $email,
-            ],
+            'user'    => $_SESSION['user'],
+        ]);
+    }
+
+    private function renderForm(array $offre, string $error, string $lm, string $message): void
+    {
+        $this->render('candidature/postuler.html.twig', [
+            'title'       => 'Postuler — StageHub',
+            'offre'       => $offre,
+            'error'       => $error,
+            'old_lm'      => $lm,
+            'old_message' => $message,
+            'user'        => $_SESSION['user'],
         ]);
     }
 }
+?>
