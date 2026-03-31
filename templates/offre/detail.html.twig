@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+{% set active = 'offres' %}
+
+{% block title %}{{ offre.title }} — StageHub{% endblock %}
+{% block meta_desc %}Offre de stage : {{ offre.title }} chez {{ offre.entreprise }} sur StageHub.{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      <a href="/">Accueil</a>
+      <span>›</span>
+      <a href="/offres">Offres</a>
+      <span>›</span>
+      <span class="current">{{ offre.title }}</span>
+    </div>
+    <h1>{{ offre.title }}</h1>
+    <p>
+      <a href="/entreprises/{{ offre.id_entreprise }}" style="color:inherit;text-decoration:underline">
+        {{ offre.entreprise }}
+      </a>
+      • {{ offre.ville }}{% if offre.region %}, {{ offre.region }}{% endif %}
+    </p>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="main-content" style="max-width:900px; margin:0 auto;">
+
+    {# Infos principales #}
+    <section style="padding:24px; background:#fff; border-radius:12px; margin-bottom:18px;">
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+        {% if offre.domaine %}
+          <span class="domain-badge">{{ offre.domaine }}</span>
+        {% endif %}
+        {% if offre.duration %}
+          <span class="domain-badge" style="background:#e8f4ff;color:#2563eb;">⏱ {{ offre.duration }}</span>
+        {% endif %}
+        {% if offre.remuneration %}
+          <span class="domain-badge" style="background:#f0fdf4;color:#16a34a;">💶 {{ offre.remuneration }}</span>
+        {% endif %}
+      </div>
+
+      <h2 style="margin-bottom:12px;">Description du poste</h2>
+      {% if offre.description %}
+        <p style="line-height:1.7; color:#444;">{{ offre.description }}</p>
+      {% else %}
+        <p style="color:#999;">Aucune description disponible.</p>
+      {% endif %}
+
+      {% if offre.skill %}
+        <h3 style="margin-top:20px; margin-bottom:8px;">Compétences recherchées</h3>
+        <p style="line-height:1.7; color:#444;">{{ offre.skill }}</p>
+      {% endif %}
+
+      <p style="margin-top:16px; font-size:.85rem; color:#aaa;">
+        Publié le {{ offre.publication_date ? offre.publication_date|date('d/m/Y') : '—' }}
+      </p>
+    </section>
+
+    {# Infos entreprise #}
+    <section style="padding:24px; background:#fff; border-radius:12px; margin-bottom:18px;">
+      <h2 style="margin-bottom:16px;">À propos de l'entreprise</h2>
+
+      <p>
+        <strong>Entreprise :</strong>
+        <a href="/entreprises/{{ offre.id_entreprise }}">{{ offre.entreprise }}</a>
+      </p>
+      <p>
+        <strong>Adresse :</strong>
+        {{ offre.street_name ?? '—' }}, {{ offre.ville }}{% if offre.region %}, {{ offre.region }}{% endif %}
+      </p>
+      <p>
+        <strong>Contact :</strong>
+        <a href="mailto:{{ offre.entreprise_email }}">{{ offre.entreprise_email }}</a>
+      </p>
+
+      <a href="/entreprises/{{ offre.id_entreprise }}" class="btn-voir" style="display:inline-block; margin-top:16px;">
+        Voir toutes les offres de {{ offre.entreprise }}
+      </a>
+    </section>
+
+    {# Bouton postuler #}
+    <section style="padding:24px; background:#fff; border-radius:12px; text-align:center;">
+      <h2 style="margin-bottom:8px;">Intéressé(e) par cette offre ?</h2>
+      <p style="color:#666; margin-bottom:16px;">Postulez dès maintenant et rejoignez {{ offre.entreprise }}.</p>
+      <a href="/postuler?id={{ offre.id_offer }}" class="btn-voir" style="font-size:1rem; padding:12px 32px;">
+        Postuler à cette offre
+      </a>
+    </section>
+
+  </div>
+</div>
+
+{% endblock %}
