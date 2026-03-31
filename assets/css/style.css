@@ -6,6 +6,9 @@
   padding: 0;
 }
 
+
+
+
 :root {
   --mint: #c8e6e0;
   --mint-bg: #dff0ec;
@@ -3528,4 +3531,59 @@ body.page-login nav {
   50% {
     transform: translateY(7px);
   }
+}
+
+
+/* ===== PAGE LEGAL CLEAN ===== */
+
+body.page-legal {
+    background: #f5f6fa;
+}
+
+.page-legal .mentions {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 50px 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.page-legal .mentions h1 {
+    font-size: 32px;
+    margin-bottom: 25px;
+    color: #1a1a2e;
+}
+
+.page-legal .mentions p {
+    font-size: 16px;
+    color: #444;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-image: url('/assets/images/test.png');
+  background-size: cover;
+  background-position: center;
+
+  opacity: 0;
+  transition: opacity 0.5s ease;
+
+  z-index: 0;
+}
+.bg-image {
+  pointer-events: none;
+}
+.mentions {
+  position: relative;
+  z-index: 2;
+  background: rgba(255,255,255,0.9);
+  padding: 40px;
 }

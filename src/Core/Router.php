@@ -61,6 +61,9 @@ class Router
             $uri === '/mentions-legales' && $method === 'GET'
                 => (new HomeController($this->twig))->mentions(),
 
+            $uri === '/mentions-legales' && $method === 'GET'
+                => require __DIR__ . '/../../static/mention_legale.html',
+
             default => $this->notFound(),
         };
     }
