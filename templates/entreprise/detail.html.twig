@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+{% set active = 'entreprises' %}
+
+{% block title %}{{ entreprise.name }} — StageHub{% endblock %}
+{% block meta_desc %}Informations sur {{ entreprise.name }} et ses offres de stage sur StageHub.{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      <a href="/">Accueil</a>
+      <span>›</span>
+      <a href="/entreprises">Entreprises</a>
+      <span>›</span>
+      <span class="current">{{ entreprise.name }}</span>
+    </div>
+
+    <h1>{{ entreprise.name }}</h1>
+    <p>
+      {{ entreprise.ville }}{% if entreprise.region %}, {{ entreprise.region }}{% endif %}
+      • {{ entreprise.nb_offres ?? 0 }} offre{{ entreprise.nb_offres > 1 ? 's' : '' }} active{{ entreprise.nb_offres > 1 ? 's' : '' }}
+    </p>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="main-content" style="max-width:900px; margin:0 auto;">
+
+    <section style="padding:24px; background:#fff; border-radius:12px; margin-bottom:18px;">
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+        <div style="width:60px; height:60px; border-radius:18px; background:#f4f7fb; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:700; color:#2563eb;">
+          {{ entreprise.name|slice(0,2)|upper }}
+        </div>
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+            <span style="font-size:1.1rem; font-weight:700;">Note moyenne</span>
+            <span style="color:#f59e0b;">{% for i in 1..5 %}{{ entreprise.note_moyenne >= i ? '★' : '☆' }}{% endfor %}</span>
+          </div>
+          <p style="margin:0; color:#555;">{{ entreprise.note_moyenne ?? '—' }} / 5 · {{ entreprise.nb_avis ?? 0 }} avis</p>
+        </div>
+      </div>
+
+      <h2 style="margin-bottom:12px;">Présentation</h2>
+      {% if entreprise.description %}
+        <p style="line-height:1.8; color:#444;">{{ entreprise.description }}</p>
+      {% else %}
+        <p style="color:#999;">Aucune description disponible pour cette entreprise.</p>
+      {% endif %}
+
+      <div style="display:grid; gap:12px; margin-top:24px;">
+        <p><strong>Adresse :</strong> {{ entreprise.street_number ? entreprise.street_number ~ ' ' : '' }}{{ entreprise.street_name ?? '' }}, {{ entreprise.ville }}{% if entreprise.region %}, {{ entreprise.region }}{% endif %}</p>
+        <p><strong>E-mail :</strong> <a href="mailto:{{ entreprise.email }}">{{ entreprise.email }}</a></p>
+        <p><strong>Offres actives :</strong> {{ entreprise.nb_offres ?? 0 }}</p>
+      </div>
+
+      <a href="/entreprises" class="btn-voir" style="display:inline-block; margin-top:24px;">
+        Retour à la liste des entreprises
+      </a>
+    </section>
+
+  </div>
+</div>
+
+{% endblock %}
