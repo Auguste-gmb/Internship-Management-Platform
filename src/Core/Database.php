@@ -11,7 +11,7 @@ class Database
     private static ?Database $instance = null;
     private PDO $pdo;
     private $user = 'root';
-    private $pass = '1234';
+    private $pass = 'A2#DevWeb!';
 
     private function __construct()
     {

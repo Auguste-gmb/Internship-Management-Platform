@@ -75,9 +75,45 @@ class User extends Model
         }
     }
 
-    
     public function count(): int
     {
         return (int) $this->query('SELECT COUNT(*) FROM User_')->fetchColumn();
+    }
+
+    public function countCandidatures(int $userId): int
+    {
+        return (int) $this->query(
+            'SELECT COUNT(*) FROM apply WHERE id_user = ?',
+            [$userId]
+        )->fetchColumn();
+    }
+
+    public function countWishlist(int $userId): int
+    {
+        return (int) $this->query(
+            'SELECT COUNT(*) FROM whishlist WHERE id_user = ?',
+            [$userId]
+        )->fetchColumn();
+    }
+
+    public function updateProfil(int $userId, array $data): void
+    {
+        $this->query('
+            UPDATE Profil p
+            JOIN User_ u ON u.id_profil = p.id_profil
+            SET p.first_name = ?, p.name = ?
+            WHERE u.id_user = ?
+        ', [$data['prenom'], $data['nom'], $userId]);
+        
+        $this->query('
+            UPDATE User_ SET email = ? WHERE id_user = ?
+        ', [$data['email'], $userId]);
+    }
+
+    public function updatePassword(int $userId, string $newPassword): void
+    {
+        $this->query('
+            UPDATE User_ SET password = ? WHERE id_user = ?
+        ', [password_hash($newPassword, PASSWORD_BCRYPT), $userId]);
     }
 }

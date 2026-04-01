@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+{% set active = 'dashboard' %}
+
+{% block title %}StageHub Admin — Statistiques{% endblock %}
+{% block meta_desc %}Tableau de bord administrateur — StageHub{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="/assets/css/pages-extra.css"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-layout">
+
+  {# Sidebar #}
+  <aside class="admin-sidebar">
+    <div style="padding:20px 20px 4px">
+      <span style="font-size:.72rem;font-weight:800;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em">
+        Administration
+      </span>
+    </div>
+    <div class="admin-nav-section">Tableau de bord</div>
+    <a href="/dashboard" class="admin-nav-link active ">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      Statistiques
+    </a>
+
+    <div class="admin-nav-section">Gestion</div>
+    <a href="/dashboard/users" class="admin-nav-link">Utilisateurs</a>
+    <a href="/dashboard/entreprises" class="admin-nav-link">Entreprises</a>
+    <a href="/dashboard/offres" class="admin-nav-link">Offres de stage</a>
+
+    <div class="admin-nav-section">Compte</div>
+    <a href="/profil" class="admin-nav-link">Mon profil</a>
+    <a href="/logout" class="admin-nav-link">Déconnexion</a>
+  </aside>
+
+  {# Main content #}
+  <main class="admin-main">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px">
+      <h1 class="admin-page-title" style="margin:0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        Statistiques générales
+      </h1>
+      <select style="border:1.5px solid #ddd;border-radius:50px;padding:9px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);outline:none">
+        <option>Promotion 2024–2025</option>
+        <option>Promotion 2023–2024</option>
+        <option>Toutes promotions</option>
+      </select>
+    </div>
+
+    {# KPIs dynamiques #}
+    <div class="admin-stats-row" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
+      {% for kpi in stats.kpis %}
+        <div class="admin-stat">
+          <div class="admin-stat-icon {{ kpi.color }}">{{ kpi.icon }}</div>
+          <div>
+            <div class="admin-stat-val">{{ kpi.value }}</div>
+            <div class="admin-stat-lbl">{{ kpi.label }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="stats-grid-admin">
+
+      {# Candidatures par domaine (exemple Chart JS) #}
+      <div class="chart-card">
+        <h3>📊 Candidatures par domaine</h3>
+        <div class="bar-chart" id="domainBars"></div>
+      </div>
+
+      {# Statut des candidatures #}
+      <div class="chart-card">
+        <h3>🎯 Répartition des statuts</h3>
+        <div class="donut-stat">
+          <svg viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15.5" fill="none" stroke="#ebebeb" stroke-width="4"/>
+            <circle cx="18" cy="18" r="15.5" fill="none"
+                    stroke="#f5c4ba" stroke-width="4"
+                    stroke-dasharray="{{ stats.refuses_dash ?? 71 }} 97.4"
+                    stroke-linecap="round"/>
+            <circle cx="18" cy="18" r="15.5" fill="none"
+                    stroke="#b8ddf5" stroke-width="4"
+                    stroke-dasharray="{{ stats.attente_dash ?? 21.4 }} 97.4"
+                    stroke-dashoffset="-{{ stats.refuses_dash ?? 71 }}"
+                    stroke-linecap="round"/>
+            <circle cx="18" cy="18" r="15.5" fill="none"
+                    stroke="#6bbfb0" stroke-width="4"
+                    stroke-dasharray="{{ stats.acceptes_dash ?? 4.8 }} 97.4"
+                    stroke-dashoffset="-{{ (stats.refuses_dash ?? 71) + (stats.attente_dash ?? 21.4) }}"
+                    stroke-linecap="round"/>
+          </svg>
+          <div class="donut-stat-legend">
+            <div class="donut-stat-item"><div class="donut-dot" style="background:#f5c4ba"></div>Refusés — <strong>{{ stats.refuses ?? 73 }}%</strong></div>
+            <div class="donut-stat-item"><div class="donut-dot" style="background:#b8ddf5"></div>En attente — <strong>{{ stats.en_attente ?? 22 }}%</strong></div>
+            <div class="donut-stat-item"><div class="donut-dot" style="background:#6bbfb0"></div>Acceptés — <strong>{{ stats.acceptes ?? 5 }}%</strong></div>
+          </div>
+        </div>
+      </div>
+
+      {# Top entreprises #}
+      <div class="chart-card">
+        <h3>🏆 Top entreprises (candidatures)</h3>
+        <div class="top-list">
+          {% for t in stats.top_wishlist %}
+            <div class="top-item">
+              <span class="top-rank {{ loop.index == 1 ? 'gold' : loop.index == 2 ? 'silver' : loop.index == 3 ? 'bronze' : '' }}">
+                {{ loop.index }}
+              </span>
+              <div class="top-info">
+                <div class="top-name">{{ t.nom }}</div>
+                <div class="top-sub">{{ t.secteur }}</div>
+              </div>
+              <span class="top-count">{{ t.candidatures }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Évolution mensuelle #}
+      <div class="chart-card">
+        <h3>📈 Candidatures / mois</h3>
+        <div id="monthlyBars" class="bar-chart"></div>
+      </div>
+
+      {# Offres les plus postulées #}
+      <div class="chart-card" style="grid-column:1/-1">
+        <h3>🔥 Offres les plus postulées</h3>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Offre</th><th>Entreprise</th><th>Domaine</th><th>Rémunération</th><th>Candidatures</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in stats.top_offres %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ o.titre }}</td>
+                <td>{{ o.entreprise }}</td>
+                <td>{{ o.domaine }}</td>
+                <td>{{ o.remuneration }}</td>
+                <td>{{ o.candidatures }}</td>
+              </tr>
+            {% else %}
+              <tr><td colspan="6" style="text-align:center;color:#bbb;">Aucune donnée</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>{# /stats-grid-admin #}
+
+  </main>
+</div>{# /admin-layout #}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/assets/js/admin-stats-script.js"></script>
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('open');
+});
+</script>
+{% endblock %}

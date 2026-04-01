@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+{% set active = 'dashboard' %}
+
+{% block title %}StageHub — Mes candidatures{% endblock %}
+{% block meta_desc %}Mes candidatures — StageHub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/assets/css/pages-extra.css"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-historique">
+  <div class="histo-header">
+    <div>
+      <h1>Mes candidatures 📋</h1>
+      <p style="color:var(--gray);font-size:.9rem;margin-top:6px;font-weight:600">
+        Suivi de toutes vos candidatures envoyées
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="/dashboard" class="btn-login">← Dashboard</a>
+      <a href="/offres" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Trouver des offres
+      </a>
+    </div>
+  </div>
+
+  <div class="histo-filters">
+    <button class="histo-chip active" onclick="filterStatus('all', this)">
+      Toutes ({{ stats.total }})
+    </button>
+    <button class="histo-chip" onclick="filterStatus('pending', this)">
+      ⏳ En attente ({{ stats.pending }})
+    </button>
+    <button class="histo-chip" onclick="filterStatus('refused', this)">
+      ✕ Refusées ({{ stats.refused }})
+    </button>
+    <button class="histo-chip" onclick="filterStatus('accepted', this)">
+      ✓ Acceptées ({{ stats.accepted }})
+    </button>
+  </div>
+
+  <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
+    <div class="admin-search" style="flex:1;min-width:200px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="histoSearch" placeholder="Rechercher une offre, entreprise…" oninput="filterSearch()"/>
+    </div>
+    <select id="histoSort" onchange="renderTable()" style="border:1.5px solid #ddd;border-radius:50px;padding:9px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);outline:none">
+      <option value="date">Plus récentes</option>
+      <option value="company">Entreprise A–Z</option>
+      <option value="status">Statut</option>
+    </select>
+  </div>
+
+  <div class="histo-table-wrap">
+    <table class="histo-table">
+      <thead>
+        <tr>
+          <th>Offre</th>
+          <th>Lieu</th>
+          <th>Rémunération</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="histoBody">
+        {% for c in candidatures %}
+          <tr data-status="{{ c.status }}">
+            <td>
+              <div style="font-weight:700">{{ c.titre }}</div>
+              <div style="color:#999;font-size:.85rem">{{ c.entreprise }}</div>
+            </td>
+            <td>{{ c.ville }}</td>
+            <td>{{ c.remuneration ?? 'N/A' }}</td>
+            <td>{{ c.date|date('d/m/Y') }}</td>
+            <td>
+              <span class="status-badge {{ c.status }}">
+                {{ c.status == 'pending' ? 'En attente' : (c.status == 'accepted' ? 'Accepté' : 'Refusé') }}
+              </span>
+            </td>
+            <td>
+              <a href="/offres/{{ c.id_offer }}" class="btn-voir" style="font-size:.8rem;padding:6px 14px">Détails</a>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="6" style="text-align:center;padding:40px;color:#999">
+              Aucune candidature pour le moment.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/assets/js/historique-script.js"></script>
+{% endblock %}

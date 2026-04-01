@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% set active = 'dashboard' %}
+
+{% block title %}StageHub — Ma wish-list{% endblock %}
+{% block meta_desc %}Ma wish-list — StageHub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/assets/css/pages-extra.css"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-wishlist">
+  <div class="wishlist-header">
+    <div>
+      <h1>Ma wish-list ❤️ <span class="wishlist-count" id="wishCount">{{ wishlist|length }}</span></h1>
+      <p style="color:var(--gray);font-size:.9rem;margin-top:6px;font-weight:600">
+        Offres sauvegardées pour postuler plus tard
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <select id="sortWish" onchange="renderWishlist()" style="border:1.5px solid #ddd;border-radius:50px;padding:9px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);cursor:pointer;outline:none">
+        <option value="date">Plus récemment ajoutés</option>
+        <option value="salary">Rémunération ↑</option>
+        <option value="alpha">Entreprise A–Z</option>
+      </select>
+      <a href="/offres" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Trouver des offres
+      </a>
+    </div>
+  </div>
+
+  <div class="wishlist-grid" id="wishGrid">
+    {% for w in wishlist %}
+      <div class="wish-card">
+        <span class="wish-card-company">{{ w.entreprise }}</span>
+        <span class="wish-card-title">{{ w.titre }}</span>
+        <span class="wish-card-salary">{{ w.salaire }}</span>
+        <div class="wish-card-footer">
+          <span class="wish-card-loc">📍 {{ w.ville }}</span>
+          <button class="wish-remove" title="Retirer" onclick="removeFromWishlist({{ w.id_offer }})">♥</button>
+        </div>
+      </div>
+    {% else %}
+      <p style="color:#bbb;text-align:center;padding:60px 0;font-weight:700;grid-column:1/-1">
+        Votre wish-list est vide.
+      </p>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="/assets/js/wishlist-script.js"></script>
+{% endblock %}

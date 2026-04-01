@@ -219,8 +219,10 @@
     {% if pagination is defined and pagination.total_pages > 1 %}
       <div class="pagination">
 
+        {% if pagination.current > 1 %}
         <a href="?page={{ pagination.current - 1 }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&domain={{ app_domain }}&remu_max={{ app_remu_max }}"
-           class="page-btn arrow {{ pagination.current <= 1 ? 'disabled' }}">‹</a>
+           class="page-btn arrow">‹</a>
+        {% endif %}
 
         {% for p in 1..pagination.total_pages %}
           {% if p == pagination.current %}
@@ -233,8 +235,10 @@
           {% endif %}
         {% endfor %}
 
+        {% if pagination.current < pagination.total_pages %}
         <a href="?page={{ pagination.current + 1 }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&domain={{ app_domain }}&remu_max={{ app_remu_max }}"
-           class="page-btn arrow {{ pagination.current >= pagination.total_pages ? 'disabled' }}">›</a>
+           class="page-btn arrow">›</a>
+        {% endif %}
 
       </div>
     {% endif %}

@@ -20,21 +20,30 @@
       <a href="/offres" {% if active == 'offres' %}class="active"{% endif %}>Offres</a>
       <span class="sep">|</span>
       <a href="/entreprises" {% if active == 'entreprises' %}class="active"{% endif %}>Entreprises</a>
+      
+      {% if app_user is defined and app_user %}
       <span class="sep">|</span>
       <a href="/dashboard" {% if active == 'dashboard' %}class="active"{% endif %}>Dashboard</a>
+      {% endif %}
+
     </div>
     <div class="nav-right">
+
       {% if app_user is defined and app_user %}
-        <span style="font-weight:700;font-size:.88rem">{{ app_user.email }}</span>
+        <span style="font-weight:700;font-size:.88rem">{{ app_user.prenom }}</span>
         <a href="/deconnexion" class="btn-login">Déconnexion</a>
       {% else %}
         <a href="/connexion" class="btn-login">Connexion</a>
       {% endif %}
-      <div class="nav-avatar" aria-label="Profil">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-        </svg>
-      </div>
+
+      <a href="/dashboard/profil">
+        <div class="nav-avatar" aria-label="Profil">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+          </svg>
+        </div>
+      </a>
+
       <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
     </div>
   </nav>
