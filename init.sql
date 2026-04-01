@@ -1,9 +1,13 @@
 CREATE TABLE Role(
    id_role INT NOT NULL AUTO_INCREMENT,
-   role_name ENUM('student', 'tutor', 'administrator') NOT NULL,
+   role_name ENUM('student','tutor','administrator') NOT NULL,
    PRIMARY KEY(id_role)
 );
 
+INSERT INTO Role (role_name) VALUES
+('student'),
+('tutor'),
+('administrator');
 
 CREATE TABLE Profil(
    id_profil INT NOT NULL AUTO_INCREMENT,
@@ -20,7 +24,7 @@ CREATE TABLE User_(
    email VARCHAR(255),
    password VARCHAR(255),
    active TINYINT(1),
-   id_tutor INT NOT NULL,
+   id_tutor INT,
    id_role INT NOT NULL,
    id_profil INT NOT NULL,
    PRIMARY KEY(id_user),
@@ -30,18 +34,28 @@ CREATE TABLE User_(
    FOREIGN KEY(id_profil) REFERENCES Profil(id_profil)
 );
 
+CREATE TABLE Domain(
+   id_domain INT NOT NULL AUTO_INCREMENT,
+   label VARCHAR(100) NOT NULL,
+   PRIMARY KEY(id_domain)
+);
 
-CREATE TABLE offer(
+
+CREATE TABLE Offer(
    id_offer INT NOT NULL AUTO_INCREMENT,
    title VARCHAR(50),
-   description VARCHAR(50),
-   duration VARCHAR(50),
+   description VARCHAR(255),
+   duration enum('3 mois','6 mois','12 mois'),
    level VARCHAR(50),
    type VARCHAR(50),
-   remuneration VARCHAR(50),
-   publication_date VARCHAR(50),
-   skill VARCHAR(50),
-   PRIMARY KEY(id_offer)
+   remuneration varchar(50),
+   publication_date DATE,
+   skill VARCHAR(255),
+   id_entreprise INT NOT NULL,
+   id_domain INT,
+   PRIMARY KEY(id_offer),
+   FOREIGN KEY(id_entreprise) REFERENCES Entreprise(id_entreprise),
+   FOREIGN KEY(id_domain) REFERENCES Domain(id_domain)
 );
 
 
@@ -56,31 +70,30 @@ CREATE TABLE Adress(
 
 
 CREATE TABLE Entreprise(
-   id_entreprise VARCHAR(50),
+   id_entreprise INT NOT NULL AUTO_INCREMENT,
    name VARCHAR(50),
-   description VARCHAR(50),
-   email VARCHAR(50),
-   id_offer INT NOT NULL,
+   description VARCHAR(255),
+   email VARCHAR(255),
    id_adress INT NOT NULL,
    PRIMARY KEY(id_entreprise),
-   FOREIGN KEY(id_offer) REFERENCES offer(id_offer),
    FOREIGN KEY(id_adress) REFERENCES Adress(id_adress)
 );
+
 
 
 CREATE TABLE apply(
    id_user INT,
    id_offer INT,
-   cv VARCHAR(50),
-   motivation_letter VARCHAR(50),
+   cv VARCHAR(255),
+   motivation_letter VARCHAR(255),
    message VARCHAR(255),
    PRIMARY KEY(id_user, id_offer),
    FOREIGN KEY(id_user) REFERENCES User_(id_user),
-   FOREIGN KEY(id_offer) REFERENCES offer(id_offer)
+   FOREIGN KEY(id_offer) REFERENCES Offer(id_offer)
 );
 
 
-CREATE TABLE whishlist(
+CREATE TABLE whishlist( 
    id_user INT,
    id_offer INT,
    PRIMARY KEY(id_user, id_offer),
@@ -91,62 +104,10 @@ CREATE TABLE whishlist(
 
 CREATE TABLE grade(
    id_user INT,
-   id_entreprise VARCHAR(50),
+   id_entreprise INT,
    note INT,
    notice VARCHAR(255),
    PRIMARY KEY(id_user, id_entreprise),
    FOREIGN KEY(id_user) REFERENCES User_(id_user),
    FOREIGN KEY(id_entreprise) REFERENCES Entreprise(id_entreprise)
 ); 
-
-
--- Procédure 1 : postuler à une offre (transactionnel)
-DELIMITER $$
-CREATE PROCEDURE sp_apply(
-    IN p_user_id INT,
-    IN p_offer_id INT,
-    IN p_cv VARCHAR(50),
-    IN p_lm VARCHAR(50),
-    IN p_msg VARCHAR(255)
-)
-BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-
-    START TRANSACTION;
-        -- Vérifie que l'offre existe
-        IF NOT EXISTS (SELECT 1 FROM offer WHERE id_offer = p_offer_id) THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Offre introuvable';
-        END IF;
-
-        INSERT INTO apply (id_user, id_offer, cv, motivation_letter, message)
-        VALUES (p_user_id, p_offer_id, p_cv, p_lm, p_msg)
-        ON DUPLICATE KEY UPDATE cv = p_cv, motivation_letter = p_lm, message = p_msg;
-
-        -- Retire de la wishlist si présent
-        DELETE FROM whishlist WHERE id_user = p_user_id AND id_offer = p_offer_id;
-    COMMIT;
-END$$
-DELIMITER ;
-
--- Procédure 2 : noter une entreprise (upsert)
-DELIMITER $$
-CREATE PROCEDURE sp_grade_entreprise(
-    IN p_user_id INT,
-    IN p_entreprise_id VARCHAR(50),
-    IN p_note INT,
-    IN p_notice VARCHAR(255)
-)
-BEGIN
-    IF p_note < 1 OR p_note > 5 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Note invalide (1-5)';
-    END IF;
-
-    INSERT INTO grade (id_user, id_entreprise, note, notice)
-    VALUES (p_user_id, p_entreprise_id, p_note, p_notice)
-    ON DUPLICATE KEY UPDATE note = p_note, notice = p_notice;
-END$$
-DELIMITER ;
