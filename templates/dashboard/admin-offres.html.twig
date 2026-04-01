@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% set active = 'dashboard' %}
+
+{% block title %}StageHub Admin — Statistiques{% endblock %}
+{% block meta_desc %}Tableau de bord administrateur — StageHub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/assets/css/pages-extra.css"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-layout">
+
+  {# Sidebar #}
+  <aside class="admin-sidebar">
+    <div style="padding:20px 20px 4px">
+      <span style="font-size:.72rem;font-weight:800;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em">
+        Administration
+      </span>
+    </div>
+    <div class="admin-nav-section">Tableau de bord</div>
+    <a href="/dashboard" class="admin-nav-link ">Statistiques</a>
+
+    <div class="admin-nav-section">Gestion</div>
+    <a href="/dashboard/users" class="admin-nav-link">Utilisateurs</a>
+    <a href="/dashboard/entreprises" class="admin-nav-link">Entreprises</a>
+    <a href="/dashboard/offres" class="admin-nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Offres de stage</a>
+
+    <div class="admin-nav-section">Compte</div>
+    <a href="/profil" class="admin-nav-link">Mon profil</a>
+    <a href="/logout" class="admin-nav-link">Déconnexion</a>
+  </aside>
+
+  {# Main content #}
+  <main class="admin-main">
+   
+
+  </main>
+</div>{# /admin-layout #}
+
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}

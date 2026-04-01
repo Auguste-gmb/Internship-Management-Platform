@@ -28,11 +28,15 @@ class Router
 
         $role = $_SESSION['user']['role'];
         if ($role === 'administrator') {
+            // Dashboard admin
             if ($pages == ''){
-                // Dashboard admin
                 (new DashboardController($this->twig))->admin();
             } elseif ($pages == 'users') {
                 (new DashboardController($this->twig))->admin_users();
+            } elseif ($pages == 'entreprises') {
+                (new DashboardController($this->twig))->admin_entreprises();
+            } elseif ($pages == 'offres') {
+                (new DashboardController($this->twig))->admin_offres();
             }
         } else {
             // Dashboard étudiant / normal
@@ -80,7 +84,7 @@ class Router
             $uri === '/inscription' && $method === 'POST'
                 => (new AuthController($this->twig))->register(),
 
-            $uri === '/deconnexion'
+            $uri === '/logout'
                 => (new AuthController($this->twig))->logout(),
 
             // Dashboard
@@ -89,6 +93,12 @@ class Router
     
             $uri === '/dashboard/users' && $method === 'GET'
                 => $this->handleDashboard('users'),
+                
+            $uri === '/dashboard/entreprises' && $method === 'GET'
+                => $this->handleDashboard('entreprises'),
+                
+            $uri === '/dashboard/offres' && $method === 'GET'
+                => $this->handleDashboard('offres'),
             
             // Candidatures
             $uri === '/dashboard/candidatures' && $method === 'GET'
@@ -105,13 +115,13 @@ class Router
                 => (new WishlistController($this->twig))->remove(),
 
             // Profil
-            $uri === '/dashboard/profil' && $method === 'GET'
+            $uri === '/profil' && $method === 'GET'
                 => (new ProfilController($this->twig))->index(),
 
-            $uri === '/dashboard/profil/update' && $method === 'POST'
+            $uri === '/profil/update' && $method === 'POST'
                 => (new ProfilController($this->twig))->update(),
 
-            $uri === '/dashboard/profil/password' && $method === 'POST'
+            $uri === '/profil/password' && $method === 'POST'
                 => (new ProfilController($this->twig))->password(),
 
             // Postuler
