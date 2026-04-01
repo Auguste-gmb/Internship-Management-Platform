@@ -14,21 +14,24 @@ class Database
 
     private function __construct()
     {
-        $host = $_ENV['DB_HOST'];
-        $dbname = $_ENV['DB_NAME'];
-        $user = $_ENV['DB_USER'];
-        $pass = $_ENV['DB_PASS'];
+        $connectionString = $_ENV['DATABASE_URL'];
 
-        $dsn = "mysql:host=$host;dbname=$dbname";
+        $parts = parse_url($connectionString);
+
+        $dsn = sprintf(
+        'pgsql:host=%s;port=%s;dbname=%s',
+            $parts['host'],
+            $parts['port'],
+            ltrim($parts['path'], '/')
+        );
 
         try {
-            $this->pdo = new PDO($dsn, $user, $pass, [
+            $this->pdo = new PDO($dsn, $parts['user'], $parts['pass'], [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
             ]);
         } catch (PDOException $e) {
-            die('Erreur BDD : ' . $e->getMessage()); // Debug tempo !!!!
+            echo "Erreur de connexion : " . $e->getMessage() . "\n";
         }
     }
 

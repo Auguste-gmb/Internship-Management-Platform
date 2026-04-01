@@ -13,10 +13,10 @@ class User extends Model
             SELECT u.id_user, u.email, u.password, u.active,
                    p.first_name, p.name,
                    r.role_name
-            FROM User_ u
-            JOIN Profil p ON p.id_profil = u.id_profil
-            JOIN Role r   ON r.id_role   = u.id_role
-            WHERE u.email = ? AND u.active = 1
+            FROM "User_" u
+            JOIN "Profil" p ON p.id_profil = u.id_profil
+            JOIN "Role" r   ON r.id_role   = u.id_role
+            WHERE u.email = ? AND u.active = true
             LIMIT 1
         ', [$email])->fetch();
 
@@ -29,9 +29,9 @@ class User extends Model
             SELECT u.id_user, u.email, u.active,
                    p.first_name, p.name,
                    r.role_name
-            FROM User_ u
-            JOIN Profil p ON p.id_profil = u.id_profil
-            JOIN Role r   ON r.id_role   = u.id_role
+            FROM "User_" u
+            JOIN "Profil" p ON p.id_profil = u.id_profil
+            JOIN "Role" r   ON r.id_role   = u.id_role
             WHERE u.id_user = ?
             LIMIT 1
         ', [$id])->fetch();
@@ -46,17 +46,17 @@ class User extends Model
 
         try {
             $this->query(
-                'INSERT INTO Profil (first_name, name, creation_date) VALUES (?, ?, NOW())',
+                'INSERT INTO "Profil" (first_name, name, creation_date) VALUES (?, ?, NOW())',
                 [$data['first_name'], $data['name']]
             );
-            $idProfil = (int) $pdo->lastInsertId();
+            $idProfil = (int) $pdo->lastInsertId('"Profil_id_profil_seq"');
 
             if ($idProfil === 0) {
                 throw new \RuntimeException('Échec création profil');
             }
 
             $this->query(
-                'INSERT INTO User_ (email, password, active, id_tutor, id_role, id_profil)
+                'INSERT INTO "User_" (email, password, active, id_tutor, id_role, id_profil)
                 VALUES (?, ?, 1, NULL, ?, ?)',
                 [
                     $data['email'],
@@ -67,7 +67,7 @@ class User extends Model
             );
 
             $pdo->commit();
-            return (int) $pdo->lastInsertId();
+            return (int) $pdo->lastInsertId('"User__id_user_seq"');
 
         } catch (\Exception $e) {
             $pdo->rollBack();
@@ -77,7 +77,7 @@ class User extends Model
 
     public function count(): int
     {
-        return (int) $this->query('SELECT COUNT(*) FROM User_')->fetchColumn();
+        return (int) $this->query('SELECT COUNT(*) FROM "User_"')->fetchColumn();
     }
 
     public function countCandidatures(int $userId): int
@@ -91,7 +91,7 @@ class User extends Model
     public function countWishlist(int $userId): int
     {
         return (int) $this->query(
-            'SELECT COUNT(*) FROM whishlist WHERE id_user = ?',
+            'SELECT COUNT(*) FROM "wishlist" WHERE id_user = ?',
             [$userId]
         )->fetchColumn();
     }
@@ -99,21 +99,22 @@ class User extends Model
     public function updateProfil(int $userId, array $data): void
     {
         $this->query('
-            UPDATE Profil p
-            JOIN User_ u ON u.id_profil = p.id_profil
-            SET p.first_name = ?, p.name = ?
-            WHERE u.id_user = ?
+            UPDATE "Profil" p
+            SET first_name = ?, name = ?
+            FROM "User_" u
+            WHERE u.id_profil = p.id_profil
+            AND u.id_user = ?
         ', [$data['prenom'], $data['nom'], $userId]);
         
         $this->query('
-            UPDATE User_ SET email = ? WHERE id_user = ?
+            UPDATE "User_" SET email = ? WHERE id_user = ?
         ', [$data['email'], $userId]);
     }
 
     public function updatePassword(int $userId, string $newPassword): void
     {
         $this->query('
-            UPDATE User_ SET password = ? WHERE id_user = ?
+            UPDATE "User_" SET password = ? WHERE id_user = ?
         ', [password_hash($newPassword, PASSWORD_BCRYPT), $userId]);
     }
 }

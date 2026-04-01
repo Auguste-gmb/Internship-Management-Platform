@@ -168,8 +168,7 @@
     <div class="offers-grid">
       {% for offre in offres %}
         <article class="offer-card" data-domain="{{ offre.domaine|lower }}">
-
-          <span class="domain-badge">{{ offre.domaine ?? offre.skill ?? '—' }}</span>
+          <span class="domain-badge">{{ offre.domain ?? '—' }}</span>
 
           <div class="offer-top">
             <div class="offer-company">
@@ -184,7 +183,7 @@
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
             </svg>
-            {{ offre.ville }}
+            {{ offre.location }}
           </div>
 
           <div class="offer-tags">

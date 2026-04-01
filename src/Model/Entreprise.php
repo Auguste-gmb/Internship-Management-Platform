@@ -15,7 +15,7 @@ class Entreprise extends Model
         int    $offset     = 0
     ): array {
         [$sql, $params] = $this->buildWhereClause($search, $noteMin, $offresRange);
-        $sql .= ' GROUP BY e.id_entreprise ORDER BY e.name LIMIT ? OFFSET ?';
+        $sql .= ' GROUP BY e.id_entreprise, e.name, e.description, e.email, a.city, a.region ORDER BY e.name LIMIT ? OFFSET ?';
         $params[] = $limit;
         $params[] = $offset;
         return $this->query($sql, $params)->fetchAll();
@@ -32,7 +32,7 @@ class Entreprise extends Model
 
     public function count(): int
     {
-        return (int) $this->query('SELECT COUNT(*) FROM Entreprise')->fetchColumn();
+        return (int) $this->query('SELECT COUNT(*) FROM "Entreprise"')->fetchColumn();
     }
 
     public function getById(string $id): ?array
@@ -42,10 +42,10 @@ class Entreprise extends Model
                    ROUND(AVG(g.note), 1)      AS note_moyenne,
                    COUNT(DISTINCT g.id_user)  AS nb_avis,
                    COUNT(DISTINCT o.id_offer) AS nb_offres
-            FROM Entreprise e
-            JOIN Adress a     ON a.id_adress      = e.id_adress
-            LEFT JOIN grade g ON g.id_entreprise  = e.id_entreprise
-            LEFT JOIN Offer o ON o.id_entreprise  = e.id_entreprise
+            FROM "Entreprise" e
+            JOIN "Adress" a     ON a.id_adress      = e.id_adress
+            LEFT JOIN "grade" g ON g.id_entreprise  = e.id_entreprise
+            LEFT JOIN "Offer" o ON o.id_entreprise  = e.id_entreprise
             WHERE e.id_entreprise = ?
             GROUP BY e.id_entreprise
             LIMIT 1
@@ -61,17 +61,17 @@ class Entreprise extends Model
         bool   $count       = false
     ): array {
         $select = $count
-            ? 'SELECT COUNT(DISTINCT e.id_entreprise) FROM Entreprise e'
+            ? 'SELECT COUNT(DISTINCT e.id_entreprise) FROM "Entreprise" e'
             : 'SELECT e.id_entreprise, e.name, e.description, e.email,
-                      a.city AS ville, a.region,
-                      COUNT(DISTINCT o.id_offer) AS nb_offres,
-                      ROUND(AVG(g.note), 1)      AS note_moyenne
-               FROM Entreprise e';
+                    a.city AS ville, a.region,
+                    COUNT(DISTINCT o.id_offer) AS nb_offres,
+                    ROUND(AVG(g.note), 1)      AS note_moyenne
+            FROM "Entreprise" e';
 
         $sql = $select . '
-            JOIN Adress a     ON a.id_adress      = e.id_adress
-            LEFT JOIN Offer o ON o.id_entreprise  = e.id_entreprise
-            LEFT JOIN grade g ON g.id_entreprise  = e.id_entreprise
+            JOIN "Adress" a     ON a.id_adress      = e.id_adress
+            LEFT JOIN "Offer" o ON o.id_entreprise  = e.id_entreprise
+            LEFT JOIN "grade" g ON g.id_entreprise  = e.id_entreprise
             WHERE 1=1
         ';
         $params = [];
