@@ -41,24 +41,6 @@ CREATE TABLE Domain(
 );
 
 
-CREATE TABLE Offer(
-   id_offer INT NOT NULL AUTO_INCREMENT,
-   title VARCHAR(50),
-   description VARCHAR(255),
-   duration enum('3 mois','6 mois','12 mois'),
-   level VARCHAR(50),
-   type VARCHAR(50),
-   remuneration varchar(50),
-   publication_date DATE,
-   skill VARCHAR(255),
-   id_entreprise INT NOT NULL,
-   id_domain INT,
-   PRIMARY KEY(id_offer),
-   FOREIGN KEY(id_entreprise) REFERENCES Entreprise(id_entreprise),
-   FOREIGN KEY(id_domain) REFERENCES Domain(id_domain)
-);
-
-
 CREATE TABLE Adress(
    id_adress INT NOT NULL AUTO_INCREMENT,
    city VARCHAR(50),
@@ -79,7 +61,22 @@ CREATE TABLE Entreprise(
    FOREIGN KEY(id_adress) REFERENCES Adress(id_adress)
 );
 
-
+CREATE TABLE Offer(
+   id_offer INT NOT NULL AUTO_INCREMENT,
+   title VARCHAR(50),
+   description VARCHAR(255),
+   duration enum('3 mois','6 mois','12 mois'),
+   level VARCHAR(50),
+   type VARCHAR(50),
+   remuneration varchar(50),
+   publication_date DATE,
+   skill VARCHAR(255),
+   id_entreprise INT NOT NULL,
+   id_domain INT,
+   PRIMARY KEY(id_offer),
+   FOREIGN KEY(id_entreprise) REFERENCES Entreprise(id_entreprise),
+   FOREIGN KEY(id_domain) REFERENCES Domain(id_domain)
+);
 
 CREATE TABLE apply(
    id_user INT,
@@ -98,7 +95,7 @@ CREATE TABLE whishlist(
    id_offer INT,
    PRIMARY KEY(id_user, id_offer),
    FOREIGN KEY(id_user) REFERENCES User_(id_user),
-   FOREIGN KEY(id_offer) REFERENCES offer(id_offer)
+   FOREIGN KEY(id_offer) REFERENCES Offer(id_offer)
 );
 
 
