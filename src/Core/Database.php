@@ -10,8 +10,8 @@ class Database
 {
     private static ?Database $instance = null;
     private PDO $pdo;
-    private $user = 'root';
-    private $pass = 'A2#DevWeb!';
+    private $user = 'neipe';
+    private $pass = 'Neipe@2024!';
 
     private function __construct()
     {
