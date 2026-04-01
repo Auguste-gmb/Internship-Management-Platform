@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Mon profil — StageHub"/>
+  <title>StageHub — Mon profil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/pages-extra.css"/>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Accueil</a>
+      <span class="sep">|</span>
+      <a href="offer.html">Offres</a>
+      <span class="sep">|</span>
+      <a href="entreprises.html">Entreprises</a>
+      <span class="sep">|</span>
+      <a href="dashboard.html" class="active">Dashboard</a>
+    </div>
+    <div class="nav-right">
+      <a href="login-register.html" class="btn-login">Connexion</a>
+      <div class="nav-avatar" aria-label="Profil">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-profil">
+
+    <!-- Hero profil -->
+    <div class="profil-hero">
+      <div class="profil-avatar-big avatar-upload" title="Changer la photo">
+        <span id="avatarInitials">TD</span>
+        <input type="file" accept="image/*" onchange="handleAvatar(this)"/>
+        <div class="avatar-upload-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span style="font-size:.65rem">Modifier</span>
+        </div>
+      </div>
+      <div class="profil-hero-info">
+        <h1 id="heroName">Thomas Dupont</h1>
+        <p id="heroEmail">thomas.dupont@cesi.fr</p>
+        <span class="profil-promo-badge">PGE A2 · CPI INFO</span>
+        <div style="display:flex;gap:24px;margin-top:16px;flex-wrap:wrap">
+          <div><span style="font-weight:900;font-size:1.3rem;color:var(--salmon)">33</span><span style="color:var(--gray);font-size:.82rem;font-weight:700;margin-left:6px">Postulés</span></div>
+          <div><span style="font-weight:900;font-size:1.3rem;color:var(--salmon)">4</span><span style="color:var(--gray);font-size:.82rem;font-weight:700;margin-left:6px">Wish-list</span></div>
+        </div>
+      </div>
+      <!-- Liens rapides -->
+      <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+        <a href="dashboard.html" class="btn-login" style="text-align:center">← Dashboard</a>
+        <a href="historique.html" class="btn-login" style="text-align:center">Candidatures</a>
+        <a href="wishlist.html" class="btn-login" style="text-align:center">Wish-list</a>
+      </div>
+    </div>
+
+    <div class="profil-grid">
+
+      <!-- Infos personnelles -->
+      <div class="profil-card">
+        <h2>Informations personnelles</h2>
+        <div class="profil-field">
+          <label class="profil-label">Prénom</label>
+          <input class="profil-input" type="text" id="firstName" value="Thomas"/>
+        </div>
+        <div class="profil-field">
+          <label class="profil-label">Nom</label>
+          <input class="profil-input" type="text" id="lastName" value="Dupont"/>
+        </div>
+        <div class="profil-field">
+          <label class="profil-label">Email CESI</label>
+          <input class="profil-input" type="email" id="email" value="thomas.dupont@cesi.fr"/>
+        </div>
+        <div class="profil-field">
+          <label class="profil-label">Téléphone</label>
+          <input class="profil-input" type="tel" id="phone" placeholder="06 00 00 00 00"/>
+        </div>
+        <div class="profil-field">
+          <label class="profil-label">Promotion</label>
+          <input class="profil-input" type="text" value="PGE A2 · CPI INFO" disabled/>
+        </div>
+        <button class="btn-save" onclick="saveInfos()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Sauvegarder
+        </button>
+      </div>
+
+      <!-- Sécurité -->
+      <div class="profil-card">
+        <h2>Sécurité</h2>
+        <div class="profil-field">
+          <label class="profil-label">Mot de passe actuel</label>
+          <div style="position:relative">
+            <input class="profil-input" type="password" id="currentPw" placeholder="••••••••" style="padding-right:44px"/>
+            <button onclick="toggleField('currentPw',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:#bbb;padding:0;display:flex">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="profil-field">
+          <label class="profil-label">Nouveau mot de passe</label>
+          <div style="position:relative">
+            <input class="profil-input" type="password" id="newPw" placeholder="••••••••" oninput="checkPwStrength(this.value)" style="padding-right:44px"/>
+            <button onclick="toggleField('newPw',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:#bbb;padding:0;display:flex">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="strength-indicator" id="strBar">
+            <div class="str-seg" id="s1"></div><div class="str-seg" id="s2"></div>
+            <div class="str-seg" id="s3"></div><div class="str-seg" id="s4"></div>
+          </div>
+          <p id="strLabel" style="font-size:.75rem;font-weight:700;margin-top:4px;color:#bbb"></p>
+        </div>
+        <div class="profil-field">
+          <label class="profil-label">Confirmer le mot de passe</label>
+          <input class="profil-input" type="password" id="confirmPw" placeholder="••••••••"/>
+          <p id="pwError" style="font-size:.78rem;font-weight:700;color:var(--salmon);margin-top:6px;display:none">Les mots de passe ne correspondent pas.</p>
+        </div>
+        <button class="btn-save" onclick="changePw()" style="background:var(--dark)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Modifier le mot de passe
+        </button>
+        <div style="margin-top:24px;padding-top:20px;border-top:1.5px solid #f0f0f0">
+          <p style="font-size:.88rem;font-weight:800;margin-bottom:12px">Zone de danger</p>
+          <button onclick="openDeleteModal()" style="background:none;border:1.5px solid var(--salmon);color:var(--salmon);border-radius:50px;padding:9px 20px;font-family:var(--font);font-size:.85rem;font-weight:800;cursor:pointer;transition:all .2s" onmouseover="this.style.background='var(--salmon-bg)'" onmouseout="this.style.background='none'">
+            Supprimer mon compte
+          </button>
+        </div>
+      </div>
+
+      <!-- CV & Documents -->
+      <div class="profil-card" style="grid-column:1/-1">
+        <h2>CV & Documents</h2>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1;min-width:240px">
+            <label class="profil-label" style="margin-bottom:10px;display:block">Mon CV actuel</label>
+            <div style="display:flex;align-items:center;gap:14px;background:var(--light-gray);border:1.5px dashed #ddd;border-radius:14px;padding:16px 20px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--salmon)" stroke-width="2" style="width:32px;height:32px;flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <div style="flex:1">
+                <p style="font-weight:800;font-size:.9rem" id="cvName">CV_Thomas_Dupont.pdf</p>
+                <p style="font-size:.75rem;color:var(--gray);font-weight:600" id="cvSize">245 Ko · Modifié le 01/03</p>
+              </div>
+              <label style="cursor:pointer">
+                <input type="file" accept=".pdf,.doc,.docx" style="display:none" onchange="updateCV(this)"/>
+                <span class="btn-save" style="margin:0;padding:8px 16px;font-size:.8rem">Remplacer</span>
+              </label>
+            </div>
+          </div>
+          <div style="flex:1;min-width:240px">
+            <label class="profil-label" style="margin-bottom:10px;display:block">Lettre type (optionnel)</label>
+            <div style="background:var(--light-gray);border:1.5px dashed #ddd;border-radius:14px;padding:16px 20px;text-align:center">
+              <p style="font-size:.85rem;color:var(--gray);font-weight:600">Aucune lettre type enregistrée</p>
+              <label style="cursor:pointer;margin-top:12px;display:inline-block">
+                <input type="file" accept=".pdf,.doc,.docx" style="display:none"/>
+                <span class="btn-save" style="margin:0;padding:8px 16px;font-size:.8rem;background:var(--dark)">Ajouter</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal suppression -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal" style="position:relative">
+      <button class="modal-close" onclick="closeDeleteModal()">×</button>
+      <h2 style="color:var(--salmon)">⚠️ Supprimer mon compte</h2>
+      <p class="modal-sub">Cette action est irréversible. Toutes vos candidatures et données seront supprimées définitivement.</p>
+      <div class="profil-field">
+        <label class="profil-label">Tapez <strong>SUPPRIMER</strong> pour confirmer</label>
+        <input class="profil-input" type="text" id="deleteConfirm" placeholder="SUPPRIMER" oninput="checkDeleteConfirm()"/>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-admin-action secondary" onclick="closeDeleteModal()">Annuler</button>
+        <button class="btn-danger" id="btnDeleteConfirm" disabled onclick="confirmDelete()">Supprimer définitivement</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="../assets/js/profil-script.js"></script>
+  <script>
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+    });
+    function openDeleteModal()  { document.getElementById('deleteModal').classList.add('open'); }
+    function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('open'); document.getElementById('deleteConfirm').value=''; document.getElementById('btnDeleteConfirm').disabled=true; }
+    function checkDeleteConfirm() { document.getElementById('btnDeleteConfirm').disabled = document.getElementById('deleteConfirm').value !== 'SUPPRIMER'; }
+    function confirmDelete() { toast('Compte supprimé. Redirection…','error'); setTimeout(()=>{ window.location.href='index.html'; },2000); }
+    function toast(msg,type='success') {
+      const c=document.getElementById('toastContainer'); const t=document.createElement('div');
+      t.className=`toast ${type}`; t.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>${msg}`;
+      c.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+      setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3000);
+    }
+  </script>
+</body>
+</html>

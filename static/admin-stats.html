@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StageHub Admin — Statistiques</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/pages-extra.css"/>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Accueil</a><span class="sep">|</span>
+      <a href="offer.html">Offres</a><span class="sep">|</span>
+      <a href="entreprises.html">Entreprises</a><span class="sep">|</span>
+      <a href="dashboard.html" class="active">Dashboard</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-avatar"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div style="padding:20px 20px 4px"><span style="font-size:.72rem;font-weight:800;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em">Administration</span></div>
+      <div class="admin-nav-section">Tableau de bord</div>
+      <a href="admin-stats.html" class="admin-nav-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Statistiques</a>
+      <div class="admin-nav-section">Gestion</div>
+      <a href="admin-users.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Utilisateurs</a>
+      <a href="admin-entreprises.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Entreprises</a>
+      <a href="admin-offres.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Offres de stage</a>
+      <div class="admin-nav-section">Compte</div>
+      <a href="profil.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Mon profil</a>
+      <a href="login-register.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Déconnexion</a>
+    </aside>
+
+    <main class="admin-main">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px">
+        <h1 class="admin-page-title" style="margin:0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Statistiques générales
+        </h1>
+        <select style="border:1.5px solid #ddd;border-radius:50px;padding:9px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);outline:none">
+          <option>Promotion 2024–2025</option>
+          <option>Promotion 2023–2024</option>
+          <option>Toutes promotions</option>
+        </select>
+      </div>
+
+      <!-- KPIs -->
+      <div class="admin-stats-row" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
+        <div class="admin-stat"><div class="admin-stat-icon blue">🎓</div><div><div class="admin-stat-val">248</div><div class="admin-stat-lbl">Étudiants</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon green">✅</div><div><div class="admin-stat-val">341</div><div class="admin-stat-lbl">Candidatures</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon orange">🏢</div><div><div class="admin-stat-val">80</div><div class="admin-stat-lbl">Entreprises</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon red">📋</div><div><div class="admin-stat-val">128</div><div class="admin-stat-lbl">Offres actives</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon green">🤝</div><div><div class="admin-stat-val">67%</div><div class="admin-stat-lbl">Taux placement</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon blue">⏱️</div><div><div class="admin-stat-val">18j</div><div class="admin-stat-lbl">Délai moyen</div></div></div>
+      </div>
+
+      <div class="stats-grid-admin">
+        <!-- Candidatures par domaine -->
+        <div class="chart-card">
+          <h3>📊 Candidatures par domaine</h3>
+          <div class="bar-chart" id="domainBars"><!-- JS --></div>
+        </div>
+
+        <!-- Statut des candidatures -->
+        <div class="chart-card">
+          <h3>🎯 Répartition des statuts</h3>
+          <div class="donut-stat">
+            <svg viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="15.5" fill="none" stroke="#ebebeb" stroke-width="4"/>
+              <circle cx="18" cy="18" r="15.5" fill="none" stroke="#f5c4ba" stroke-width="4" stroke-dasharray="71 97.4" stroke-linecap="round"/>
+              <circle cx="18" cy="18" r="15.5" fill="none" stroke="#b8ddf5" stroke-width="4" stroke-dasharray="21.4 97.4" stroke-dashoffset="-71" stroke-linecap="round"/>
+              <circle cx="18" cy="18" r="15.5" fill="none" stroke="#6bbfb0" stroke-width="4" stroke-dasharray="4.8 97.4" stroke-dashoffset="-92.4" stroke-linecap="round"/>
+            </svg>
+            <div class="donut-stat-legend">
+              <div class="donut-stat-item"><div class="donut-dot" style="background:#f5c4ba"></div>Refusés — <strong>73%</strong></div>
+              <div class="donut-stat-item"><div class="donut-dot" style="background:#b8ddf5"></div>En attente — <strong>22%</strong></div>
+              <div class="donut-stat-item"><div class="donut-dot" style="background:#6bbfb0"></div>Acceptés — <strong>5%</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top entreprises -->
+        <div class="chart-card">
+          <h3>🏆 Top entreprises (candidatures)</h3>
+          <div class="top-list">
+            <div class="top-item"><span class="top-rank gold">1</span><div class="top-info"><div class="top-name">Accenture</div><div class="top-sub">Conseil & Numérique</div></div><span class="top-count">48</span></div>
+            <div class="top-item"><span class="top-rank silver">2</span><div class="top-info"><div class="top-name">Thales</div><div class="top-sub">Défense & Aérospatial</div></div><span class="top-count">41</span></div>
+            <div class="top-item"><span class="top-rank bronze">3</span><div class="top-info"><div class="top-name">Capgemini</div><div class="top-sub">ESN / Conseil IT</div></div><span class="top-count">37</span></div>
+            <div class="top-item"><span class="top-rank">4</span><div class="top-info"><div class="top-name">Airbus</div><div class="top-sub">Aéronautique</div></div><span class="top-count">29</span></div>
+            <div class="top-item"><span class="top-rank">5</span><div class="top-info"><div class="top-name">BNP Paribas</div><div class="top-sub">Banque & Finance</div></div><span class="top-count">24</span></div>
+          </div>
+        </div>
+
+        <!-- Évolution mensuelle -->
+        <div class="chart-card">
+          <h3>📈 Candidatures / mois</h3>
+          <div id="monthlyBars" class="bar-chart"><!-- JS --></div>
+        </div>
+
+        <!-- Offres les plus postulées -->
+        <div class="chart-card" style="grid-column:1/-1">
+          <h3>🔥 Offres les plus postulées</h3>
+          <table class="admin-table">
+            <thead><tr><th>#</th><th>Offre</th><th>Entreprise</th><th>Domaine</th><th>Rémunération</th><th>Candidatures</th></tr></thead>
+            <tbody id="topOffersBody"><!-- JS --></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="../assets/js/admin-stats-script.js"></script>
+  <script>
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

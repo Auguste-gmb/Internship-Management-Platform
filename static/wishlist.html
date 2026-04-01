@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Ma wish-list — StageHub"/>
+  <title>StageHub — Ma wish-list</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/pages-extra.css"/>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Accueil</a>
+      <span class="sep">|</span>
+      <a href="offer.html">Offres</a>
+      <span class="sep">|</span>
+      <a href="entreprises.html">Entreprises</a>
+      <span class="sep">|</span>
+      <a href="dashboard.html" class="active">Dashboard</a>
+    </div>
+    <div class="nav-right">
+      <a href="login-register.html" class="btn-login">Connexion</a>
+      <div class="nav-avatar" aria-label="Profil">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-wishlist">
+    <div class="wishlist-header">
+      <div>
+        <h1>Ma wish-list ❤️ <span class="wishlist-count" id="wishCount">4</span></h1>
+        <p style="color:var(--gray);font-size:.9rem;margin-top:6px;font-weight:600">Offres sauvegardées pour postuler plus tard</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <select id="sortWish" onchange="renderWishlist()" style="border:1.5px solid #ddd;border-radius:50px;padding:9px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);cursor:pointer;outline:none">
+          <option value="date">Plus récemment ajoutés</option>
+          <option value="salary">Rémunération ↑</option>
+          <option value="alpha">Entreprise A–Z</option>
+        </select>
+        <a href="offer.html" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Trouver des offres
+        </a>
+      </div>
+    </div>
+
+    <div class="wishlist-grid" id="wishGrid">
+      <!-- Généré par JS -->
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="../assets/js/wishlist-script.js"></script>
+  <script>
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

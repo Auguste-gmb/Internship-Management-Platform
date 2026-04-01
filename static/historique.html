@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Mes candidatures — StageHub"/>
+  <title>StageHub — Mes candidatures</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/pages-extra.css"/>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Accueil</a>
+      <span class="sep">|</span>
+      <a href="offer.html">Offres</a>
+      <span class="sep">|</span>
+      <a href="entreprises.html">Entreprises</a>
+      <span class="sep">|</span>
+      <a href="dashboard.html" class="active">Dashboard</a>
+    </div>
+    <div class="nav-right">
+      <a href="login-register.html" class="btn-login">Connexion</a>
+      <div class="nav-avatar" aria-label="Profil">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="page-historique">
+    <div class="histo-header">
+      <div>
+        <h1>Mes candidatures 📋</h1>
+        <p style="color:var(--gray);font-size:.9rem;margin-top:6px;font-weight:600">Suivi de toutes vos candidatures envoyées</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="dashboard.html" class="btn-login">← Dashboard</a>
+        <a href="offer.html" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Trouver des offres
+        </a>
+      </div>
+    </div>
+
+    <!-- Filtres statut -->
+    <div class="histo-filters">
+      <button class="histo-chip active" onclick="filterStatus('all', this)">Toutes (33)</button>
+      <button class="histo-chip" onclick="filterStatus('pending', this)">⏳ En attente (5)</button>
+      <button class="histo-chip" onclick="filterStatus('refused', this)">✕ Refusées (28)</button>
+      <button class="histo-chip" onclick="filterStatus('accepted', this)">✓ Acceptées (0)</button>
+    </div>
+
+    <!-- Barre recherche + tri -->
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
+      <div class="admin-search" style="flex:1;min-width:200px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="histoSearch" placeholder="Rechercher une offre, entreprise…" oninput="filterSearch()"/>
+      </div>
+      <select id="histoSort" onchange="renderTable()" style="border:1.5px solid #ddd;border-radius:50px;padding:9px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);outline:none">
+        <option value="date">Plus récentes</option>
+        <option value="company">Entreprise A–Z</option>
+        <option value="status">Statut</option>
+      </select>
+    </div>
+
+    <div class="histo-table-wrap">
+      <table class="histo-table">
+        <thead>
+          <tr>
+            <th>Offre</th>
+            <th>Lieu</th>
+            <th>Rémunération</th>
+            <th>Date</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="histoBody"><!-- Généré par JS --></tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:12px">
+      <p style="color:var(--gray);font-size:.85rem;font-weight:600" id="histoMeta">Affichage 1–10 sur 33 candidatures</p>
+      <div class="pagination" style="margin-top:0">
+        <button class="page-btn arrow">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span style="font-weight:700;color:#ccc;padding:0 4px">…</span>
+        <button class="page-btn">4</button>
+        <button class="page-btn arrow">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal détail candidature -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal" style="position:relative;max-width:520px">
+      <button class="modal-close" onclick="closeDetail()">×</button>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="../assets/js/historique-script.js"></script>
+  <script>
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+    });
+    document.querySelectorAll('.page-btn:not(.arrow)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

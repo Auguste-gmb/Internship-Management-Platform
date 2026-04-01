@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StageHub Admin — Entreprises</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/pages-extra.css"/>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Stage<span>Hub</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Accueil</a><span class="sep">|</span>
+      <a href="offer.html">Offres</a><span class="sep">|</span>
+      <a href="entreprises.html">Entreprises</a><span class="sep">|</span>
+      <a href="dashboard.html" class="active">Dashboard</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-avatar"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div style="padding:20px 20px 4px"><span style="font-size:.72rem;font-weight:800;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em">Administration</span></div>
+      <div class="admin-nav-section">Tableau de bord</div>
+      <a href="admin-stats.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Statistiques</a>
+      <div class="admin-nav-section">Gestion</div>
+      <a href="admin-users.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Utilisateurs</a>
+      <a href="admin-entreprises.html" class="admin-nav-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Entreprises</a>
+      <a href="admin-offres.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Offres de stage</a>
+      <div class="admin-nav-section">Compte</div>
+      <a href="profil.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Mon profil</a>
+      <a href="login-register.html" class="admin-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Déconnexion</a>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-stats-row">
+        <div class="admin-stat"><div class="admin-stat-icon blue">🏢</div><div><div class="admin-stat-val">80</div><div class="admin-stat-lbl">Entreprises</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon green">✅</div><div><div class="admin-stat-val">68</div><div class="admin-stat-lbl">Avec offres actives</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon orange">📋</div><div><div class="admin-stat-val">128</div><div class="admin-stat-lbl">Total offres</div></div></div>
+        <div class="admin-stat"><div class="admin-stat-icon red">⭐</div><div><div class="admin-stat-val">4.2</div><div class="admin-stat-lbl">Note moyenne</div></div></div>
+      </div>
+
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h2>Toutes les entreprises</h2>
+          <div class="admin-toolbar">
+            <div class="admin-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Rechercher…" id="entSearch" oninput="filterEnt()"/>
+            </div>
+            <select id="sectorFilter" onchange="filterEnt()" style="border:1.5px solid #ddd;border-radius:50px;padding:8px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);outline:none">
+              <option value="all">Tous secteurs</option>
+              <option value="Informatique">Informatique</option>
+              <option value="Finance">Finance</option>
+              <option value="Industrie">Industrie</option>
+              <option value="Conseil">Conseil</option>
+              <option value="Télécoms">Télécoms</option>
+            </select>
+            <button class="btn-admin-action" onclick="openEntModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Ajouter
+            </button>
+          </div>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>Entreprise</th><th>Secteur</th><th>Offres actives</th><th>Note</th><th>Ajoutée le</th><th>Actions</th></tr></thead>
+          <tbody id="entBody"><!-- JS --></tbody>
+        </table>
+        <div class="admin-pagination">
+          <button class="page-btn arrow">‹</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <span style="font-weight:700;color:#ccc;padding:0 4px">…</span>
+          <button class="page-btn">8</button>
+          <button class="page-btn arrow">›</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal entreprise -->
+  <div class="modal-overlay" id="entModal">
+    <div class="modal" style="position:relative">
+      <button class="modal-close" onclick="closeEntModal()">×</button>
+      <h2 id="entModalTitle">Ajouter une entreprise</h2>
+      <p class="modal-sub">Renseignez les informations de l'entreprise partenaire.</p>
+      <div class="profil-field"><label class="profil-label">Nom de l'entreprise</label><input class="profil-input" type="text" id="entName" placeholder="Accenture"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="profil-field"><label class="profil-label">Secteur</label>
+          <select class="profil-input" id="entSector">
+            <option>Informatique</option><option>Finance</option><option>Industrie</option>
+            <option>Conseil</option><option>Télécoms</option><option>Marketing</option>
+          </select>
+        </div>
+        <div class="profil-field"><label class="profil-label">Note (0–5)</label><input class="profil-input" type="number" id="entNote" min="0" max="5" step="0.5" placeholder="4.5"/></div>
+      </div>
+      <div class="profil-field"><label class="profil-label">Site web</label><input class="profil-input" type="url" id="entSite" placeholder="https://accenture.com"/></div>
+      <div class="profil-field"><label class="profil-label">Email de contact</label><input class="profil-input" type="email" id="entEmail" placeholder="stages@entreprise.fr"/></div>
+      <div class="profil-field"><label class="profil-label">Description</label><textarea class="profil-input" id="entDesc" rows="3" placeholder="Description…" style="resize:vertical;border-radius:14px"></textarea></div>
+      <div class="modal-actions">
+        <button class="btn-admin-action secondary" onclick="closeEntModal()">Annuler</button>
+        <button class="btn-admin-action" onclick="saveEnt()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal suppression -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal" style="position:relative">
+      <button class="modal-close" onclick="closeDeleteModal()">×</button>
+      <h2 style="color:var(--salmon)">Supprimer l'entreprise ?</h2>
+      <p class="modal-sub">Toutes les offres associées à <strong id="deleteEntName"></strong> seront également supprimées.</p>
+      <div class="modal-actions">
+        <button class="btn-admin-action secondary" onclick="closeDeleteModal()">Annuler</button>
+        <button class="btn-danger" onclick="confirmDeleteEnt()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="../assets/js/admin-entreprises-script.js"></script>
+  <script>
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+    });
+    document.querySelectorAll('.page-btn:not(.arrow)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
