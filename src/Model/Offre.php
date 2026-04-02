@@ -19,11 +19,15 @@ class Offre extends Model
         int    $limit     = 12,
         int    $offset    = 0
     ): array {
+        // Construire la requête SQL et les paramètres
         [$sql, $params] = $this->buildQuery($search, $loc, $duration, $remuMax, $domainIds);
+
+        // Ajouter l'ordre, la limite et l'offset
         $sql      .= ' ORDER BY o.publication_date DESC LIMIT ? OFFSET ?';
         $params[]  = $limit;
         $params[]  = $offset;
 
+        // Exécuter et retourner toutes les offres
         return $this->fetchAll($sql, $params);
     }
 
@@ -133,10 +137,11 @@ class Offre extends Model
         } else {
             $sql = '
                 SELECT o.id_offer, o.title, o.description, o.duration,
-                       o.remuneration, o.publication_date, o.skill,
-                       o.level, o.type,
-                       d.name AS domain,
-                       a.city AS location
+                    o.remuneration, o.publication_date, o.skill,
+                    o.level, o.type,
+                    d.name AS domain,
+                    e.name AS entreprise_name,   -- <-- correction ici
+                    a.city AS location
                 FROM "Offer" o
                 LEFT JOIN "Domain"     d ON d.id_domain     = o.id_domain
                 LEFT JOIN "Entreprise" e ON e.id_entreprise = o.id_entreprise

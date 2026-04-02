@@ -113,7 +113,7 @@
         </div>
 
         {# Titre #}
-        <a href="/offres/{{ offre.id_offer }}" class="offer-title-link">
+        <a href="/offres/{{ offre.id_offer }}" class="offer-title-link offer-title">
           <p class="offer-title">{{ offre.title }}</p>
         </a>
 
@@ -206,10 +206,6 @@
 </section>
 
 
-{# ═══════════════════════════════════════════════════════════════════════════ #}
-{#  CALL TO ACTION                                                             #}
-{#  Affiché uniquement si l'utilisateur n'est pas connecté                    #}
-{# ═══════════════════════════════════════════════════════════════════════════ #}
 {% if not app_user %}
   <section class="cta-section">
     <h2>Prêt à trouver votre <span>stage</span> ?</h2>
@@ -224,9 +220,6 @@
 {% endblock %}
 
 
-{# ═══════════════════════════════════════════════════════════════════════════ #}
-{#  SCRIPTS                                                                    #}
-{# ═══════════════════════════════════════════════════════════════════════════ #}
 {% block extra_js %}
   <script src="/assets/js/index-script.js"></script>
 {% endblock %}
