@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Entreprise;
+use App\Model\Offre;
 
 class EntrepriseController extends BaseController
 {
@@ -12,26 +13,42 @@ class EntrepriseController extends BaseController
     public function index(): void
     {
         $model       = new Entreprise();
-        $search      = trim($_GET['q']           ?? '');
-        $noteMin     = (int)($_GET['note_min']   ?? 0);
+        $search      = trim($_GET['q'] ?? '');
+        $noteMin     = (int)($_GET['note_min'] ?? 0);
         $offresRange = trim($_GET['offres_range'] ?? '');
         $page        = max(1, (int)($_GET['page'] ?? 1));
         $offset      = ($page - 1) * self::PER_PAGE;
 
-        $total      = $model->countFiltered($search, $noteMin, $offresRange);
+        $domainIds = $_GET['domain'] ?? [];
+        if (!is_array($domainIds)) {
+            $domainIds = [$domainIds];
+        }
+
+        $total = $model->countFiltered($search, $noteMin, $offresRange, $domainIds);
         $totalPages = (int) ceil($total / self::PER_PAGE);
 
+        $entreprises = $model->getAll(
+            $search,
+            $noteMin,
+            $offresRange,
+            $domainIds,
+            self::PER_PAGE,
+            $offset
+        );
+
         $this->render('entreprise/list.html.twig', [
-            'title'         => 'Entreprises partenaires — StageHub',
-            'entreprises'   => $model->getAll($search, $noteMin, $offresRange, self::PER_PAGE, $offset),
-            'stats'         => ['total_entreprises' => $total],
-            'pagination'    => [
+            'title'          => 'Entreprises partenaires — StageHub',
+            'entreprises'    => $entreprises,
+            'stats'          => ['total_entreprises' => $total],
+            'pagination'     => [
                 'current'     => $page,
                 'total_pages' => $totalPages,
             ],
             'app_query'       => htmlspecialchars($search, ENT_QUOTES),
             'app_note_min'    => $noteMin,
             'app_offres_range'=> $offresRange,
+            'app_domain'      => $domainIds,
+            'domaines'        => (new Offre())->getDomaines(),
         ]);
     }
 
@@ -50,4 +67,5 @@ class EntrepriseController extends BaseController
             'entreprise' => $entreprise,
         ]);
     }
+
 }

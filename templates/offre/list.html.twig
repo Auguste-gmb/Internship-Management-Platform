@@ -43,9 +43,9 @@
 </div>
 
 {# ════ LAYOUT ═══════════════════════════════════════════════════════════════ #}
+
 <div class="layout">
 
-  {# ── Bouton filtres mobile ──────────────────────────────────────────────── #}
   <button class="filter-toggle-btn" id="filterToggle">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -56,23 +56,21 @@
     Filtres
   </button>
 
-  {# ── SIDEBAR FILTRES ────────────────────────────────────────────────────── #}
   <aside class="sidebar" id="sidebar">
     <form id="filterForm" action="/offres" method="GET">
 
-      {# Conserver q et loc dans les filtres #}
       <input type="hidden" name="q"   value="{{ app_query ?? '' }}"/>
       <input type="hidden" name="loc" value="{{ app_loc   ?? '' }}"/>
 
       {# Domaine #}
       <div class="filter-card">
-        <h3>Domaine <button type="button" onclick="clearFilter('domaine')">Réinitialiser</button></h3>
-        <div class="filter-options" id="domaine">
+        <h3>Domaine</h3>
+        <div class="filter-options" id="domain">
           {% for d in domaines %}
             <label class="filter-option">
               <input type="checkbox" name="domain[]" value="{{ d.id_domain }}"
-                    {{ app_domain is defined and d.id_domain in app_domain ? 'checked' }}
-                    onchange="updateChips()"/>
+                     {{ app_domain is defined and d.id_domain in app_domain ? 'checked' }}
+                     onchange="this.form.submit()"/>
               <span class="custom-check">
                 <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="1.5,6 5,9.5 10.5,2.5"/>
@@ -88,13 +86,13 @@
 
       {# Durée #}
       <div class="filter-card">
-        <h3>Durée <button type="button" onclick="clearFilter('duree')">Réinitialiser</button></h3>
-        <div class="filter-options" id="duree">
+        <h3>Durée</h3>
+        <div class="filter-options" id="duration">
           {% for dur in ['3 mois', '6 mois', '12 mois'] %}
             <label class="filter-option">
               <input type="checkbox" name="duration" value="{{ dur }}"
                      {{ app_duration is defined and app_duration == dur ? 'checked' }}
-                     onchange="updateChips()"/>
+                     onchange="this.form.submit()"/>
               <span class="custom-check">
                 <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="1.5,6 5,9.5 10.5,2.5"/>
@@ -119,13 +117,18 @@
           <input type="range" min="0" max="4000"
                  value="{{ app_remu_max is defined and app_remu_max > 0 ? app_remu_max : 4000 }}"
                  id="salaryRange" name="remu_max"
-                 oninput="updateRange(this.value)"/>
+                 oninput="updateRange(this.value); this.form.submit()"/>
         </div>
       </div>
 
-      <button type="submit" class="apply-btn">Appliquer les filtres</button>
+      <button type="submit" class="apply-btn">Appliquer</button>
+      <a href="/offres" class="apply-btn"
+         style="display:block;text-align:center;margin-top:8px;background:#eee;color:#333">
+        Réinitialiser
+      </a>
     </form>
   </aside>
+
 
   {# ── CONTENU PRINCIPAL ──────────────────────────────────────────────────── #}
   <div class="main-content">
