@@ -1,18 +1,15 @@
 {% extends 'base.html.twig' %}
 {% set active = 'dashboard' %}
 
-{% block title %}StageHub Admin — Statistiques{% endblock %}
-{% block meta_desc %}Tableau de bord administrateur — StageHub{% endblock %}
+{% block title %}StageHub Admin — Offres{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="/assets/css/pages-extra.css"/>
 {% endblock %}
 
 {% block content %}
-
 <div class="admin-layout">
 
-  {# Sidebar #}
   <aside class="admin-sidebar">
     <div style="padding:20px 20px 4px">
       <span style="font-size:.72rem;font-weight:800;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em">
@@ -20,32 +17,33 @@
       </span>
     </div>
     <div class="admin-nav-section">Tableau de bord</div>
-    <a href="/dashboard" class="admin-nav-link ">Statistiques</a>
-
+    <a href="/dashboard" class="admin-nav-link">Statistiques</a>
     <div class="admin-nav-section">Gestion</div>
     <a href="/dashboard/users" class="admin-nav-link">Utilisateurs</a>
     <a href="/dashboard/entreprises" class="admin-nav-link">Entreprises</a>
     <a href="/dashboard/offres" class="admin-nav-link active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Offres de stage</a>
-
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
+      Offres de stage
+    </a>
     <div class="admin-nav-section">Compte</div>
     <a href="/profil" class="admin-nav-link">Mon profil</a>
     <a href="/deconnexion" class="admin-nav-link">Déconnexion</a>
   </aside>
 
-  {# Main content #}
   <main class="admin-main">
-
-    {# Stats #}
     <div class="admin-stats-row">
-      <div class="admin-stat"><div class="admin-stat-icon blue">📋</div><div><div class="admin-stat-val">128</div><div class="admin-stat-lbl">Total offres</div></div></div>
-      <div class="admin-stat"><div class="admin-stat-icon green">✅</div><div><div class="admin-stat-val">112</div><div class="admin-stat-lbl">Actives</div></div></div>
-      <div class="admin-stat"><div class="admin-stat-icon orange">👥</div><div><div class="admin-stat-val">341</div><div class="admin-stat-lbl">Candidatures</div></div></div>
-      <div class="admin-stat"><div class="admin-stat-icon red">🔥</div><div><div class="admin-stat-val">12</div><div class="admin-stat-lbl">Expirent bientôt</div></div></div>
+      <div class="admin-stat">
+        <div class="admin-stat-icon blue">📋</div>
+        <div>
+          <div class="admin-stat-val">{{ stats.total ?? 0 }}</div>
+          <div class="admin-stat-lbl">Total offres</div>
+        </div>
+      </div>
     </div>
 
-    {# Card table #}
     <div class="admin-card">
       <div class="admin-card-header">
         <h2>Toutes les offres de stage</h2>
@@ -56,123 +54,85 @@
             </svg>
             <input type="text" placeholder="Rechercher…" id="offerSearch" oninput="filterOffers()"/>
           </div>
-          <select id="domainFilter" onchange="filterOffers()" style="border:1.5px solid #ddd;border-radius:50px;padding:8px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);outline:none">
-            <option value="all">Tous domaines</option>
-            <option value="info">Informatique</option>
-            <option value="finance">Finance</option>
-            <option value="design">Design</option>
-            <option value="data">Data / IA</option>
-            <option value="management">Management</option>
-          </select>
-          <button class="btn-admin-action" onclick="openOfferModal()">
+          <a href="/offres/create" class="btn-admin-action">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
             Nouvelle offre
-          </button>
+          </a>
         </div>
       </div>
+
       <table class="admin-table">
         <thead>
           <tr>
-            <th>Offre</th>
+            <th>Intitulé</th>
             <th>Entreprise</th>
             <th>Domaine</th>
-            <th>Lieu</th>
+            <th>Durée</th>
             <th>Rémunération</th>
-            <th>Candidatures</th>
-            <th>Publiée le</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="offersBody"><!-- JS --></tbody>
+        <tbody id="offersBody">
+          {% for offre in offres %}
+            <tr>
+              <td>{{ offre.title }}</td>
+              <td>{{ offre.entreprise ?? '—' }}</td>
+              <td>{{ offre.domain ?? '—' }}</td>
+              <td>{{ offre.duration ?? '—' }}</td>
+              <td>{{ offre.remuneration ?? '—' }}</td>
+              <td style="display:flex; gap:8px;">
+                <a href="/offres/{{ offre.id_offer }}/edit"
+                   style="padding:6px 12px; background:#2563eb; color:#fff; border-radius:6px; text-decoration:none; font-size:.85rem;">
+                  ✏️ Modifier
+                </a>
+                <form action="/offres/{{ offre.id_offer }}/delete" method="POST"
+                      onsubmit="return confirm('Supprimer cette offre et toutes ses candidatures ?')">
+                  <button type="submit"
+                          style="padding:6px 12px; background:#e53e3e; color:#fff; border-radius:6px; border:none; cursor:pointer; font-size:.85rem;">
+                    🗑️ Supprimer
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="6">Aucune offre trouvée</td></tr>
+          {% endfor %}
+        </tbody>
       </table>
+
+      {% if pagination.total_pages > 1 %}
       <div class="admin-pagination">
-        <button class="page-btn arrow">‹</button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <span style="font-weight:700;color:#ccc;padding:0 4px">…</span>
-        <button class="page-btn">11</button>
-        <button class="page-btn arrow">›</button>
+        {% if pagination.current > 1 %}
+          <a class="page-btn arrow" href="?page={{ pagination.current - 1 }}">‹</a>
+        {% endif %}
+        {% for p in 1..pagination.total_pages %}
+          <a class="page-btn {{ p == pagination.current ? 'active' : '' }}" href="?page={{ p }}">{{ p }}</a>
+        {% endfor %}
+        {% if pagination.current < pagination.total_pages %}
+          <a class="page-btn arrow" href="?page={{ pagination.current + 1 }}">›</a>
+        {% endif %}
       </div>
-    </div>
+      {% endif %}
 
+    </div>
   </main>
-</div>{# /admin-layout #}
-
-{# Modals #}
-<div class="modal-overlay" id="offerModal">
-  <div class="modal" style="position:relative;max-width:560px">
-    <button class="modal-close" onclick="closeOfferModal()">×</button>
-    <h2 id="offerModalTitle">Nouvelle offre de stage</h2>
-    <p class="modal-sub">Renseignez les détails de l'offre.</p>
-    <div class="profil-field"><label class="profil-label">Intitulé du poste</label><input class="profil-input" type="text" id="ofTitle" placeholder="Développeur Full-Stack PHP/JS"/></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-      <div class="profil-field"><label class="profil-label">Entreprise</label>
-        <select class="profil-input" id="ofCompany">
-          <option>Accenture</option><option>Capgemini</option><option>Sopra Steria</option>
-          <option>BNP Paribas</option><option>Alten</option><option>Orange Group</option>
-          <option>Thales</option><option>Airbus</option>
-        </select>
-      </div>
-      <div class="profil-field"><label class="profil-label">Domaine</label>
-        <select class="profil-input" id="ofDomain">
-          <option>Informatique</option><option>Finance</option><option>Design</option>
-          <option>Data / IA</option><option>Management</option><option>DevOps</option>
-        </select>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-      <div class="profil-field"><label class="profil-label">Ville</label><input class="profil-input" type="text" id="ofCity" placeholder="Paris"/></div>
-      <div class="profil-field"><label class="profil-label">Rémunération (€/mois)</label><input class="profil-input" type="number" id="ofSalary" placeholder="800"/></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-      <div class="profil-field"><label class="profil-label">Durée</label>
-        <select class="profil-input" id="ofDuration">
-          <option>1 – 2 mois</option><option>3 – 4 mois</option><option>5 – 6 mois</option>
-        </select>
-      </div>
-      <div class="profil-field"><label class="profil-label">Date de début</label><input class="profil-input" type="date" id="ofStart"/></div>
-    </div>
-    <div class="profil-field"><label class="profil-label">Compétences (séparées par des virgules)</label><input class="profil-input" type="text" id="ofSkills" placeholder="PHP, JavaScript, MySQL"/></div>
-    <div class="profil-field"><label class="profil-label">Description</label><textarea class="profil-input" id="ofDesc" rows="3" placeholder="Description du poste…" style="resize:vertical;border-radius:14px"></textarea></div>
-    <div class="modal-actions">
-      <button class="btn-admin-action secondary" onclick="closeOfferModal()">Annuler</button>
-      <button class="btn-admin-action" onclick="saveOffer()">Publier l'offre</button>
-    </div>
-  </div>
 </div>
-
-<div class="modal-overlay" id="deleteOfferModal">
-  <div class="modal" style="position:relative">
-    <button class="modal-close" onclick="closeDeleteOfferModal()">×</button>
-    <h2 style="color:var(--salmon)">Supprimer l'offre ?</h2>
-    <p class="modal-sub">Toutes les candidatures liées à <strong id="deleteOfferName"></strong> seront également supprimées.</p>
-    <div class="modal-actions">
-      <button class="btn-admin-action secondary" onclick="closeDeleteOfferModal()">Annuler</button>
-      <button class="btn-danger" onclick="confirmDeleteOffer()">Supprimer</button>
-    </div>
-  </div>
-</div>
-
 {% endblock %}
 
 {% block extra_js %}
-<script src="/assets/js/admin-offres-script.js"></script>
 <script>
-  document.getElementById('hamburger').addEventListener('click', () => {
-    document.getElementById('hamburger').classList.toggle('open');
-    document.getElementById('navLinks').classList.toggle('open');
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+function filterOffers() {
+  const q = document.getElementById('offerSearch').value.toLowerCase();
+  document.querySelectorAll('#offersBody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
-  document.querySelectorAll('.modal-overlay').forEach(o => {
-    o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
-  });
-  document.querySelectorAll('.page-btn:not(.arrow)').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
+}
 </script>
 {% endblock %}

@@ -68,4 +68,121 @@ class OffreController extends BaseController
             'offre' => $offre,
         ]);
     }
+
+    private function requireAdmin(): void
+{
+    $this->requireAuth();
+    if (($_SESSION['user']['role'] ?? '') !== 'administrator') {
+        http_response_code(403);
+        $this->render('errors/403.html.twig', []);
+        exit;
+    }
+}
+
+public function createForm(): void
+{
+    $this->requireAdmin();
+    $model = new Offre();
+    $this->render('offre/form.html.twig', [
+        'title'      => 'Nouvelle offre — StageHub',
+        'offre'      => null,
+        'errors'     => [],
+        'domaines'   => $model->getDomaines(),
+        'entreprises'=> $model->getAllEntreprises(),
+    ]);
+}
+
+public function store(): void
+{
+    $this->requireAdmin();
+    $data   = $this->extractFormData();
+    $errors = $this->validate($data);
+    $model  = new Offre();
+
+    if ($errors) {
+        $this->render('offre/form.html.twig', [
+            'title'      => 'Nouvelle offre — StageHub',
+            'offre'      => $data,
+            'errors'     => $errors,
+            'domaines'   => $model->getDomaines(),
+            'entreprises'=> $model->getAllEntreprises(),
+        ]);
+        return;
+    }
+
+    $model->create($data);
+    $this->redirect('/dashboard/offres');
+}
+
+public function editForm(int $id): void
+{
+    $this->requireAdmin();
+    $model = new Offre();
+    $offre = $model->getById($id);
+
+    if (!$offre) {
+        http_response_code(404);
+        $this->render('errors/404.html.twig', []);
+        return;
+    }
+
+    $this->render('offre/form.html.twig', [
+        'title'      => 'Modifier ' . $offre['title'] . ' — StageHub',
+        'offre'      => $offre,
+        'errors'     => [],
+        'domaines'   => $model->getDomaines(),
+        'entreprises'=> $model->getAllEntreprises(),
+    ]);
+}
+
+public function update(int $id): void
+{
+    $this->requireAdmin();
+    $data   = $this->extractFormData();
+    $errors = $this->validate($data);
+    $model  = new Offre();
+
+    if ($errors) {
+        $this->render('offre/form.html.twig', [
+            'title'      => 'Modifier l\'offre — StageHub',
+            'offre'      => array_merge($data, ['id_offer' => $id]),
+            'errors'     => $errors,
+            'domaines'   => $model->getDomaines(),
+            'entreprises'=> $model->getAllEntreprises(),
+        ]);
+        return;
+    }
+
+    $model->update($id, $data);
+    $this->redirect('/dashboard/offres');
+}
+
+public function destroy(int $id): void
+{
+    $this->requireAdmin();
+    (new Offre())->delete($id);
+    $this->redirect('/dashboard/offres');
+}
+
+private function extractFormData(): array
+{
+    return [
+        'title'         => trim($_POST['title']         ?? ''),
+        'description'   => trim($_POST['description']   ?? ''),
+        'skill'         => trim($_POST['skill']         ?? ''),
+        'duration'      => trim($_POST['duration']      ?? ''),
+        'remuneration'  => trim($_POST['remuneration']  ?? ''),
+        'level'         => trim($_POST['level']         ?? ''),
+        'type'          => trim($_POST['type']          ?? ''),
+        'id_domain'     => $_POST['id_domain']     ?: null,
+        'id_entreprise' => $_POST['id_entreprise'] ?: null,
+    ];
+}
+
+private function validate(array $data): array
+{
+    $errors = [];
+    if ($data['title'] === '') $errors['title'] = 'L\'intitulé est obligatoire.';
+    return $errors;
+}
 }

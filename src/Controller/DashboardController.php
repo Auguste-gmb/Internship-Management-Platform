@@ -301,5 +301,38 @@ class DashboardController extends BaseController
         ]);
     }
 
-    public function admin_offres(): void { $this->adminView('dashboard/admin-offres.html.twig'); }
+   public function admin_offres(): void
+{
+    $this->requireAuth();
+    $db = Database::getInstance();
+    $offreModel = new Offre();
+
+    $perPage     = 15;
+    $currentPage = max(1, (int)($_GET['page'] ?? 1));
+    $offset      = ($currentPage - 1) * $perPage;
+
+    $total      = $offreModel->count();
+    $totalPages = (int) ceil($total / $perPage);
+
+    $offres = $db->query('
+        SELECT o.id_offer, o.title, o.duration, o.remuneration,
+               e.name AS entreprise, d.name AS domain
+        FROM "Offer" o
+        LEFT JOIN "Entreprise" e ON e.id_entreprise = o.id_entreprise
+        LEFT JOIN "Domain" d     ON d.id_domain     = o.id_domain
+        ORDER BY o.publication_date DESC
+        LIMIT ? OFFSET ?
+    ', [$perPage, $offset])->fetchAll();
+
+    $this->render('dashboard/admin-offres.html.twig', [
+        'title'      => 'Dashboard Admin — Offres',
+        'user'       => $_SESSION['user'],
+        'offres'     => $offres,
+        'stats'      => ['total' => $total],
+        'pagination' => [
+            'current'     => $currentPage,
+            'total_pages' => $totalPages,
+        ],
+    ]);
+}
 }

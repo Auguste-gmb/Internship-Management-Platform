@@ -63,6 +63,21 @@ class Router
             // Offres
             $uri === '/offres' && $method === 'GET'
                 => (new OffreController($this->twig))->index(),
+            // CRUD offres
+            $uri === '/offres/create' && $method === 'GET'
+                => (new OffreController($this->twig))->createForm(),
+
+            $uri === '/offres/create' && $method === 'POST'
+                => (new OffreController($this->twig))->store(),
+
+            preg_match('#^/offres/(\d+)/edit$#', $uri, $m) && $method === 'GET'
+                => (new OffreController($this->twig))->editForm((int)$m[1]),
+
+            preg_match('#^/offres/(\d+)/edit$#', $uri, $m) && $method === 'POST'
+                => (new OffreController($this->twig))->update((int)$m[1]),
+
+            preg_match('#^/offres/(\d+)/delete$#', $uri, $m) && $method === 'POST'
+                => (new OffreController($this->twig))->destroy((int)$m[1]),
 
             preg_match('#^/offres/(\d+)$#', $uri, $m) && $method === 'GET'
                 => (new OffreController($this->twig))->show((int)$m[1]),
@@ -71,7 +86,7 @@ class Router
             $uri === '/entreprises' && $method === 'GET'
                 => (new EntrepriseController($this->twig))->index(),
 
-                // --- CRUD entreprises (admin) ---
+                // --- CRUD entreprises ---
             $uri === '/entreprises/create' && $method === 'GET'
                 => (new EntrepriseController($this->twig))->createForm(),
 

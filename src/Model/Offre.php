@@ -188,5 +188,75 @@ class Offre extends Model
         ', [$limit])->fetchAll();
     }
 
+public function create(array $data): int
+{
+    $db  = Database::getInstance();
+    $pdo = $db->getPdo();
 
+    $pdo->beginTransaction();
+    try {
+        $db->query('
+            INSERT INTO "Offer" (title, description, skill, duration, remuneration, level, type, id_domain, id_entreprise)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ', [
+            $data['title'],
+            $data['description'] ?: null,
+            $data['skill']       ?: null,
+            $data['duration']    ?: null,
+            $data['remuneration'] ?: null,
+            $data['level']       ?: null,
+            $data['type']        ?: null,
+            $data['id_domain']   ?: null,
+            $data['id_entreprise'] ?: null,
+        ]);
+        $id = (int) $pdo->lastInsertId('offer_id_offer_seq');
+        $pdo->commit();
+        return $id;
+    } catch (\Throwable $e) {
+        $pdo->rollBack();
+        throw $e;
+    }
+}
+
+public function update(int $id, array $data): void
+{
+    Database::getInstance()->query('
+        UPDATE "Offer"
+        SET title = ?, description = ?, skill = ?, duration = ?,
+            remuneration = ?, level = ?, type = ?, id_domain = ?, id_entreprise = ?
+        WHERE id_offer = ?
+    ', [
+        $data['title'],
+        $data['description']   ?: null,
+        $data['skill']         ?: null,
+        $data['duration']      ?: null,
+        $data['remuneration']  ?: null,
+        $data['level']         ?: null,
+        $data['type']          ?: null,
+        $data['id_domain']     ?: null,
+        $data['id_entreprise'] ?: null,
+        $id,
+    ]);
+}
+
+public function delete(int $id): void
+{
+    $db  = Database::getInstance();
+    $pdo = $db->getPdo();
+    $pdo->beginTransaction();
+    try {
+        $db->query('DELETE FROM "apply"    WHERE id_offer = ?', [$id]);
+        $db->query('DELETE FROM "wishlist" WHERE id_offer = ?', [$id]);
+        $db->query('DELETE FROM "Offer"    WHERE id_offer = ?', [$id]);
+        $pdo->commit();
+    } catch (\Throwable $e) {
+        $pdo->rollBack();
+        throw $e;
+    }
+}
+
+public function getAllEntreprises(): array
+{
+    return $this->query('SELECT id_entreprise, name FROM "Entreprise" ORDER BY name')->fetchAll();
+}
 }
