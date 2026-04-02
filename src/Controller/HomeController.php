@@ -14,8 +14,8 @@ class HomeController extends BaseController
         $offreModel      = new Offre();
         $entrepriseModel = new Entreprise();
         $userModel       = new User();
-
-        $offres      = $offreModel->getAll();
+        
+        $offres  = (new Offre())->getAll('', '', '', 0, 0, 5, 0);
         $entreprises = $entrepriseModel->getAll();
 
         $this->render('home/index.html.twig', [

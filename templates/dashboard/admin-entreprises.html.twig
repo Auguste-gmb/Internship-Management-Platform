@@ -34,15 +34,177 @@
     <a href="/logout" class="admin-nav-link">Déconnexion</a>
   </aside>
 
-  {# Main content #}
+   {# Main content #}
   <main class="admin-main">
-   
+    <div class="admin-stats-row">
+      <div class="admin-stat">
+        <div class="admin-stat-icon blue">🏢</div>
+        <div>
+          <div class="admin-stat-val">{{ stats.totalEntreprises }}</div>
+          <div class="admin-stat-lbl">Entreprises</div>
+        </div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-icon green">✅</div>
+        <div>
+          <div class="admin-stat-val">{{ stats.avecOffres }}</div>
+          <div class="admin-stat-lbl">Avec offres actives</div>
+        </div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-icon orange">📋</div>
+        <div>
+          <div class="admin-stat-val">{{ stats.totalOffres }}</div>
+          <div class="admin-stat-lbl">Total offres</div>
+        </div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-icon red">⭐</div>
+        <div>
+          <div class="admin-stat-val">{{ stats.noteMoyenne }}</div>
+          <div class="admin-stat-lbl">Note moyenne</div>
+        </div>
+      </div>
+    </div>
 
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h2>Toutes les entreprises</h2>
+        <div class="admin-toolbar">
+          <div class="admin-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" placeholder="Rechercher…" id="entSearch" oninput="filterEnt()"/>
+          </div>
+          <select id="sectorFilter" onchange="filterEnt()" style="border:1.5px solid #ddd;border-radius:50px;padding:8px 16px;font-family:var(--font);font-size:.85rem;font-weight:700;background:var(--white);outline:none">
+            <option value="all">Tous secteurs</option>
+            {% for sector in sectors %}
+              <option value="{{ sector }}">{{ sector }}</option>
+            {% endfor %}
+          </select>
+          <button class="btn-admin-action" onclick="openEntModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Ajouter
+          </button>
+        </div>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Entreprise</th>
+            <th>Secteur</th>
+            <th>Offres actives</th>
+            <th>Note</th>
+            <th>Ajoutée le</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="entBody">
+          {% for ent in entreprises %}
+            <tr>
+              <td>{{ ent.nom }}</td>
+              <td>{{ ent.secteur }}</td>
+              <td>{{ ent.offresActives }}</td>
+              <td>{{ ent.note }}</td>
+              <td>{{ ent.dateAjout|date('d/m/Y') }}</td>
+              <td>
+                <button onclick="editEnt({{ ent.id }})">✏️</button>
+                <button onclick="deleteEnt({{ ent.id }}, '{{ ent.nom }}')">🗑️</button>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="6">Aucune entreprise trouvée</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {# Pagination #}
+      {% if pagination.pages > 1 %}
+      <div class="admin-pagination">
+          {# Bouton précédent, masqué si page 1 #}
+          {% if pagination.current > 1 %}
+              <a class="page-btn arrow" href="?page={{ pagination.current - 1 }}">‹</a>
+          {% endif %}
+
+          {# Numéros de page #}
+          {% for p in 1..pagination.pages %}
+              <a class="page-btn {{ p == pagination.current ? 'active' : '' }}" href="?page={{ p }}">{{ p }}</a>
+          {% endfor %}
+
+          {# Bouton suivant, masqué si dernière page #}
+          {% if pagination.current < pagination.pages %}
+              <a class="page-btn arrow" href="?page={{ pagination.current + 1 }}">›</a>
+          {% endif %}
+      </div>
+      {% endif %}
+    </div>
   </main>
-</div>{# /admin-layout #}
+</div>
 
+{# Modal ajout/édition entreprise #}
+<div class="modal-overlay" id="entModal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeEntModal()">×</button>
+    <h2 id="entModalTitle">Ajouter une entreprise</h2>
+    <p class="modal-sub">Renseignez les informations de l'entreprise partenaire.</p>
+    <div class="profil-field"><label class="profil-label">Nom de l'entreprise</label><input class="profil-input" type="text" id="entName" placeholder="Accenture"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="profil-field"><label class="profil-label">Secteur</label>
+        <select class="profil-input" id="entSector">
+          {% for sector in sectors %}
+            <option>{{ sector }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="profil-field"><label class="profil-label">Note (0–5)</label><input class="profil-input" type="number" id="entNote" min="0" max="5" step="0.5" placeholder="4.5"/></div>
+    </div>
+    <div class="profil-field"><label class="profil-label">Site web</label><input class="profil-input" type="url" id="entSite" placeholder="https://accenture.com"/></div>
+    <div class="profil-field"><label class="profil-label">Email de contact</label><input class="profil-input" type="email" id="entEmail" placeholder="stages@entreprise.fr"/></div>
+    <div class="profil-field"><label class="profil-label">Description</label><textarea class="profil-input" id="entDesc" rows="3" placeholder="Description…" style="resize:vertical;border-radius:14px"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-admin-action secondary" onclick="closeEntModal()">Annuler</button>
+      <button class="btn-admin-action" onclick="saveEnt()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+{# Modal suppression #}
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeDeleteModal()">×</button>
+    <h2 style="color:var(--salmon)">Supprimer l'entreprise ?</h2>
+    <p class="modal-sub">Toutes les offres associées à <strong id="deleteEntName"></strong> seront également supprimées.</p>
+    <div class="modal-actions">
+      <button class="btn-admin-action secondary" onclick="closeDeleteModal()">Annuler</button>
+      <button class="btn-danger" onclick="confirmDeleteEnt()">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
 {% endblock %}
 
 {% block extra_js %}
-
+<script src="/assets/js/admin-entreprises-script.js"></script>
+<script>
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+});
+document.querySelectorAll('.page-btn:not(.arrow)').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
 {% endblock %}

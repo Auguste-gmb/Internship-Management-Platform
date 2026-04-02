@@ -16,13 +16,21 @@ class OffreController extends BaseController
         $loc      = trim($_GET['loc']      ?? '');
         $duration = trim($_GET['duration'] ?? '');
         $remuMax  = (int)($_GET['remu_max'] ?? 0);
-        $domainId = (int)($_GET['domain']   ?? 0);
-        $page     = max(1, (int)($_GET['page'] ?? 1));
-        $offset   = ($page - 1) * self::PER_PAGE;
+        
+        // Toujours récupérer domainIds comme tableau
+        $domainIds = $_GET['domain'] ?? [];
+        if (!is_array($domainIds)) {
+            $domainIds = [$domainIds];
+        }
 
-        $total      = $model->countFiltered($search, $loc, $duration, $remuMax, $domainId);
+        $page   = max(1, (int)($_GET['page'] ?? 1));
+        $offset = ($page - 1) * self::PER_PAGE;
+
+        // Récupérer les offres filtrées et le total
+        $offres = $model->getAll($search, $loc, $duration, $remuMax, $domainIds, self::PER_PAGE, $offset);
+        $total  = $model->countFiltered($search, $loc, $duration, $remuMax, $domainIds);
+
         $totalPages = (int) ceil($total / self::PER_PAGE);
-        $offres     = $model->getAll($search, $loc, $duration, $remuMax, $domainId, self::PER_PAGE, $offset);
         $domaines   = $model->getDomaines();
 
         $this->render('offre/list.html.twig', [
@@ -39,7 +47,7 @@ class OffreController extends BaseController
             'app_loc'      => htmlspecialchars($loc,      ENT_QUOTES),
             'app_duration' => htmlspecialchars($duration, ENT_QUOTES),
             'app_remu_max' => $remuMax,
-            'app_domain'   => $domainId,
+            'app_domain'   => $domainIds,
         ]);
     }
 

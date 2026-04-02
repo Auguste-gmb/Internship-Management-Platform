@@ -88,6 +88,26 @@
           {% endfor %}
         </tbody>
       </table>
+
+      {# Pagination #}
+      {% if pagination.pages > 1 %}
+      <div class="admin-pagination">
+          {# Précédent #}
+          {% if pagination.current > 1 %}
+              <a class="page-btn arrow" href="?page={{ pagination.current - 1 }}">‹</a>
+          {% endif %}
+
+          {# Numéros de page #}
+          {% for p in 1..pagination.pages %}
+              <a class="page-btn {{ p == pagination.current ? 'active' : '' }}" href="?page={{ p }}">{{ p }}</a>
+          {% endfor %}
+
+          {# Suivant #}
+          {% if pagination.current < pagination.pages %}
+              <a class="page-btn arrow" href="?page={{ pagination.current + 1 }}">›</a>
+          {% endif %}
+      </div>
+      {% endif %}
     </div>
 
   </main>

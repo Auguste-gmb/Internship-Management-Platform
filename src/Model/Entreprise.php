@@ -5,20 +5,26 @@ namespace App\Model;
 
 use App\Core\Model;
 
+use App\Core\Database;
+use PDO;
+use PDOException;
+
 class Entreprise extends Model
 {
-    public function getAll(
-        string $search     = '',
-        int    $noteMin    = 0,
-        string $offresRange = '',
-        int    $limit      = 12,
-        int    $offset     = 0
-    ): array {
-        [$sql, $params] = $this->buildWhereClause($search, $noteMin, $offresRange);
-        $sql .= ' GROUP BY e.id_entreprise, e.name, e.description, e.email, a.city, a.region ORDER BY e.name LIMIT ? OFFSET ?';
-        $params[] = $limit;
-        $params[] = $offset;
-        return $this->query($sql, $params)->fetchAll();
+   public function getAll(): array
+    {
+        $db = Database::getInstance();
+        return $db->query('
+            SELECT e.id_entreprise AS id,
+                e.name AS nom,
+                COALESCE(COUNT(o.id_offer) FILTER (WHERE o.active = TRUE), 0) AS offres,
+                COALESCE(AVG(g.note), 0) AS note
+            FROM "Entreprise" e
+            LEFT JOIN "Offer" o ON o.id_entreprise = e.id_entreprise
+            LEFT JOIN "grade" g ON g.id_entreprise = e.id_entreprise
+            GROUP BY e.id_entreprise, e.name
+            ORDER BY e.name
+        ')->fetchAll();
     }
 
     public function countFiltered(

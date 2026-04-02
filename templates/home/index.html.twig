@@ -95,17 +95,17 @@
           <span class="company-name">{{ offre.entreprise }}</span>
         </div>
 
-        <p class="offer-title">{{ offre.titre }}</p>
+        <p class="offer-title">{{ offre.title }}</p>
 
         <div class="offer-tags">
-          {% for tag in offre.tags %}
-            <span class="offer-tag">{{ tag }}</span>
+          {% for tag in offre.skill|split(',') %}
+            <span class="offer-tag">{{ tag|trim }}</span>
           {% endfor %}
         </div>
 
         <div class="offer-footer">
-          <span class="offer-salary">{{ offre.salaire }}</span>
-          <span class="offer-date">{{ offre.date ?? 'Il y a 2 jours' }}</span>
+          <span class="offer-salary">{{ offre.remuneration  }}</span>
+          <span class="offer-date">{{ offre.publication_date  ?? 'Il y a 2 jours' }}</span>
           <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Ajouter aux favoris">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

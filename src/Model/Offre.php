@@ -10,35 +10,45 @@ use PDOException;
 
 class Offre extends Model
 {
+
     public function getAll(
         string $search   = '',
         string $loc      = '',
         string $duration = '',
         int    $remuMax  = 0,
-        int    $domainId = 0,
-        int    $limit    = 10,
+        array  $domainIds = [],  // <- accepter un tableau
+        int    $limit    = 12,
         int    $offset   = 0
     ): array {
-        [$sql, $params] = $this->buildWhereClause($search,$duration,$remuMax,$domainId,$loc,false);
+        [$sql, $params] = $this->buildWhereClause($search, $duration, $remuMax, $domainIds, $loc);
+
+        // Pagination
         $sql .= ' ORDER BY o.publication_date DESC LIMIT ? OFFSET ?';
         $params[] = $limit;
         $params[] = $offset;
-        return $this->query($sql, $params)->fetchAll();
+
+        return Database::getInstance()->query($sql, $params)->fetchAll();
     }
+
+
     public function countFiltered(
         string $search   = '',
         string $loc      = '',
         string $duration = '',
         int    $remuMax  = 0,
-        int    $domainId = 0
+        array  $domainIds = []  // <- changer en tableau
     ): int {
-        [$sql, $params] = $this->buildWhereClause($search,$duration,$remuMax,0,'',true);
+        [$sql, $params] = $this->buildWhereClause($search, $duration, $remuMax, $domainIds, $loc, true);
         return (int) $this->query($sql, $params)->fetchColumn();
     }
+
+
     public function count(): int
     {
         return (int) $this->query('SELECT COUNT(*) FROM "Offer"')->fetchColumn();
     }
+
+
     public function getById(int $id): ?array
     {
         $row = $this->query('
@@ -49,22 +59,33 @@ class Offre extends Model
         ', [$id])->fetch();
         return $row ?: null;
     }
+
+
+
+
     public function getDomaines(): array
     {
         try {
-            // Requête SQL avec majuscule car PostgreSQL sensible à la casse
-            $sql = 'SELECT id_domain, label FROM "Domain" ORDER BY label';
-            
-            // Exécution de la requête
-            $stmt = $this->query($sql); // renvoie un PDOStatement
-            
-            // Récupération de tous les résultats sous forme de tableau associatif
+            // Requête SQL pour récupérer les domaines + nombre d'offres dans chaque domaine
+            $sql = '
+                SELECT d.id_domain,
+                    d.name,
+                    COUNT(o.id_offer) AS count
+                FROM "Domain" d
+                LEFT JOIN "Offer" o ON o.id_domain = d.id_domain
+                GROUP BY d.id_domain, d.name
+                ORDER BY d.name
+            ';
+
+            $stmt = $this->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            // En cas d'erreur, on peut loguer $e->getMessage() ou retourner un tableau vide
             return [];
         }
     }
+
+
+
     public function topWishlist(int $limit = 5): array
     {
         return $this->query('
@@ -77,6 +98,9 @@ class Offre extends Model
             LIMIT ?
         ', [$limit])->fetchAll();
     }
+
+
+
     public function avgCandidatures(): float
     {
         $val = $this->query('
@@ -86,11 +110,14 @@ class Offre extends Model
         ')->fetchColumn();
         return round((float)($val ?? 0), 1);
     }
+
+
+
     private function buildWhereClause(
         string $search,
         string $duration = '',
         int    $remuMax  = 0,
-        int    $domainId = 0,
+        array  $domainIds = [], // <- accepter tableau
         string $loc      = '',
         bool   $count    = false
     ): array {
@@ -100,8 +127,8 @@ class Offre extends Model
             LEFT JOIN "Entreprise" e ON o.id_entreprise = e.id_entreprise
             LEFT JOIN "Adress" a ON e.id_adress = a.id_adress'
             : 'SELECT o.id_offer, o.title, o.description, o.duration,
-                    o.remuneration, o.publication_date, o.skill,
-                    o.level, o.type, d.label AS domain, a.city AS location
+            o.remuneration, o.publication_date, o.skill,
+            o.level, o.type, d.name AS domain, a.city AS location
             FROM "Offer" o
             LEFT JOIN "Domain" d ON o.id_domain = d.id_domain
             LEFT JOIN "Entreprise" e ON o.id_entreprise = e.id_entreprise
@@ -126,9 +153,10 @@ class Offre extends Model
             $params[] = $remuMax;
         }
 
-        if ($domainId > 0) {
-            $sql .= ' AND o.id_domain = ?';
-            $params[] = $domainId;
+        if (!empty($domainIds)) {
+            $placeholders = implode(',', array_fill(0, count($domainIds), '?'));
+            $sql .= " AND o.id_domain IN ($placeholders)";
+            $params = array_merge($params, $domainIds);
         }
 
         if ($loc !== '') {
@@ -138,4 +166,27 @@ class Offre extends Model
 
         return [$sql, $params];
     }
+
+
+    public function topOffres(int $limit = 5): array
+    {
+        $db = \App\Core\Database::getInstance();
+
+        return $db->query('
+            SELECT o.title AS titre,
+                e.name AS entreprise,
+                d.name AS domaine,
+                o.remuneration,
+                COUNT(ap.id_offer) AS candidatures
+            FROM "Offer" o
+            JOIN "Entreprise" e ON e.id_entreprise = o.id_entreprise
+            LEFT JOIN "Domain" d ON o.id_domain = d.id_domain
+            LEFT JOIN apply ap ON ap.id_offer = o.id_offer
+            GROUP BY o.id_offer, e.name, d.name, o.remuneration
+            ORDER BY candidatures DESC
+            LIMIT ?
+        ', [$limit])->fetchAll();
+    }
+
+
 }
