@@ -11,13 +11,13 @@ class OffreController extends BaseController
 
     public function index(): void
     {
-        $model    = new Offre();
+        $model = new Offre();
+
+        // Récup des filtres
         $search   = trim($_GET['q']        ?? '');
         $loc      = trim($_GET['loc']      ?? '');
         $duration = trim($_GET['duration'] ?? '');
         $remuMax  = (int)($_GET['remu_max'] ?? 0);
-        
-        // Toujours récupérer domainIds comme tableau
         $domainIds = $_GET['domain'] ?? [];
         if (!is_array($domainIds)) {
             $domainIds = [$domainIds];
@@ -26,13 +26,15 @@ class OffreController extends BaseController
         $page   = max(1, (int)($_GET['page'] ?? 1));
         $offset = ($page - 1) * self::PER_PAGE;
 
-        // Récupérer les offres filtrées et le total
-        $offres = $model->getAll($search, $loc, $duration, $remuMax, $domainIds, self::PER_PAGE, $offset);
-        $total  = $model->countFiltered($search, $loc, $duration, $remuMax, $domainIds);
-
+        // Récupération des offres et du total
+        $total      = $model->countFiltered($search, $loc, $duration, $remuMax, $domainIds);
         $totalPages = (int) ceil($total / self::PER_PAGE);
-        $domaines   = $model->getDomaines();
+        $offres     = $model->getAll($search, $loc, $duration, $remuMax, $domainIds, self::PER_PAGE, $offset);
 
+        // Domaines pour le filtre
+        $domaines = $model->getDomaines();
+
+        // Rendu
         $this->render('offre/list.html.twig', [
             'title'        => 'Offres de stage — StageHub',
             'offres'       => $offres,

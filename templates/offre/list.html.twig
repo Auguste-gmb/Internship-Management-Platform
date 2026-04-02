@@ -147,20 +147,41 @@
 
     {# Chips filtres actifs #}
     <div class="active-filters" id="activeFilters">
+
+      {# Durée #}
       {% if app_duration is defined and app_duration != '' %}
         <button class="chip" onclick="removeChip(this, 'duration')">
           {{ app_duration }} <span class="chip-x">×</span>
         </button>
       {% endif %}
-      {% if app_domain is defined and app_domain > 0 %}
-        {% for d in domaines %}
-          {% if d.id_domain == app_domain %}
-            <button class="chip" onclick="removeChip(this, 'domain')">
-              {{ d.label }} <span class="chip-x">×</span>
-            </button>
-          {% endif %}
+
+      {# Domaines #}
+      {% if app_domain is defined and app_domain is iterable %}
+        {% for domainId in app_domain %}
+          {% for d in domaines %}
+            {% if d.id_domain == domainId %}
+              <button class="chip" onclick="removeChip(this, 'domain', {{ d.id_domain }})">
+                {{ d.name }} <span class="chip-x">×</span>
+              </button>
+            {% endif %}
+          {% endfor %}
         {% endfor %}
       {% endif %}
+
+      {# Ville / localisation #}
+      {% if app_loc is defined and app_loc != '' %}
+        <button class="chip" onclick="removeChip(this, 'loc')">
+          {{ app_loc }} <span class="chip-x">×</span>
+        </button>
+      {% endif %}
+
+      {# Rémunération max #}
+      {% if app_remu_max is defined and app_remu_max > 0 and app_remu_max < 4000 %}
+        <button class="chip" onclick="removeChip(this, 'remu_max')">
+          Jusqu'à {{ app_remu_max }} €/mois <span class="chip-x">×</span>
+        </button>
+      {% endif %}
+
     </div>
 
     {# ── Grille des offres ──────────────────────────────────────────────── #}
@@ -215,27 +236,39 @@
 
     {# ── Pagination ─────────────────────────────────────────────────────── #}
     {% if pagination is defined and pagination.total_pages > 1 %}
+
+      {# Construire la query string pour les domaines #}
+      {% set domainQuery = '' %}
+      {% if app_domain is defined and app_domain is iterable %}
+          {% for d in app_domain %}
+              {% set domainQuery = domainQuery ~ '&domain[]=' ~ d %}
+          {% endfor %}
+      {% endif %}
+
       <div class="pagination">
 
+        {# Flèche précédente #}
         {% if pagination.current > 1 %}
-        <a href="?page={{ pagination.current - 1 }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&domain={{ app_domain }}&remu_max={{ app_remu_max }}"
-           class="page-btn arrow">‹</a>
+          <a href="?page={{ pagination.current - 1 }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&remu_max={{ app_remu_max }}{{ domainQuery }}"
+            class="page-btn arrow">‹</a>
         {% endif %}
 
+        {# Pages #}
         {% for p in 1..pagination.total_pages %}
           {% if p == pagination.current %}
             <button class="page-btn active">{{ p }}</button>
-          {% elseif p <= 4 or p == pagination.total_pages %}
-            <a href="?page={{ p }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&domain={{ app_domain }}&remu_max={{ app_remu_max }}"
-               class="page-btn">{{ p }}</a>
-          {% elseif p == 5 %}
+          {% elseif p <= 3 or p > pagination.total_pages - 2 or (p >= pagination.current -1 and p <= pagination.current +1) %}
+            <a href="?page={{ p }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&remu_max={{ app_remu_max }}{{ domainQuery }}"
+              class="page-btn">{{ p }}</a>
+          {% elseif p == 4 or p == pagination.total_pages - 2 %}
             <span style="font-weight:700;color:#ccc;padding:0 4px">…</span>
           {% endif %}
         {% endfor %}
 
+        {# Flèche suivante #}
         {% if pagination.current < pagination.total_pages %}
-        <a href="?page={{ pagination.current + 1 }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&domain={{ app_domain }}&remu_max={{ app_remu_max }}"
-           class="page-btn arrow">›</a>
+          <a href="?page={{ pagination.current + 1 }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&remu_max={{ app_remu_max }}{{ domainQuery }}"
+            class="page-btn arrow">›</a>
         {% endif %}
 
       </div>
