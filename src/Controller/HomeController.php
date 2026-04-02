@@ -22,9 +22,9 @@ class HomeController extends BaseController
             'title'               => 'StageHub — Trouvez votre stage idéal',
             'offres_recentes'     => array_slice($offres, 0, 3),
             'entreprises_vedette' => array_slice($entreprises, 0, 4),
-            'stats'               => [
+            'stats' => [
                 'total_offres'      => $offreModel->count(),
-                'total_entreprises' => $entrepriseModel->count(),
+                'total_entreprises' => $entrepriseModel->countFiltered(),
                 'total_etudiants'   => $userModel->count(),
             ],
         ]);

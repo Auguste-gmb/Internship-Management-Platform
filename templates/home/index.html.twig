@@ -131,13 +131,13 @@
 
     <div class="companies-grid">
       {% for entreprise in entreprises_vedette %}
-        <a href="/entreprises/{{ entreprise.id }}" class="company-card-index">
-          <div class="logo-big">{{ entreprise.nom|slice(0,2)|upper }}</div>
-          <h3>{{ entreprise.nom }}</h3>
-          <p>{{ entreprise.offres }} offres actives</p>
+        <a href="/entreprises/{{ entreprise.id_entreprise }}" class="company-card-index">
+          <div class="logo-big">{{ entreprise.name|slice(0,2)|upper }}</div>
+          <h3>{{ entreprise.name }}</h3>
+          <p>{{ entreprise.nb_offres }} offres actives</p>
           <div class="stars">
             {%- for i in 1..5 -%}
-              {{- entreprise.note >= i ? '★' : '☆' -}}
+              {{- entreprise.note_moyenne >= i ? '★' : '☆' -}}
             {%- endfor -%}
           </div>
         </a>

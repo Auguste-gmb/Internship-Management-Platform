@@ -34,6 +34,11 @@ class Entreprise extends Model
         return (int) $this->query($sql, $params)->fetchColumn();
     }
 
+    public function count(): int
+    {
+        return $this->countFiltered();
+    }
+
     public function getById(string $id): ?array
     {
         $row = $this->query('
