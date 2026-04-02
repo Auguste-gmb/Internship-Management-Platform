@@ -49,7 +49,7 @@ class User extends Model
                 'INSERT INTO "Profil" (first_name, name, creation_date) VALUES (?, ?, NOW())',
                 [$data['first_name'], $data['name']]
             );
-            $idProfil = (int) $pdo->lastInsertId('"Profil_id_profil_seq"');
+            $idProfil = (int) $pdo->lastInsertId('profil_id_profil_seq');
 
             if ($idProfil === 0) {
                 throw new \RuntimeException('Échec création profil');
@@ -57,17 +57,18 @@ class User extends Model
 
             $this->query(
                 'INSERT INTO "User_" (email, password, active, id_tutor, id_role, id_profil)
-                VALUES (?, ?, 1, NULL, ?, ?)',
+                VALUES (?, ?, ?, NULL, ?, ?)',
                 [
                     $data['email'],
                     password_hash($data['password'], PASSWORD_BCRYPT),
+                    true,                 // <-- ici
                     $data['id_role'] ?? 1,
                     $idProfil,
                 ]
             );
 
             $pdo->commit();
-            return (int) $pdo->lastInsertId('"User__id_user_seq"');
+            return (int) $pdo->lastInsertId('user__id_user_seq');
 
         } catch (\Exception $e) {
             $pdo->rollBack();

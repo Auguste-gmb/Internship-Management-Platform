@@ -21,9 +21,9 @@ class DashboardController extends BaseController
                 a.city AS ville, ap.motivation_letter,
                 o.publication_date AS date
             FROM apply ap
-            JOIN Offer o      ON o.id_offer      = ap.id_offer
-            JOIN Entreprise e ON e.id_entreprise = o.id_entreprise
-            JOIN Adress a     ON a.id_adress     = e.id_adress
+            JOIN "Offer" o       ON o.id_offer      = ap.id_offer
+            JOIN "Entreprise" e  ON e.id_entreprise = o.id_entreprise
+            JOIN "Adress" a      ON a.id_adress     = e.id_adress
             WHERE ap.id_user = ?
             ORDER BY o.publication_date DESC
         ', [$userId])->fetchAll();
@@ -32,10 +32,10 @@ class DashboardController extends BaseController
         $wishlist = $db->query('
             SELECT o.id_offer, o.title AS titre, e.name AS entreprise,
                 o.remuneration AS salaire, a.city AS ville
-            FROM whishlist w
-            JOIN Offer o      ON o.id_offer      = w.id_offer
-            JOIN Entreprise e ON e.id_entreprise = o.id_entreprise
-            JOIN Adress a     ON a.id_adress     = e.id_adress
+            FROM "wishlist" w
+            JOIN "Offer" o       ON o.id_offer      = w.id_offer
+            JOIN "Entreprise" e  ON e.id_entreprise = o.id_entreprise
+            JOIN "Adress" a      ON a.id_adress     = e.id_adress
             WHERE w.id_user = ?
         ', [$userId])->fetchAll();
         // Stats offres (pour les tueurs/admins)
