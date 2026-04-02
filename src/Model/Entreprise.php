@@ -39,15 +39,15 @@ class Entreprise extends Model
     {
         $row = $this->query('
             SELECT e.*, a.city AS ville, a.street_number, a.street_name, a.region,
-                   ROUND(AVG(g.note), 1)      AS note_moyenne,
-                   COUNT(DISTINCT g.id_user)  AS nb_avis,
-                   COUNT(DISTINCT o.id_offer) AS nb_offres
+                    ROUND(AVG(g.note), 1)      AS note_moyenne,
+                    COUNT(DISTINCT g.id_user)  AS nb_avis,
+                    COUNT(DISTINCT o.id_offer) AS nb_offres
             FROM "Entreprise" e
             JOIN "Adress" a     ON a.id_adress      = e.id_adress
             LEFT JOIN "grade" g ON g.id_entreprise  = e.id_entreprise
             LEFT JOIN "Offer" o ON o.id_entreprise  = e.id_entreprise
             WHERE e.id_entreprise = ?
-            GROUP BY e.id_entreprise
+            GROUP BY e.id_entreprise, a.city, a.street_number, a.street_name, a.region
             LIMIT 1
         ', [$id])->fetch();
 

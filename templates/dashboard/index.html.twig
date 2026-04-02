@@ -10,7 +10,7 @@
 
   <div class="greeting">
     <div class="greeting-left">
-      <h1>Bonjour, <span>{{ user.prenom ?? 'Thomas' }}</span> 👋</h1>
+      <h1>Bonjour, <span>{{ user.prenom ?? 'Thomas' }}</span></h1>
       <p>Voici un résumé de votre activité de recherche de stage.</p>
     </div>
     <a href="/offres" class="btn-primary">
@@ -25,19 +25,19 @@
 
   <div class="stats-row">
     <div class="stat-card accepted">
-      <div class="stat-card-icon">✓</div>
+      <!--<div class="stat-card-icon">✓</div>-->
       <span class="stat-card-label">Acceptés</span>
       <span class="stat-card-value">{{ stats.acceptes ?? 0 }}</span>
       <span class="stat-card-sub">candidature retenue</span>
     </div>
     <div class="stat-card pending">
-      <div class="stat-card-icon">⏳</div>
+      <!--<div class="stat-card-icon">⏳</div>-->
       <span class="stat-card-label">En attente</span>
       <span class="stat-card-value">{{ stats.en_attente ?? 5 }}</span>
       <span class="stat-card-sub">réponses en cours</span>
     </div>
     <div class="stat-card refused">
-      <div class="stat-card-icon">✕</div>
+      <!--<div class="stat-card-icon">✕</div>-->
       <span class="stat-card-label">Refusés</span>
       <span class="stat-card-value">{{ stats.refuses ?? 28 }}</span>
       <span class="stat-card-sub">candidatures refusées</span>
@@ -78,11 +78,10 @@
         <h2 class="card-title">Offres postulées</h2>
       </div>
 
-      {% set total    = (stats.acceptes ?? 0) + (stats.en_attente ?? 5) + (stats.refuses ?? 28) %}
-      {% set circ     = 97.4 %}
-      {% set refuses_dash  = ((stats.refuses   ?? 28) / total * circ)|round(1) %}
-      {% set attente_dash  = ((stats.en_attente ?? 5)  / total * circ)|round(1) %}
-      {% set acceptes_dash = ((stats.acceptes  ?? 0)  / total * circ)|round(1) %}
+      {% set total = (stats.acceptes ?? 0) + (stats.en_attente ?? 0) + (stats.refuses ?? 0) %}
+      {% set refuses_dash  = total > 0 ? ((stats.refuses   ?? 0) / total * circ)|round(1) : 0 %}
+      {% set attente_dash  = total > 0 ? ((stats.en_attente ?? 0) / total * circ)|round(1) : 0 %}
+      {% set acceptes_dash = total > 0 ? ((stats.acceptes  ?? 0) / total * circ)|round(1) : 0 %}
 
       <div class="donut-wrap">
         <div class="donut-svg-wrap">
@@ -132,14 +131,14 @@
           <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
         </div>
         <div class="progress-item">
-          {% set pct_refuses = total > 0 ? ((stats.refuses ?? 28) / total * 100)|round : 0 %}
+          {% set pct_refuses  = total > 0 ? ((stats.refuses ?? 0) / total * 100)|round : 0 %}
           <div class="progress-label"><span>Refus</span><span>{{ pct_refuses }} %</span></div>
           <div class="progress-bar">
             <div class="progress-fill" style="width:{{ pct_refuses }}%;background:var(--salmon-light)"></div>
           </div>
         </div>
         <div class="progress-item">
-          {% set pct_attente = total > 0 ? ((stats.en_attente ?? 5) / total * 100)|round : 0 %}
+          {% set pct_attente  = total > 0 ? ((stats.en_attente ?? 0) / total * 100)|round : 0 %}
           <div class="progress-label"><span>En attente</span><span>{{ pct_attente }} %</span></div>
           <div class="progress-bar">
             <div class="progress-fill" style="width:{{ pct_attente }}%;background:var(--sky)"></div>
@@ -154,7 +153,7 @@
 
     <div class="card">
       <div class="card-header">
-        <h2 class="card-title">Ma wish-list ❤️</h2>
+        <h2 class="card-title">Ma wish-list</h2>
         <a href="/dashboard/wishlist" class="card-link">Voir les offres →</a>
       </div>
       <div class="wish-grid">
@@ -185,7 +184,7 @@
           </svg>
         </div>
         <div class="profile-info">
-          <h2>{{ user.nom ?? 'Thomas Dupont' }}</h2>
+          <h2>{{ (user.prenom ?? 'Thomas') ~ ' ' ~ (user.nom ?? 'Dupont') }}</h2>
           <p>{{ user.email ?? 'thomas.dupont@cesi.fr' }}</p>
           <span class="profile-promo">{{ user.promo ?? 'PGE A2 · CPI INFO' }}</span>
         </div>
@@ -206,7 +205,7 @@
         <div class="card-header">
           <h2 class="card-title">Échéances à venir</h2>
         </div>
-        <div class="candidature-list">
+        <div class="candidature-list" style="display: none;">
           {% set echeances = [
             {
               icon:    '📅',

@@ -84,7 +84,7 @@ class Router
             $uri === '/inscription' && $method === 'POST'
                 => (new AuthController($this->twig))->register(),
 
-            $uri === '/logout'
+            $uri === '/deconnexion'
                 => (new AuthController($this->twig))->logout(),
 
             // Dashboard
