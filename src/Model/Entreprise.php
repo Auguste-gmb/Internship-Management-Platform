@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Core\Model;
+use App\Core\Database;
 
 class Entreprise extends Model
 {
