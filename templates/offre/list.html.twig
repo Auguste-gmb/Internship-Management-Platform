@@ -17,18 +17,18 @@
     </div>
 
     <h1>Toutes les <em>offres</em> de stage</h1>
-    <p>{{ stats.total_offres ?? 0 }} offres disponibles</p>
+    <p>{{ stats.total_offres ?? 0 }} offre{{ stats.total_offres > 1 ? 's' : '' }} disponible{{ stats.total_offres > 1 ? 's' : '' }}</p>
 
     <div class="search-wrap">
       <form class="search-bar" action="/offres" method="GET">
         <input class="search-input" type="text" name="q"
                placeholder="Emploi, compétence..." id="jobInput"
-               value="{{ app_query ?? '' }}"/>
+               value="{{ filters.q ?? '' }}"/>
         <div class="search-divider"></div>
         <input class="search-input" type="text" name="loc"
                placeholder="Ville, région…" id="locInput"
                style="max-width: 200px"
-               value="{{ app_loc ?? '' }}"/>
+               value="{{ filters.loc ?? '' }}"/>
         <button class="search-btn" type="submit" aria-label="Rechercher">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -59,8 +59,9 @@
   <aside class="sidebar" id="sidebar">
     <form id="filterForm" action="/offres" method="GET">
 
-      <input type="hidden" name="q"   value="{{ app_query ?? '' }}"/>
-      <input type="hidden" name="loc" value="{{ app_loc   ?? '' }}"/>
+      {# Conserver les paramètres de recherche #}
+      <input type="hidden" name="q"   value="{{ filters.q ?? '' }}"/>
+      <input type="hidden" name="loc" value="{{ filters.loc ?? '' }}"/>
 
       {# Domaine #}
       <div class="filter-card">
@@ -69,7 +70,7 @@
           {% for d in domaines %}
             <label class="filter-option">
               <input type="checkbox" name="domain[]" value="{{ d.id_domain }}"
-                     {{ app_domain is defined and d.id_domain in app_domain ? 'checked' }}
+                     {% if filters.domain is defined and d.id_domain in filters.domain %}checked{% endif %}
                      onchange="this.form.submit()"/>
               <span class="custom-check">
                 <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -91,7 +92,7 @@
           {% for dur in ['3 mois', '6 mois', '12 mois'] %}
             <label class="filter-option">
               <input type="checkbox" name="duration" value="{{ dur }}"
-                     {{ app_duration is defined and app_duration == dur ? 'checked' }}
+                     {% if filters.duration is defined and filters.duration == dur %}checked{% endif %}
                      onchange="this.form.submit()"/>
               <span class="custom-check">
                 <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -111,11 +112,15 @@
           <div class="range-display">
             <span>0 €</span>
             <span id="rangeVal">
-              {{ app_remu_max is defined and app_remu_max > 0 ? app_remu_max ~ ' €/mois' : '4 000 €/mois' }}
+              {% if filters.remu_max is defined and filters.remu_max > 0 %}
+                {{ filters.remu_max }} €/mois
+              {% else %}
+                4 000 €/mois
+              {% endif %}
             </span>
           </div>
           <input type="range" min="0" max="4000"
-                 value="{{ app_remu_max is defined and app_remu_max > 0 ? app_remu_max : 4000 }}"
+                 value="{{ filters.remu_max ?? 4000 }}"
                  id="salaryRange" name="remu_max"
                  oninput="updateRange(this.value); this.form.submit()"/>
         </div>
@@ -135,7 +140,8 @@
 
     <div class="results-bar">
       <p class="results-count">
-        <strong>{{ stats.total_offres ?? 0 }} offres</strong> correspondent à votre recherche
+        <strong>{{ stats.total_offres ?? 0 }} offre{{ stats.total_offres > 1 ? 's' : '' }}</strong> 
+        {{ stats.total_offres > 1 ? 'correspondent' : 'correspond' }} à votre recherche
       </p>
       <div class="sort-wrap">
         <span class="sort-label">Trier par</span>
@@ -152,15 +158,15 @@
     <div class="active-filters" id="activeFilters">
 
       {# Durée #}
-      {% if app_duration is defined and app_duration != '' %}
+      {% if filters.duration is defined and filters.duration != '' %}
         <button class="chip" onclick="removeChip(this, 'duration')">
-          {{ app_duration }} <span class="chip-x">×</span>
+          {{ filters.duration }} <span class="chip-x">×</span>
         </button>
       {% endif %}
 
       {# Domaines #}
-      {% if app_domain is defined and app_domain is iterable %}
-        {% for domainId in app_domain %}
+      {% if filters.domain is defined and filters.domain is iterable %}
+        {% for domainId in filters.domain %}
           {% for d in domaines %}
             {% if d.id_domain == domainId %}
               <button class="chip" onclick="removeChip(this, 'domain', {{ d.id_domain }})">
@@ -172,16 +178,16 @@
       {% endif %}
 
       {# Ville / localisation #}
-      {% if app_loc is defined and app_loc != '' %}
+      {% if filters.loc is defined and filters.loc != '' %}
         <button class="chip" onclick="removeChip(this, 'loc')">
-          {{ app_loc }} <span class="chip-x">×</span>
+          {{ filters.loc }} <span class="chip-x">×</span>
         </button>
       {% endif %}
 
       {# Rémunération max #}
-      {% if app_remu_max is defined and app_remu_max > 0 and app_remu_max < 4000 %}
+      {% if filters.remu_max is defined and filters.remu_max > 0 and filters.remu_max < 4000 %}
         <button class="chip" onclick="removeChip(this, 'remu_max')">
-          Jusqu'à {{ app_remu_max }} €/mois <span class="chip-x">×</span>
+          Jusqu'à {{ filters.remu_max }} €/mois <span class="chip-x">×</span>
         </button>
       {% endif %}
 
@@ -219,14 +225,21 @@
 
           <div class="offer-footer">
             <span class="offer-salary">{{ offre.remuneration ?? 'N/A' }}</span>
-            <span class="offer-date">{{ offre.publication_date }}</span>
+            <span class="offer-date">{{ offre.publication_date|date('d/m/Y') }}</span>
             <a href="/offres/{{ offre.id_offer }}" class="btn-voir">Voir</a>
-            <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Favoris">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-            </button>
+            
+            {# Bouton wishlist - uniquement si connecté #}
+            {% if app_user %}
+              <button class="wishlist-btn {% if offre.in_wishlist|default(false) %}active{% endif %}" 
+                      onclick="toggleWish(this, {{ offre.id_offer }})" 
+                      aria-label="Ajouter aux favoris"
+                      data-offer-id="{{ offre.id_offer }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
+            {% endif %}
           </div>
 
         </article>
@@ -240,19 +253,14 @@
     {# ── Pagination ─────────────────────────────────────────────────────── #}
     {% if pagination is defined and pagination.total_pages > 1 %}
 
-      {# Construire la query string pour les domaines #}
-      {% set domainQuery = '' %}
-      {% if app_domain is defined and app_domain is iterable %}
-          {% for d in app_domain %}
-              {% set domainQuery = domainQuery ~ '&domain[]=' ~ d %}
-          {% endfor %}
-      {% endif %}
+      {# Définir filters par défaut si null #}
+      {% set filters = filters|default({}) %}
 
       <div class="pagination">
 
         {# Flèche précédente #}
         {% if pagination.current > 1 %}
-          <a href="?page={{ pagination.current - 1 }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&remu_max={{ app_remu_max }}{{ domainQuery }}"
+          <a href="{{ path('offres', filters|merge({page: pagination.current - 1})) }}"
             class="page-btn arrow">‹</a>
         {% endif %}
 
@@ -260,8 +268,8 @@
         {% for p in 1..pagination.total_pages %}
           {% if p == pagination.current %}
             <button class="page-btn active">{{ p }}</button>
-          {% elseif p <= 3 or p > pagination.total_pages - 2 or (p >= pagination.current -1 and p <= pagination.current +1) %}
-            <a href="?page={{ p }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&remu_max={{ app_remu_max }}{{ domainQuery }}"
+          {% elseif p <= 3 or p > pagination.total_pages - 2 or (p >= pagination.current - 1 and p <= pagination.current + 1) %}
+            <a href="{{ path('offres', filters|merge({page: p})) }}"
               class="page-btn">{{ p }}</a>
           {% elseif p == 4 or p == pagination.total_pages - 2 %}
             <span style="font-weight:700;color:#ccc;padding:0 4px">…</span>
@@ -270,7 +278,7 @@
 
         {# Flèche suivante #}
         {% if pagination.current < pagination.total_pages %}
-          <a href="?page={{ pagination.current + 1 }}&q={{ app_query }}&loc={{ app_loc }}&duration={{ app_duration }}&remu_max={{ app_remu_max }}{{ domainQuery }}"
+          <a href="{{ path('offres', filters|merge({page: pagination.current + 1})) }}"
             class="page-btn arrow">›</a>
         {% endif %}
 

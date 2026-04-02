@@ -1,62 +1,47 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}StageHub — Mentions Légales{% endblock %}
 {% block meta_desc %}Trouvez votre stage idéal sur StageHub, la plateforme de stages CESI.{% endblock %}
-
 {% block body_class %}page-legal{% endblock %}
-
 
 {% block content %}
 
+<section class="mentions-section container mentions">
+    <h1>Mentions Légales</h1>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae sollicitudin risus. 
+        Vivamus eget eros enim. Quisque imperdiet nisl sed mollis pretium. Integer consectetur varius placerat. 
+        Vivamus lobortis enim et erat sodales, et ullamcorper purus posuere. Duis sit amet mattis nibh, ut porttitor felis. 
+        Duis ultricies diam id odio ultrices, sed ultricies diam ultricies.
+    </p>
+    <p>
+        Praesent urna enim, dictum eget purus vel, tincidunt aliquet velit. Morbi sit amet sapien sit amet dui 
+        elementum finibus ac eu purus. Aliquam vestibulum vehicula libero tempus imperdiet. Quisque fermentum eu erat a luctus. 
+        Nullam eget semper orci, quis tincidunt massa. Aenean nec dignissim lacus, a tincidunt sem. Phasellus semper dui eu ipsum 
+        molestie, facilisis vulputate est dapibus. In ac sapien sit amet felis porttitor rhoncus quis eget nibh.
+    </p>
+    <p>
+        Ut massa ante, molestie ut sollicitudin eget, porttitor id eros. Suspendisse pulvinar risus vel nulla cursus mollis. 
+        Sed eget urna gravida, auctor ipsum ut, porta felis. Aenean vitae ex rhoncus, iaculis urna id, tempor neque. 
+        Duis sed lectus vel purus tristique ornare sit amet non eros. Mauris eget orci eu ipsum ornare tincidunt. 
+        Cras non libero sed leo finibus dictum eget id urna. Aenean at ante erat.
+    </p>
+    <p>
+        Etiam non tincidunt erat, non vehicula neque. Vestibulum at leo orci. Nunc dictum sapien vitae vulputate congue. 
+        Phasellus dictum nisl eu massa gravida suscipit. Nullam at dignissim odio, id gravida tortor. 
+        Vivamus orci ligula, ullamcorper nec vestibulum sed, luctus eget nibh. Nunc et enim sed urna finibus scelerisque. 
+        Aenean mattis tellus vitae commodo porta. Suspendisse potenti. Fusce nunc dui, porta vitae quam quis, iaculis dapibus odio.
+    </p>
+</section>
 
-
-
- <section class="mentions"> 
- 
- <h1>Mentions Légales :  </h1>
-
- <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae sollicitudin risus. Vivamus eget eros enim. Quisque imperdiet nisl sed mollis pretium. Integer consectetur varius placerat. Vivamus lobortis enim et erat sodales, et ullamcorper purus posuere. Duis sit amet mattis nibh, ut porttitor felis. Duis ultricies diam id odio ultrices, sed ultricies diam ultricies.
-
-Praesent urna enim, dictum eget purus vel, tincidunt aliquet velit. Morbi sit amet sapien sit amet dui elementum finibus ac eu purus. Aliquam vestibulum vehicula libero tempus imperdiet. Quisque fermentum eu erat a luctus. Nullam eget semper orci, quis tincidunt massa. Aenean nec dignissim lacus, a tincidunt sem. Phasellus semper dui eu ipsum molestie, facilisis vulputate est dapibus. In ac sapien sit amet felis porttitor rhoncus quis eget nibh. Vivamus a lacus bibendum, posuere augue et, eleifend leo. Maecenas malesuada tortor ac nulla fringilla, sed iaculis dolor molestie. Vestibulum vitae mi nisi. Suspendisse vehicula, odio vitae convallis euismod, ipsum velit convallis ex, eu varius leo est non felis.
-
-Ut massa ante, molestie ut sollicitudin eget, porttitor id eros. Suspendisse pulvinar risus vel nulla cursus mollis. Sed eget urna gravida, auctor ipsum ut, porta felis. Aenean vitae ex rhoncus, iaculis urna id, tempor neque. Duis sed lectus vel purus tristique ornare sit amet non eros. Mauris eget orci eu ipsum ornare tincidunt. Cras non libero sed leo finibus dictum eget id urna. Aenean at ante erat.
-
-Etiam non tincidunt erat, non vehicula neque. Vestibulum at leo orci. Nunc dictum sapien vitae vulputate congue. Phasellus dictum nisl eu massa gravida suscipit. Nullam at dignissim odio, id gravida tortor. Vivamus orci ligula, ullamcorper nec vestibulum sed, luctus eget nibh. Nunc et enim sed urna finibus scelerisque. Aenean mattis tellus vitae commodo porta. Suspendisse potenti. Fusce nunc dui, porta vitae quam quis, iaculis dapibus odio.
- 
-  </p>
-
- </section>
-
-
-
-<section class="cta-section">
-  <h2>Prêt à trouver votre <span>stage</span> ?</h2>
-  <p>Inscrivez-vous gratuitement et accédez à toutes les offres en quelques clics.</p>
-  <div class="cta-btns">
-    <a href="/inscription" class="btn-primary">Créer un compte étudiant</a>
-    <a href="/connexion"   class="btn-secondary">Je suis une entreprise</a>
-  </div>
+<section class="cta-section container ">
+    <h2>Prêt à trouver votre <span>stage</span> ?</h2>
+    <p>Inscrivez-vous gratuitement et accédez à toutes les offres en quelques clics.</p>
+    <div class="cta-btns">
+        <a href="/inscription" class="btn-primary">Créer un compte étudiant</a>
+        <a href="/connexion" class="btn-secondary">Je suis une entreprise</a>
+    </div>
 </section>
 
 
-<div id="bgImage" class="bg-image"></div>
-
-<button onclick="afficherBg()">Voir l'image</button>
-
-
-<script>
-function afficherBg() {
-  const bg = document.getElementById("bgImage");
-  bg.style.opacity = "1";
-}
-</script>
-
-
-
-{% endblock %}
-
-{% block extra_js %}
-<script src="/assets/js/index-script.js"></script>
 {% endblock %}

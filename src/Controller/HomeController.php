@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\Offre;
 use App\Model\Entreprise;
+use App\Model\Offre;
 use App\Model\User;
+
 
 class HomeController extends BaseController
 {
@@ -15,7 +16,7 @@ class HomeController extends BaseController
         $entrepriseModel = new Entreprise();
         $userModel       = new User();
 
-        $offres  = (new Offre())->getAll('', '', '', 0, [1], 5, 0);
+        $offres      = $offreModel->getAll('', '', '', 0, [], 5, 0);
         $entreprises = $entrepriseModel->getAll();
 
         $this->render('home/index.html.twig', [

@@ -3,17 +3,19 @@
 
 {% block title %}StageHub — Trouvez votre stage idéal{% endblock %}
 {% block meta_desc %}Trouvez votre stage idéal sur StageHub, la plateforme de stages CESI.{% endblock %}
-
 {% block body_class %}page-index{% endblock %}
 
 {% block content %}
 
-<div class="hero-wrapper" style="position: relative">
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+{#  HERO                                                                       #}
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+<div class="hero-wrapper">
   <main class="hero">
 
     <div class="hero-left">
       <h1 class="hero-title">
-        Trouvez le <span class="accent">stage</span><br/>idéal pour vous !
+        Trouvez le <span class="accent">stage</span><br>idéal pour vous !
       </h1>
 
       <form class="search-bar" action="/offres" method="GET">
@@ -24,6 +26,7 @@
           placeholder="Emploi, compétence…"
           id="jobInput"
           value="{{ app_query ?? '' }}"
+          autocomplete="off"
         />
         <div class="search-divider"></div>
         <input
@@ -33,10 +36,12 @@
           placeholder="Ville, région…"
           id="locInput"
           value="{{ app_loc ?? '' }}"
+          autocomplete="off"
         />
         <button class="search-btn" type="submit" aria-label="Rechercher">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
             <circle cx="11" cy="11" r="8"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
@@ -51,36 +56,40 @@
           {% endfor %}
         </div>
       </div>
-    </div>
+    </div>{# /.hero-left #}
 
-    <div class="stats-card">
+    {# ── Compteurs animés ── #}
+    <div class="stats-card" aria-label="Chiffres clés">
       <div class="stat-item">
-        <span class="stat-number" data-target="{{ stats.total_offres ?? 128 }}">0</span>
+        <span class="stat-number" data-target="{{ stats.total_offres ?? 0 }}">0</span>
         <span class="stat-label">Offres disponibles</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number" data-target="{{ stats.total_entreprises ?? 80 }}">0</span>
+        <span class="stat-number" data-target="{{ stats.total_entreprises ?? 0 }}">0</span>
         <span class="stat-label">Entreprises</span>
       </div>
       <div class="stat-item">
-        <span class="stat-number faded" data-target="{{ stats.total_etudiants ?? 128 }}">0</span>
+        <span class="stat-number faded" data-target="{{ stats.total_etudiants ?? 0 }}">0</span>
         <span class="stat-label">Étudiants inscrits</span>
       </div>
     </div>
 
   </main>
 
-  <a class="scroll-arrow" href="#offres"
-     onclick="document.getElementById('offres').scrollIntoView({behavior:'smooth'}); return false;">
+  <a class="scroll-arrow" href="#offres" aria-label="Découvrir les offres">
     <span>Découvrir</span>
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
          stroke="var(--salmon)" stroke-width="2.5"
-         stroke-linecap="round" stroke-linejoin="round">
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <polyline points="6 9 12 15 18 9"/>
     </svg>
   </a>
-</div>
+</div>{# /.hero-wrapper #}
 
+
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+{#  OFFRES RÉCENTES                                                            #}
+{# ═══════════════════════════════════════════════════════════════════════════ #}
 <section id="offres" class="section">
   <div class="section-header">
     <h2 class="section-title">Offres <span>récentes</span></h2>
@@ -89,40 +98,80 @@
 
   <div class="offers-grid-index">
     {% for offre in offres_recentes %}
-      <article class="offer-card-index">
+      <article class="offer-card-index" data-offer-id="{{ offre.id_offer }}">
+
+        {# En-tête entreprise #}
         <div class="offer-company">
-          <div class="company-logo">{{ offre.entreprise|slice(0,2)|upper }}</div>
-          <span class="company-name">{{ offre.entreprise }}</span>
+          <div class="company-logo" aria-hidden="true">
+            {{ offre.entreprise_name is not empty
+                ? offre.entreprise_name|slice(0,2)|upper
+                : '??' }}
+          </div>
+          <span class="company-name">
+            {{ offre.entreprise_name ?? 'Entreprise inconnue' }}
+          </span>
         </div>
 
-        <p class="offer-title">{{ offre.title }}</p>
+        {# Titre #}
+        <a href="/offres/{{ offre.id_offer }}" class="offer-title-link">
+          <p class="offer-title">{{ offre.title }}</p>
+        </a>
 
-        <div class="offer-tags">
-          {% for tag in offre.skill|split(',') %}
-            <span class="offer-tag">{{ tag|trim }}</span>
-          {% endfor %}
-        </div>
+        {# Compétences #}
+        {% if offre.skill is not empty %}
+          <div class="offer-tags" aria-label="Compétences">
+            {% for tag in offre.skill|split(',') %}
+              <span class="offer-tag">{{ tag|trim }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
 
+        {# Pied de carte #}
         <div class="offer-footer">
-          <span class="offer-salary">{{ offre.remuneration  }}</span>
-          <span class="offer-date">{{ offre.publication_date  ?? 'Il y a 2 jours' }}</span>
-          <button class="wishlist-btn" onclick="toggleWish(this)" aria-label="Ajouter aux favoris">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
+          <span class="offer-salary">
+            {{ offre.remuneration is not empty ? offre.remuneration : 'Non précisé' }}
+          </span>
+          <span class="offer-location">
+            {{ offre.location is not empty ? offre.location : '' }}
+          </span>
+          <time class="offer-date" datetime="{{ offre.publication_date }}">
+            {{ offre.publication_date ?? '' }}
+          </time>
+
+          {# Bouton wishlist — uniquement si connecté avec la permission #}
+          {% if auth_can('wishlist.manage') %}
+            <button
+              class="wishlist-btn"
+              data-offer-id="{{ offre.id_offer }}"
+              aria-label="Ajouter aux favoris"
+              aria-pressed="false"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
+                         l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78
+                         l1.06 1.06L12 21.23l7.78-7.78
+                         1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+          {% endif %}
         </div>
+
       </article>
     {% else %}
-      <p style="color:#999; grid-column:1/-1; text-align:center; padding:40px 0">
+      <p class="empty-state">
         Aucune offre disponible pour le moment.
       </p>
     {% endfor %}
   </div>
 </section>
 
-<div class="companies-section" id="entreprises">
+
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+{#  ENTREPRISES PARTENAIRES                                                    #}
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+<section class="companies-section" id="entreprises">
   <div class="companies-inner">
     <div class="section-header">
       <h2 class="section-title">Entreprises <span>partenaires</span></h2>
@@ -132,31 +181,52 @@
     <div class="companies-grid">
       {% for entreprise in entreprises_vedette %}
         <a href="/entreprises/{{ entreprise.id_entreprise }}" class="company-card-index">
-          <div class="logo-big">{{ entreprise.name|slice(0,2)|upper }}</div>
+          <div class="logo-big" aria-hidden="true">
+            {{ entreprise.name|slice(0,2)|upper }}
+          </div>
           <h3>{{ entreprise.name }}</h3>
-          <p>{{ entreprise.nb_offres }} offres actives</p>
-          <div class="stars">
+          <p>
+            {{ entreprise.nb_offres ?? 0 }}
+            {{ entreprise.nb_offres == 1 ? 'offre active' : 'offres actives' }}
+          </p>
+          <div class="stars" aria-label="Note : {{ entreprise.note_moyenne ?? 0 }}/5">
             {%- for i in 1..5 -%}
-              {{- entreprise.note_moyenne >= i ? '★' : '☆' -}}
+              <span class="{{ (entreprise.note_moyenne ?? 0) >= i ? 'star--full' : 'star--empty' }}"
+                    aria-hidden="true">
+                {{- (entreprise.note_moyenne ?? 0) >= i ? '★' : '☆' -}}
+              </span>
             {%- endfor -%}
           </div>
         </a>
+      {% else %}
+        <p class="empty-state">Aucune entreprise partenaire pour le moment.</p>
       {% endfor %}
     </div>
   </div>
-</div>
-
-<section class="cta-section">
-  <h2>Prêt à trouver votre <span>stage</span> ?</h2>
-  <p>Inscrivez-vous gratuitement et accédez à toutes les offres en quelques clics.</p>
-  <div class="cta-btns">
-    <a href="/inscription" class="btn-primary">Créer un compte étudiant</a>
-    <a href="/connexion"   class="btn-secondary">Je suis une entreprise</a>
-  </div>
 </section>
+
+
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+{#  CALL TO ACTION                                                             #}
+{#  Affiché uniquement si l'utilisateur n'est pas connecté                    #}
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+{% if not app_user %}
+  <section class="cta-section">
+    <h2>Prêt à trouver votre <span>stage</span> ?</h2>
+    <p>Inscrivez-vous gratuitement et accédez à toutes les offres en quelques clics.</p>
+    <div class="cta-btns">
+      <a href="/connexion" class="btn-primary">Créer un compte étudiant</a>
+      <a href="/connexion" class="btn-secondary">Se connecter</a>
+    </div>
+  </section>
+{% endif %}
 
 {% endblock %}
 
+
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+{#  SCRIPTS                                                                    #}
+{# ═══════════════════════════════════════════════════════════════════════════ #}
 {% block extra_js %}
-<script src="/assets/js/index-script.js"></script>
+  <script src="/assets/js/index-script.js"></script>
 {% endblock %}

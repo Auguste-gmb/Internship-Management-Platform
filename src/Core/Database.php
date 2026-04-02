@@ -5,34 +5,29 @@ namespace App\Core;
 
 use PDO;
 use PDOException;
+use PDOStatement;
 
-class Database
+final class Database
 {
-    private static ?Database $instance = null;
+    private static ?self $instance = null;
     private PDO $pdo;
-    
 
     private function __construct()
     {
-        $connectionString = $_ENV['DATABASE_URL'];
-
-        $parts = parse_url($connectionString);
+        $url   = $_ENV['DATABASE_URL'] ?? throw new \RuntimeException('DATABASE_URL non définie.');
+        $parts = parse_url($url);
 
         $dsn = sprintf(
-        'pgsql:host=%s;port=%s;dbname=%s',
+            'pgsql:host=%s;port=%s;dbname=%s',
             $parts['host'],
-            $parts['port'],
+            $parts['port'] ?? 5432,
             ltrim($parts['path'], '/')
         );
 
-        try {
-            $this->pdo = new PDO($dsn, $parts['user'], $parts['pass'], [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            ]);
-        } catch (PDOException $e) {
-            echo "Erreur de connexion : " . $e->getMessage() . "\n";
-        }
+        $this->pdo = new PDO($dsn, $parts['user'], $parts['pass'], [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]);
     }
 
     public static function getInstance(): self
@@ -48,7 +43,7 @@ class Database
         return $this->pdo;
     }
 
-    public function query(string $sql, array $params = []): \PDOStatement
+    public function query(string $sql, array $params = []): PDOStatement
     {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);

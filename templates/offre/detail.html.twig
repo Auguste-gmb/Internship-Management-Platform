@@ -6,6 +6,7 @@
 
 {% block content %}
 
+{# ════ PAGE HEADER ══════════════════════════════════════════════════════════ #}
 <div class="page-header">
   <div class="page-header-inner">
     <div class="breadcrumb">
@@ -25,14 +26,17 @@
   </div>
 </div>
 
+{# ════ LAYOUT ═══════════════════════════════════════════════════════════════ #}
 <div class="layout">
   <div class="main-content" style="max-width:900px; margin:0 auto;">
 
-    {# Infos principales #}
+    {# ── Infos principales ──────────────────────────────────────────────── #}
     <section style="padding:24px; background:#fff; border-radius:12px; margin-bottom:18px;">
+      
+      {# Badges #}
       <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
-        {% if offre.domaine %}
-          <span class="domain-badge">{{ offre.domaine }}</span>
+        {% if offre.domain %}
+          <span class="domain-badge">{{ offre.domain }}</span>
         {% endif %}
         {% if offre.duration %}
           <span class="domain-badge" style="background:#e8f4ff;color:#2563eb;">⏱ {{ offre.duration }}</span>
@@ -42,55 +46,141 @@
         {% endif %}
       </div>
 
+      {# Description #}
       <h2 style="margin-bottom:12px;">Description du poste</h2>
       {% if offre.description %}
-        <p style="line-height:1.7; color:#444;">{{ offre.description }}</p>
+        <p style="line-height:1.7; color:#444; white-space:pre-line;">{{ offre.description }}</p>
       {% else %}
         <p style="color:#999;">Aucune description disponible.</p>
       {% endif %}
 
+      {# Compétences #}
       {% if offre.skill %}
         <h3 style="margin-top:20px; margin-bottom:8px;">Compétences recherchées</h3>
-        <p style="line-height:1.7; color:#444;">{{ offre.skill }}</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          {% for skill in offre.skill|split(',') %}
+            <span class="offer-tag">{{ skill|trim }}</span>
+          {% endfor %}
+        </div>
       {% endif %}
 
+      {# Date de publication #}
       <p style="margin-top:16px; font-size:.85rem; color:#aaa;">
-        Publié le {{ offre.publication_date ? offre.publication_date|date('d/m/Y') : '—' }}
+        Publié le {{ offre.publication_date|date('d/m/Y') }}
       </p>
     </section>
 
-    {# Infos entreprise #}
+    {# ── Infos entreprise ───────────────────────────────────────────────── #}
     <section style="padding:24px; background:#fff; border-radius:12px; margin-bottom:18px;">
       <h2 style="margin-bottom:16px;">À propos de l'entreprise</h2>
 
-      <p>
-        <strong>Entreprise :</strong>
-        <a href="/entreprises/{{ offre.id_entreprise }}">{{ offre.entreprise }}</a>
-      </p>
-      <p>
-        <strong>Adresse :</strong>
-        {{ offre.street_name ?? '—' }}, {{ offre.ville }}{% if offre.region %}, {{ offre.region }}{% endif %}
-      </p>
-      <p>
-        <strong>Contact :</strong>
-        <a href="mailto:{{ offre.entreprise_email }}">{{ offre.entreprise_email }}</a>
-      </p>
+      <div style="display:grid; gap:12px;">
+        <p>
+          <strong>Entreprise :</strong>
+          <a href="/entreprises/{{ offre.id_entreprise }}" style="color:#2563eb;">
+            {{ offre.entreprise }}
+          </a>
+        </p>
+        
+        <p>
+          <strong>Adresse :</strong>
+          {{ offre.street_name ?? '—' }}, {{ offre.ville }}{% if offre.region %}, {{ offre.region }}{% endif %}
+        </p>
+        
+        {% if offre.entreprise_email %}
+          <p>
+            <strong>Contact :</strong>
+            <a href="mailto:{{ offre.entreprise_email }}" style="color:#2563eb;">
+              {{ offre.entreprise_email }}
+            </a>
+          </p>
+        {% endif %}
+      </div>
 
-      <a href="/entreprises/{{ offre.id_entreprise }}" class="btn-voir" style="display:inline-block; margin-top:16px;">
+      <a href="/entreprises/{{ offre.id_entreprise }}" class="btn-voir" 
+         style="display:inline-block; margin-top:16px;">
         Voir toutes les offres de {{ offre.entreprise }}
       </a>
     </section>
 
-    {# Bouton postuler #}
-    <section style="padding:24px; background:#fff; border-radius:12px; text-align:center;">
-      <h2 style="margin-bottom:8px;">Intéressé(e) par cette offre ?</h2>
-      <p style="color:#666; margin-bottom:16px;">Postulez dès maintenant et rejoignez {{ offre.entreprise }}.</p>
-      <a href="/postuler?id={{ offre.id_offer }}" class="btn-voir" style="font-size:1rem; padding:12px 32px;">
-        Postuler à cette offre
-      </a>
-    </section>
+    {# ── Section postuler ────────────────────────────────────────────────── #}
+    {% if auth_check() %}
+      {# Utilisateur connecté - peut postuler #}
+      <section style="padding:24px; background:#fff; border-radius:12px; text-align:center;">
+        <h2 style="margin-bottom:8px;">Intéressé(e) par cette offre ?</h2>
+        <p style="color:#666; margin-bottom:16px;">
+          Postulez dès maintenant et rejoignez {{ offre.entreprise }}.
+        </p>
+        
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          {# Bouton postuler #}
+          <a href="/postuler?id={{ offre.id_offer }}" 
+             class="btn-voir" 
+             style="font-size:1rem; padding:12px 32px;">
+            Postuler à cette offre
+          </a>
+          
+          {# Bouton wishlist #}
+          <button class="wishlist-btn {% if offre.in_wishlist|default(false) %}active{% endif %}" 
+                  onclick="toggleWish(this, {{ offre.id_offer }})"
+                  data-offer-id="{{ offre.id_offer }}"
+                  style="padding:12px 24px; font-size:1rem; border-radius:8px; cursor:pointer;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 style="width:20px; height:20px; vertical-align:middle; margin-right:6px;">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            {{ offre.in_wishlist|default(false) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+          </button>
+        </div>
+      </section>
+    {% else %}
+      {# Utilisateur non connecté - invitation à se connecter #}
+      <section style="padding:24px; background:#fff; border-radius:12px; text-align:center;">
+        <h2 style="margin-bottom:8px;">Intéressé(e) par cette offre ?</h2>
+        <p style="color:#666; margin-bottom:16px;">
+          Connectez-vous pour postuler et enregistrer cette offre dans vos favoris.
+        </p>
+        <a href="/connexion?redirect=/offres/{{ offre.id_offer }}" 
+           class="btn-voir" 
+           style="font-size:1rem; padding:12px 32px;">
+          Se connecter pour postuler
+        </a>
+      </section>
+    {% endif %}
 
   </div>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Fonction pour toggle wishlist (si connecté)
+function toggleWish(btn, offerId) {
+  const isActive = btn.classList.contains('active');
+  const action = isActive ? 'remove' : 'add';
+  
+  fetch('/wishlist', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `action=${action}&id_offer=${offerId}`
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      btn.classList.toggle('active');
+      
+      // Mettre à jour le texte du bouton
+      const text = btn.querySelector('svg').nextSibling;
+      if (text && text.nodeType === Node.TEXT_NODE) {
+        text.textContent = isActive ? ' Ajouter aux favoris' : ' Retirer des favoris';
+      }
+    }
+  })
+  .catch(err => console.error('Erreur wishlist:', err));
+}
+</script>
 {% endblock %}

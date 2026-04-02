@@ -9,277 +9,81 @@
 <div class="login-main">
   <div class="login-card">
 
-    <div class="tabs">
-      <button class="tab {{ tab != 'register' ? 'active' }}" id="tabLogin"
-              onclick="switchTab('login')">Se connecter</button>
-      <button class="tab {{ tab == 'register' ? 'active' }}" id="tabRegister"
-              onclick="switchTab('register')">Créer un compte</button>
+    <div class="login-card-header">
+      <div class="card-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+        </svg>
+      </div>
+      <h1>Se <span>connecter</span></h1>
+      <p>Accédez à votre espace personnel StageHub</p>
     </div>
 
-    <div class="panel {{ tab != 'register' ? 'active' }}" id="panelLogin">
+    {% if error is defined and error %}
+      <div class="alert error show">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>{{ error }}</span>
+      </div>
+    {% endif %}
 
-      <div class="login-card-header">
-        <div class="card-logo">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-          </svg>
+    <form method="POST" action="/connexion" id="loginForm">
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <div class="input-wrap">
+          <span class="input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </span>
+          <input class="form-input" type="email" name="email"
+                 placeholder="name@mail.fr" autocomplete="email"
+                 value="{{ old_email ?? '' }}" required/>
         </div>
-        <h1>Se <span>connecter</span></h1>
-        <p>Accédez à votre espace personnel StageHub</p>
       </div>
 
-      {% if error is defined and error %}
-        <div class="alert error show">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span>{{ error }}</span>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <div class="input-wrap">
+          <span class="input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </span>
+          <input class="form-input" type="password" name="password"
+                 placeholder="••••••••" autocomplete="current-password" required/>
+          <button class="pw-toggle" type="button" onclick="togglePw('loginForm', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
         </div>
-      {% else %}
-        {# Alerte JS (masquée par défaut) #}
-        <div class="alert error" id="loginAlert">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span id="loginAlertMsg">Email ou mot de passe incorrect.</span>
-        </div>
-      {% endif %}
-
-      {# Formulaire POST vers /connexion #}
-      <form method="POST" action="/connexion" id="loginForm">
-
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <div class="input-wrap">
-            <span class="input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-            </span>
-            <input class="form-input" type="email" name="email" id="loginEmail"
-                   placeholder="name@mail.fr" autocomplete="email"
-                   value="{{ old_email ?? '' }}" required/>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Mot de passe</label>
-          <div class="input-wrap">
-            <span class="input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-            </span>
-            <input class="form-input" type="password" name="password" id="loginPw"
-                   placeholder="••••••••" autocomplete="current-password" required/>
-            <button class="pw-toggle" type="button" onclick="togglePw('loginPw', this)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="forgot"><a href="#">Mot de passe oublié ?</a></div>
-
-        <button class="btn-submit" type="submit">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-            <polyline points="10 17 15 12 10 7"/>
-            <line x1="15" y1="12" x2="3" y2="12"/>
-          </svg>
-          Connexion
-        </button>
-
-      </form>
-
-      <div class="divider">ou</div>
-      <p class="switch-link">
-        Pas encore de compte ?
-        <a href="#" onclick="switchTab('register'); return false;">Créer un compte</a>
-      </p>
-
-    </div>{# /panelLogin #}
-
-    <div class="panel {{ tab == 'register' ? 'active' }}" id="panelRegister">
-
-      <div class="login-card-header">
-        <div class="card-logo">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="8.5" cy="7" r="4"/>
-            <line x1="20" y1="8" x2="20" y2="14"/>
-            <line x1="23" y1="11" x2="17" y2="11"/>
-          </svg>
-        </div>
-        <h1>Créer un <span>compte</span></h1>
-        <p>Rejoignez StageHub et trouvez votre stage idéal</p>
       </div>
 
-      {% if register_error is defined and register_error %}
-        <div class="alert error show">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span>{{ register_error }}</span>
-        </div>
-      {% endif %}
+      <div class="forgot"><a href="#">Mot de passe oublié ?</a></div>
 
-      <form method="POST" action="/inscription" id="registerForm">
+      <button class="btn-submit" type="submit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+        Connexion
+      </button>
 
-        <div class="form-group">
-          <label class="form-label">Je suis…</label>
-          <div class="role-selector">
-            {% set roles = [
-              { value: 'etudiant',  icon: '🎓', label: 'Étudiant'  },
-              { value: 'pilote',    icon: '👨‍🏫', label: 'Pilote'    },
-              { value: 'entreprise',icon: '🏢', label: 'Entreprise' },
-            ] %}
-            {% for r in roles %}
-              <button type="button"
-                      class="role-btn {{ r.value == 'etudiant' ? 'active' }}"
-                      data-role="{{ r.value }}"
-                      onclick="selectRole(this)">
-                <span class="role-icon">{{ r.icon }}</span>{{ r.label }}
-              </button>
-            {% endfor %}
-          </div>
-          {# Champ caché mis à jour par le JS #}
-          <input type="hidden" name="role" id="roleInput" value="etudiant"/>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-          <div class="form-group">
-            <label class="form-label">Prénom</label>
-            <div class="input-wrap">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </span>
-              <input class="form-input" type="text" name="prenom"
-                     placeholder="Thomas" value="{{ old_prenom ?? '' }}" required/>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Nom</label>
-            <div class="input-wrap">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </span>
-              <input class="form-input" type="text" name="nom"
-                     placeholder="Dupont" value="{{ old_nom ?? '' }}" required/>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <div class="input-wrap">
-            <span class="input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-            </span>
-            <input class="form-input" type="email" name="email"
-                   placeholder="name@mail.fr" value="{{ old_reg_email ?? '' }}" required/>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Mot de passe</label>
-          <div class="input-wrap">
-            <span class="input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-            </span>
-            <input class="form-input" type="password" name="password" id="regPw"
-                   placeholder="••••••••" autocomplete="new-password"
-                   oninput="checkStrength(this.value)" required/>
-            <button class="pw-toggle" type="button" onclick="togglePw('regPw', this)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            </button>
-          </div>
-          <div class="strength-bar">
-            <div class="strength-seg" id="s1"></div>
-            <div class="strength-seg" id="s2"></div>
-            <div class="strength-seg" id="s3"></div>
-            <div class="strength-seg" id="s4"></div>
-          </div>
-          <p class="strength-label" id="strengthLabel"></p>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Confirmer le mot de passe</label>
-          <div class="input-wrap">
-            <span class="input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-            </span>
-            <input class="form-input" type="password" name="password_confirm"
-                   id="regPwConfirm" placeholder="••••••••"
-                   autocomplete="new-password" required/>
-          </div>
-          <p class="error-msg" id="pwMismatch">
-            Les mots de passe ne correspondent pas.
-          </p>
-        </div>
-
-        <button class="btn-submit" type="submit" style="background:var(--salmon)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="8.5" cy="7" r="4"/>
-            <line x1="20" y1="8" x2="20" y2="14"/>
-            <line x1="23" y1="11" x2="17" y2="11"/>
-          </svg>
-          Créer mon compte
-        </button>
-
-      </form>
-
-      <div class="divider">ou</div>
-      <p class="switch-link">
-        Déjà un compte ?
-        <a href="#" onclick="switchTab('login'); return false;">Se connecter</a>
-      </p>
-
-    </div>
+    </form>
 
   </div>
 </div>
@@ -289,11 +93,16 @@
 {% block extra_js %}
 <script src="/assets/js/login-register-script.js"></script>
 <script>
-  const origSelectRole = window.selectRole;
-  window.selectRole = function(btn) {
-    if (origSelectRole) origSelectRole(btn);
-    const roleInput = document.getElementById('roleInput');
-    if (roleInput && btn.dataset.role) roleInput.value = btn.dataset.role;
-  };
+function togglePw(formId, btn) {
+  const input = document.querySelector(`#${formId} input[type="password"]`);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.classList.add('active');
+  } else {
+    input.type = 'password';
+    btn.classList.remove('active');
+  }
+}
 </script>
 {% endblock %}

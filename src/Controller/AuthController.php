@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Core\Auth;
 use App\Model\User;
+
 
 class AuthController extends BaseController
 {
     public function loginForm(): void
     {
-        if (!empty($_SESSION['user'])) {
+        if (Auth::check()) {
             $this->redirect('/dashboard');
         }
 
@@ -19,13 +21,13 @@ class AuthController extends BaseController
         ]);
     }
 
+    
     public function login(): void
     {
         $email = trim($_POST['email']    ?? '');
         $mdp   = $_POST['password'] ?? '';
 
-        $userModel = new User();
-        $user      = $userModel->findByEmail($email);
+        $user = (new User())->findByEmail($email);
 
         if (!$user || !password_verify($mdp, $user['password'])) {
             $this->render('auth/login.html.twig', [
@@ -37,17 +39,11 @@ class AuthController extends BaseController
             return;
         }
 
-        $_SESSION['user'] = [
-            'id'     => $user['id_user'],
-            'email'  => $user['email'],
-            'prenom' => $user['first_name'],
-            'nom'    => $user['name'],
-            'role'   => $user['role_name'],
-        ];
-
+        Auth::login($user);
         $this->redirect('/dashboard');
     }
 
+ 
     public function register(): void
     {
         $prenom  = trim($_POST['prenom']           ?? '');
@@ -56,7 +52,6 @@ class AuthController extends BaseController
         $mdp     = $_POST['password']         ?? '';
         $confirm = $_POST['password_confirm'] ?? '';
 
-        // Validation
         if ($mdp !== $confirm) {
             $this->renderRegisterError('Les mots de passe ne correspondent pas.', $prenom, $nom, $email);
             return;
@@ -74,38 +69,32 @@ class AuthController extends BaseController
 
         $userModel = new User();
 
-        // Vérifie que l'email n'existe pas déjà
         if ($userModel->findByEmail($email)) {
             $this->renderRegisterError('Cette adresse email est déjà utilisée.', $prenom, $nom, $email);
             return;
         }
 
-        $id = $userModel->create([
+        $id   = $userModel->create([
             'first_name' => $prenom,
             'name'       => $nom,
             'email'      => $email,
             'password'   => $mdp,
-            'id_role'    => 1, // student par défaut
+            'id_role'    => 1, // etudiant par défaut
         ]);
 
         $user = $userModel->findById($id);
-
-        $_SESSION['user'] = [
-            'id'     => $user['id_user'],
-            'email'  => $user['email'],
-            'prenom' => $user['first_name'],
-            'nom'    => $user['name'],
-            'role'   => $user['role_name'],
-        ];
+        Auth::login($user);
 
         $this->redirect('/dashboard');
     }
 
+
     public function logout(): void
     {
-        session_destroy();
+        Auth::logout();
         $this->redirect('/');
     }
+
 
     private function renderRegisterError(string $msg, string $prenom, string $nom, string $email): void
     {
@@ -119,4 +108,3 @@ class AuthController extends BaseController
         ]);
     }
 }
-?>

@@ -1,26 +1,44 @@
 <?php
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    // à retier (pour afficher les erreur)
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
 
-    require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if (file_exists(__DIR__ . '/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
+}
 
-    use App\Core\Router;
 
-    session_start();
-
-    $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-    $twig   = new \Twig\Environment($loader, [
-        'cache' => false,
-        'debug' => true,
+if (session_status() === PHP_SESSION_NONE) {
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path'     => '/',
+        'secure'   => isset($_SERVER['HTTPS']),
+        'httponly' => true,
+        'samesite' => 'Lax',
     ]);
-    $twig->addExtension(new \Twig\Extension\DebugExtension());
+    session_start();
+}
 
-    $router = new Router($twig);
-    $router->dispatch();
-?>
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
+$twig   = new \Twig\Environment($loader, [
+    'cache'       => __DIR__ . '/var/cache/twig',
+    'auto_reload' => true,
+    'debug'       => ($_ENV['APP_ENV'] ?? 'prod') === 'dev',
+]);
+
+
+if (($_ENV['APP_ENV'] ?? 'prod') === 'dev') {
+    $twig->addExtension(new \Twig\Extension\DebugExtension());
+}
+
+$twig->addFunction(new \Twig\TwigFunction('auth_can', [\App\Core\Auth::class, 'can']));
+$twig->addFunction(new \Twig\TwigFunction('auth_role', [\App\Core\Auth::class, 'hasRole']));
+
+
+(new \App\Core\Router($twig))->dispatch();
