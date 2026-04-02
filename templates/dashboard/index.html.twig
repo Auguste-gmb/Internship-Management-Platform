@@ -5,9 +5,9 @@
 {% block meta_desc %}Mon tableau de bord — StageHub{% endblock %}
 
 {% block content %}
-
 <div class="page-dashboard">
 
+  <!-- Greeting -->
   <div class="greeting">
     <div class="greeting-left">
       <h1>Bonjour, <span>{{ user.prenom ?? 'Thomas' }}</span></h1>
@@ -23,29 +23,29 @@
     </a>
   </div>
 
+  <!-- Stats Row -->
   <div class="stats-row">
     <div class="stat-card accepted">
-      <!--<div class="stat-card-icon">✓</div>-->
       <span class="stat-card-label">Acceptés</span>
       <span class="stat-card-value">{{ stats.acceptes ?? 0 }}</span>
       <span class="stat-card-sub">candidature retenue</span>
     </div>
     <div class="stat-card pending">
-      <!--<div class="stat-card-icon">⏳</div>-->
       <span class="stat-card-label">En attente</span>
       <span class="stat-card-value">{{ stats.en_attente ?? 5 }}</span>
       <span class="stat-card-sub">réponses en cours</span>
     </div>
     <div class="stat-card refused">
-      <!--<div class="stat-card-icon">✕</div>-->
       <span class="stat-card-label">Refusés</span>
       <span class="stat-card-value">{{ stats.refuses ?? 28 }}</span>
       <span class="stat-card-sub">candidatures refusées</span>
     </div>
   </div>
 
+  <!-- Main Grid Row 1 -->
   <div class="main-grid">
 
+    <!-- Candidatures -->
     <div class="card">
       <div class="card-header">
         <h2 class="card-title">Mes candidatures</h2>
@@ -66,19 +66,19 @@
             <span class="cand-date">{{ c.date }}</span>
           </div>
         {% else %}
-          <p style="color:#bbb;text-align:center;padding:20px 0;font-weight:700">
-            Aucune candidature pour le moment.
-          </p>
+          <p class="no-data">Aucune candidature pour le moment.</p>
         {% endfor %}
       </div>
     </div>
 
+    <!-- Offres Postulées avec Donut SVG -->
     <div class="card">
       <div class="card-header">
         <h2 class="card-title">Offres postulées</h2>
       </div>
 
       {% set total = (stats.acceptes ?? 0) + (stats.en_attente ?? 0) + (stats.refuses ?? 0) %}
+      {% set circ = 100 %}
       {% set refuses_dash  = total > 0 ? ((stats.refuses   ?? 0) / total * circ)|round(1) : 0 %}
       {% set attente_dash  = total > 0 ? ((stats.en_attente ?? 0) / total * circ)|round(1) : 0 %}
       {% set acceptes_dash = total > 0 ? ((stats.acceptes  ?? 0) / total * circ)|round(1) : 0 %}
@@ -124,6 +124,7 @@
         </div>
       </div>
 
+      <!-- Progress Section -->
       <div class="progress-section">
         <h3>Taux de réponse</h3>
         <div class="progress-item">
@@ -149,8 +150,10 @@
 
   </div>{# /main-grid row 1 #}
 
+  <!-- Main Grid Row 2 -->
   <div class="main-grid">
 
+    <!-- Wish-list -->
     <div class="card">
       <div class="card-header">
         <h2 class="card-title">Ma wish-list</h2>
@@ -168,15 +171,13 @@
             </div>
           </div>
         {% else %}
-          <p style="color:#bbb;text-align:center;padding:20px 0;font-weight:700;grid-column:1/-1">
-            Votre wish-list est vide.
-          </p>
+          <p class="no-data" style="grid-column:1/-1">Votre wish-list est vide.</p>
         {% endfor %}
       </div>
     </div>
 
+    <!-- Profile & Échéances -->
     <div style="display:flex;flex-direction:column;gap:20px">
-
       <div class="profile-card">
         <div class="profile-avatar">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -201,39 +202,16 @@
         <a href="#" class="btn-edit">Modifier</a>
       </div>
 
+      <!-- Échéances -->
       <div class="card">
         <div class="card-header">
           <h2 class="card-title">Échéances à venir</h2>
         </div>
         <div class="candidature-list" style="display: none;">
           {% set echeances = [
-            {
-              icon:    '📅',
-              bg:      '#fef3c7',
-              color:   '#b45309',
-              titre:   'Début stage obligatoire',
-              sous:    'CESI · Promotion 2025',
-              date:    '01/06',
-              urgent:  true
-            },
-            {
-              icon:    '📝',
-              bg:      '#e0e7ff',
-              color:   '#4338ca',
-              titre:   'Dépôt convention de stage',
-              sous:    'Scolarité CESI',
-              date:    '15/05',
-              urgent:  false
-            },
-            {
-              icon:    '🎓',
-              bg:      '#d1fae5',
-              color:   '#065f46',
-              titre:   'Rapport de stage à rendre',
-              sous:    'Pilote de promotion',
-              date:    '31/08',
-              urgent:  false
-            },
+            {icon:'📅', bg:'#fef3c7', color:'#b45309', titre:'Début stage obligatoire', sous:'CESI · Promotion 2025', date:'01/06', urgent:true},
+            {icon:'📝', bg:'#e0e7ff', color:'#4338ca', titre:'Dépôt convention de stage', sous:'Scolarité CESI', date:'15/05', urgent:false},
+            {icon:'🎓', bg:'#d1fae5', color:'#065f46', titre:'Rapport de stage à rendre', sous:'Pilote de promotion', date:'31/08', urgent:false}
           ] %}
           {% for e in echeances %}
             <div class="candidature-item">
@@ -252,12 +230,11 @@
           {% endfor %}
         </div>
       </div>
-
     </div>
+
   </div>{# /main-grid row 2 #}
 
 </div>{# /page-dashboard #}
-
 {% endblock %}
 
 {% block extra_js %}

@@ -4,12 +4,11 @@ declare(strict_types=1);
 namespace App\Core;
 
 
-
 final class Auth
 {
 
-    public const ROLE_ETUDIANT      = 'etudiant';
-    public const ROLE_PILOTE        = 'pilote';
+    public const ROLE_ETUDIANT      = 'student';
+    public const ROLE_PILOTE        = 'tutor';
     public const ROLE_ADMINISTRATOR = 'administrator';
 
     private const HIERARCHY = [
@@ -117,7 +116,6 @@ final class Auth
 
         if (!self::hasRole($minimumRole)) {
             http_response_code(403);
-            // On lance une exception attrapable par le controller
             throw new \RuntimeException('Accès refusé : rôle insuffisant.', 403);
         }
     }
