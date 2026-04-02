@@ -16,7 +16,7 @@ class Offre extends Model
         string $loc      = '',
         string $duration = '',
         int    $remuMax  = 0,
-        array  $domainIds = [],  // <- accepter un tableau
+        array  $domainIds = [],
         int    $limit    = 12,
         int    $offset   = 0
     ): array {
