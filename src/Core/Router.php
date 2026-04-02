@@ -71,6 +71,22 @@ class Router
             $uri === '/entreprises' && $method === 'GET'
                 => (new EntrepriseController($this->twig))->index(),
 
+                // --- CRUD entreprises (admin) ---
+            $uri === '/entreprises/create' && $method === 'GET'
+                => (new EntrepriseController($this->twig))->createForm(),
+
+            $uri === '/entreprises/create' && $method === 'POST'
+                => (new EntrepriseController($this->twig))->store(),
+
+            preg_match('#^/entreprises/(\d+)/edit$#', $uri, $m) && $method === 'GET'
+                => (new EntrepriseController($this->twig))->editForm((int)$m[1]),
+
+            preg_match('#^/entreprises/(\d+)/edit$#', $uri, $m) && $method === 'POST'
+                => (new EntrepriseController($this->twig))->update((int)$m[1]),
+
+            preg_match('#^/entreprises/(\d+)/delete$#', $uri, $m) && $method === 'POST'
+                => (new EntrepriseController($this->twig))->destroy((int)$m[1]),
+
             preg_match('#^/entreprises/(\d+)$#', $uri, $m) && $method === 'GET'
                 => (new EntrepriseController($this->twig))->show((int)$m[1]),
 
@@ -134,6 +150,8 @@ class Router
             // Mentions légales
             $uri === '/mentions-legales' && $method === 'GET'
                 => (new HomeController($this->twig))->mentions(),
+
+                
 
             // 404
             default => $this->notFound(),

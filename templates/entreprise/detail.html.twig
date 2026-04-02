@@ -2,11 +2,7 @@
 {% set active = 'entreprises' %}
 
 {% block title %}{{ entreprise.name }} — StageHub{% endblock %}
-<<<<<<< Updated upstream
 {% block meta_desc %}Informations sur {{ entreprise.name }} et ses offres de stage sur StageHub.{% endblock %}
-=======
-{% block meta_desc %}Page profil de {{ entreprise.name }} sur StageHub.{% endblock %}
->>>>>>> Stashed changes
 
 {% block content %}
 
@@ -19,18 +15,12 @@
       <span>›</span>
       <span class="current">{{ entreprise.name }}</span>
     </div>
-<<<<<<< Updated upstream
 
     <h1>{{ entreprise.name }}</h1>
+    
     <p>
       {{ entreprise.ville }}{% if entreprise.region %}, {{ entreprise.region }}{% endif %}
       • {{ entreprise.nb_offres ?? 0 }} offre{{ entreprise.nb_offres > 1 ? 's' : '' }} active{{ entreprise.nb_offres > 1 ? 's' : '' }}
-=======
-    <h1>{{ entreprise.name }}</h1>
-    <p>
-      {{ entreprise.ville }}{% if entreprise.region %}, {{ entreprise.region }}{% endif %}
-      • {{ entreprise.nb_offres ?? 0 }} offres
->>>>>>> Stashed changes
     </p>
   </div>
 </div>
@@ -38,7 +28,7 @@
 <div class="layout">
   <div class="main-content" style="max-width:900px; margin:0 auto;">
 
-<<<<<<< Updated upstream
+    {# Infos entreprise #}
     <section style="padding:24px; background:#fff; border-radius:12px; margin-bottom:18px;">
       <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
         <div style="width:60px; height:60px; border-radius:18px; background:#f4f7fb; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:700; color:#2563eb;">
@@ -65,47 +55,13 @@
         <p><strong>E-mail :</strong> <a href="mailto:{{ entreprise.email }}">{{ entreprise.email }}</a></p>
         <p><strong>Offres actives :</strong> {{ entreprise.nb_offres ?? 0 }}</p>
       </div>
-
-      <a href="/entreprises" class="btn-voir" style="display:inline-block; margin-top:24px;">
-        Retour à la liste des entreprises
-      </a>
-=======
-    {# Infos entreprise #}
-    <section style="padding:24px; background:#fff; border-radius:12px; margin-bottom:18px;">
-      <h2 style="margin-bottom:16px;">À propos</h2>
-
-      {% if entreprise.description %}
-        <p style="line-height:1.7; color:#444; margin-bottom:16px;">{{ entreprise.description }}</p>
-      {% else %}
-        <p style="color:#999; margin-bottom:16px;">Aucune description disponible.</p>
-      {% endif %}
-
-      <p>
-        <strong>Adresse :</strong>
-        {{ entreprise.street_number ? entreprise.street_number ~ ' ' : '' }}{{ entreprise.street_name }},
-        {{ entreprise.ville }}{% if entreprise.region %}, {{ entreprise.region }}{% endif %}
-      </p>
-      <p>
-        <strong>Email :</strong>
-        <a href="mailto:{{ entreprise.email }}">{{ entreprise.email }}</a>
-      </p>
-      <p>
-        <strong>Note moyenne :</strong>
-        {%- set note = entreprise.note_moyenne ?? 0 -%}
-        {%- for i in 1..5 -%}
-          {{- note >= i ? '★' : '☆' -}}
-        {%- endfor -%}
-        <span style="color:#999; font-size:.85rem;">
-          ({{ entreprise.note_moyenne ?? '—' }}/5 — {{ entreprise.nb_avis ?? 0 }} avis)
-        </span>
-      </p>
     </section>
 
     {# Liste des offres #}
     <section>
       <div class="results-bar" style="margin-bottom:12px;">
         <p class="results-count">
-          <strong>{{ stats.total_offres ?? 0 }} offres</strong> proposées par {{ entreprise.name }}
+          <strong>{{ stats.total_offres ?? 0 }} offre{{ (stats.total_offres ?? 0) > 1 ? 's' : '' }}</strong> proposée{{ (stats.total_offres ?? 0) > 1 ? 's' : '' }} par {{ entreprise.name }}
         </p>
       </div>
 
@@ -127,17 +83,13 @@
           </p>
         {% endfor %}
       </div>
->>>>>>> Stashed changes
     </section>
 
   </div>
 </div>
 
 {% endblock %}
-<<<<<<< Updated upstream
-=======
 
 {% block extra_js %}
 <script src="/assets/js/entreprises-script.js"></script>
 {% endblock %}
->>>>>>> Stashed changes

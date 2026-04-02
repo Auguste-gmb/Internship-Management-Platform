@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+{% set active = 'entreprises' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      <a href="/">Accueil</a><span>›</span>
+      <a href="/entreprises">Entreprises</a><span>›</span>
+      <span class="current">{{ entreprise ? 'Modifier' : 'Nouvelle entreprise' }}</span>
+    </div>
+    <h1>{{ entreprise ? 'Modifier ' ~ entreprise.name : 'Nouvelle entreprise' }}</h1>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="main-content" style="max-width:640px; margin:0 auto;">
+    <form action="{{ entreprise ? '/entreprises/' ~ entreprise.id_entreprise ~ '/edit' : '/entreprises/create' }}"
+          method="POST"
+          style="background:#fff; border-radius:12px; padding:32px; display:flex; flex-direction:column; gap:20px;">
+
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:6px;">Nom *</label>
+        <input class="search-input" type="text" name="name"
+               value="{{ entreprise.name ?? '' }}"
+               placeholder="Nom de l'entreprise" style="width:100%;">
+        {% if errors.name %}<p style="color:#e53e3e; font-size:.85rem; margin-top:4px;">{{ errors.name }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:6px;">Description</label>
+        <textarea name="description" rows="4"
+                  placeholder="Présentation de l'entreprise…"
+                  style="width:100%; border:1px solid #ddd; border-radius:8px; padding:10px 14px; font-size:.95rem; resize:vertical;">{{ entreprise.description ?? '' }}</textarea>
+      </div>
+
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:6px;">Email</label>
+        <input class="search-input" type="email" name="email"
+               value="{{ entreprise.email ?? '' }}"
+               placeholder="contact@entreprise.fr" style="width:100%;">
+        {% if errors.email %}<p style="color:#e53e3e; font-size:.85rem; margin-top:4px;">{{ errors.email }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:6px;">Domaine</label>
+        <select name="id_domain"
+                style="width:100%; border:1px solid #ddd; border-radius:8px; padding:10px 14px; font-size:.95rem; background:#fff;">
+          <option value="">— Aucun —</option>
+          {% for d in domains %}
+            <option value="{{ d.id_domain }}" {{ (entreprise.id_domain ?? '') == d.id_domain ? 'selected' }}>
+              {{ d.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <hr style="border:none; border-top:1px solid #eee;">
+      <p style="font-weight:700; margin:0;">Adresse</p>
+
+      <div style="display:grid; grid-template-columns:1fr 2fr; gap:16px;">
+        <div>
+          <label style="font-weight:600; display:block; margin-bottom:6px;">N°</label>
+          <input class="search-input" type="text" name="street_number"
+                 value="{{ entreprise.street_number ?? '' }}" placeholder="12" style="width:100%;">
+        </div>
+        <div>
+          <label style="font-weight:600; display:block; margin-bottom:6px;">Rue</label>
+          <input class="search-input" type="text" name="street_name"
+                 value="{{ entreprise.street_name ?? '' }}" placeholder="Rue de la Paix" style="width:100%;">
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div>
+          <label style="font-weight:600; display:block; margin-bottom:6px;">Ville *</label>
+          <input class="search-input" type="text" name="city"
+                 value="{{ entreprise.ville ?? entreprise.city ?? '' }}" placeholder="Paris" style="width:100%;">
+          {% if errors.city %}<p style="color:#e53e3e; font-size:.85rem; margin-top:4px;">{{ errors.city }}</p>{% endif %}
+        </div>
+        <div>
+          <label style="font-weight:600; display:block; margin-bottom:6px;">Région</label>
+          <input class="search-input" type="text" name="region"
+                 value="{{ entreprise.region ?? '' }}" placeholder="Île-de-France" style="width:100%;">
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:8px;">
+        <a href="/entreprises{% if entreprise %}/{{ entreprise.id_entreprise }}{% endif %}"
+           style="padding:10px 24px; border-radius:8px; background:#eee; color:#333; text-decoration:none; font-weight:600;">
+          Annuler
+        </a>
+        <button type="submit"
+                style="padding:10px 28px; border-radius:8px; background:#2563eb; color:#fff; border:none; font-weight:600; cursor:pointer;">
+          {{ entreprise ? 'Enregistrer' : 'Créer l\'entreprise' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

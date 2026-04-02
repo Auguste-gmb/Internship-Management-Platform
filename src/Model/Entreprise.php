@@ -126,4 +126,113 @@ class Entreprise extends Model
 
         return [$sql, $params];
     }
+    public function getAllDomains(): array
+    {
+        return $this->query('SELECT id_domain, name FROM "Domain" ORDER BY name')->fetchAll();
+    }
+
+    public function create(array $data): int
+    {
+        $db  = Database::getInstance();
+        $pdo = $db->getPdo();
+
+        $pdo->beginTransaction();
+        try {
+            $db->query('
+                INSERT INTO "Adress" (city, street_number, street_name, region)
+                VALUES (?, ?, ?, ?)
+            ', [
+                $data['city'],
+                $data['street_number'] ?: null,
+                $data['street_name']   ?: null,
+                $data['region']        ?: null,
+            ]);
+            $idAdress = (int) $pdo->lastInsertId('adress_id_adress_seq');
+
+            $db->query('
+                INSERT INTO "Entreprise" (name, description, email, id_adress, id_domain)
+                VALUES (?, ?, ?, ?, ?)
+            ', [
+                $data['name'],
+                $data['description'] ?: null,
+                $data['email']       ?: null,
+                $idAdress,
+                $data['id_domain']   ?: null,
+            ]);
+            $idEntreprise = (int) $pdo->lastInsertId('entreprise_id_entreprise_seq');
+
+            $pdo->commit();
+            return $idEntreprise;
+
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    public function update(int $id, array $data): void
+    {
+        $db  = Database::getInstance();
+        $row = $this->query(
+            'SELECT id_adress FROM "Entreprise" WHERE id_entreprise = ?', [$id]
+        )->fetch();
+
+        if (!$row) return;
+
+        $db->query('
+            UPDATE "Adress"
+            SET city = ?, street_number = ?, street_name = ?, region = ?
+            WHERE id_adress = ?
+        ', [
+            $data['city'],
+            $data['street_number'] ?: null,
+            $data['street_name']   ?: null,
+            $data['region']        ?: null,
+            $row['id_adress'],
+        ]);
+
+        $db->query('
+            UPDATE "Entreprise"
+            SET name = ?, description = ?, email = ?, id_domain = ?
+            WHERE id_entreprise = ?
+        ', [
+            $data['name'],
+            $data['description'] ?: null,
+            $data['email']       ?: null,
+            $data['id_domain']   ?: null,
+            $id,
+        ]);
+    }
+
+    public function delete(int $id): void
+    {
+        $db  = Database::getInstance();
+        $pdo = $db->getPdo();
+
+        $row = $this->query(
+            'SELECT id_adress FROM "Entreprise" WHERE id_entreprise = ?', [$id]
+        )->fetch();
+
+        $pdo->beginTransaction();
+        try {
+            $db->query('DELETE FROM "grade"   WHERE id_entreprise = ?', [$id]);
+            $db->query('DELETE FROM "apply"   WHERE id_offer IN (
+                SELECT id_offer FROM "Offer" WHERE id_entreprise = ?
+            )', [$id]);
+            $db->query('DELETE FROM "wishlist" WHERE id_offer IN (
+                SELECT id_offer FROM "Offer" WHERE id_entreprise = ?
+            )', [$id]);
+            $db->query('DELETE FROM "Offer"       WHERE id_entreprise = ?', [$id]);
+            $db->query('DELETE FROM "Entreprise"  WHERE id_entreprise = ?', [$id]);
+
+            if ($row) {
+                $db->query('DELETE FROM "Adress" WHERE id_adress = ?', [$row['id_adress']]);
+            }
+
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+    }
 }
