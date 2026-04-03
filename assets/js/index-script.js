@@ -105,3 +105,33 @@ function toggleWish(btn) {
 		btn.classList.contains("active") ? "currentColor" : "none",
 	);
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const offerId = btn.dataset.offerId;
+      const formData = new FormData();
+      formData.append('offerId', offerId);
+
+      try {
+        const res = await fetch('/wishlist/toggle', {
+          method: 'POST',
+          body: formData,
+          credentials: 'same-origin'
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          btn.classList.toggle('active', data.inWishlist);
+          btn.setAttribute('aria-pressed', data.inWishlist);
+        } else {
+          alert('Erreur lors de la mise à jour de votre wishlist.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Erreur réseau.');
+      }
+    });
+  });
+});
