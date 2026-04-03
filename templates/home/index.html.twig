@@ -100,63 +100,61 @@
     {% for offre in offres_recentes %}
       <article class="offer-card-index" data-offer-id="{{ offre.id_offer }}">
 
-        {# En-tête entreprise #}
-        <div class="offer-company">
-          <div class="company-logo" aria-hidden="true">
-            {{ offre.entreprise_name is not empty
-                ? offre.entreprise_name|slice(0,2)|upper
-                : '??' }}
+          {# En-tête entreprise #}
+          <div class="offer-company">
+            <div class="company-logo" aria-hidden="true">
+              {{ offre.entreprise_name is not empty
+                  ? offre.entreprise_name|slice(0,2)|upper
+                  : '??' }}
+            </div>
+            <span class="company-name">
+              {{ offre.entreprise_name ?? 'Entreprise inconnue' }}
+            </span>
           </div>
-          <span class="company-name">
-            {{ offre.entreprise_name ?? 'Entreprise inconnue' }}
-          </span>
-        </div>
 
-        {# Titre #}
-        <a href="/offres/{{ offre.id_offer }}" class="offer-title-link offer-title">
+          {# Titre #}
           <p class="offer-title">{{ offre.title }}</p>
-        </a>
 
-        {# Compétences #}
-        {% if offre.skill is not empty %}
-          <div class="offer-tags" aria-label="Compétences">
-            {% for tag in offre.skill|split(',') %}
-              <span class="offer-tag">{{ tag|trim }}</span>
-            {% endfor %}
-          </div>
-        {% endif %}
 
-        {# Pied de carte #}
-        <div class="offer-footer">
-          <span class="offer-salary">
-            {{ offre.remuneration is not empty ? offre.remuneration : 'Non précisé' }}
-          </span>
-          <span class="offer-location">
-            {{ offre.location is not empty ? offre.location : '' }}
-          </span>
-          <time class="offer-date" datetime="{{ offre.publication_date }}">
-            {{ offre.publication_date ?? '' }}
-          </time>
+          {# Compétences #}
+          {% if offre.skill is not empty %}
+            <div class="offer-tags" aria-label="Compétences">
+              {% for tag in offre.skill|split(',') %}
+                <span class="offer-tag">{{ tag|trim }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
 
-          {% if auth_can('wishlist.manage') %}
-          <button
-            class="wishlist-btn {{ offre.id_offer in userWishlist ? 'active' : '' }}"
-            data-offer-id="{{ offre.id_offer }}"
-            aria-label="Ajouter aux favoris"
-            aria-pressed="{{ offre.id_offer in userWishlist ? 'true' : 'false' }}"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                aria-hidden="true">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
-                      l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78
-                      l1.06 1.06L12 21.23l7.78-7.78
-                      1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
-        {% endif %}
-        </div>
+          {# Pied de carte #}
+          <div class="offer-footer">
+            <span class="offer-salary">
+              {{ offre.remuneration is not empty ? offre.remuneration : 'Non précisé' }}
+            </span>
+            <span class="offer-location">
+              {{ offre.location is not empty ? offre.location : '' }}
+            </span>
+            <time class="offer-date" datetime="{{ offre.publication_date }}">
+              {{ offre.publication_date ?? '' }}
+            </time>
 
+            {% if auth_can('wishlist.manage') %}
+            <button
+              class="wishlist-btn {{ offre.id_offer in userWishlist ? 'active' : '' }}"
+              data-offer-id="{{ offre.id_offer }}"
+              aria-label="Ajouter aux favoris"
+              aria-pressed="{{ offre.id_offer in userWishlist ? 'true' : 'false' }}"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
+                        l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78
+                        l1.06 1.06L12 21.23l7.78-7.78
+                        1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+          {% endif %}
+          </div>  
       </article>
     {% else %}
       <p class="empty-state">
